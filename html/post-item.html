@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a New Item - CampusShare</title>
+  <meta name="description" content="List your textbook, electronics, dorm essentials, or campus services on CampusShare to sell to verified peers.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Dynamic Global Site Header -->
+  <header id="site-header" class="site-header"></header>
+
+  <main>
+    <!-- Page Header Banner -->
+    <section class="page-header">
+      <div class="container">
+        <h1>Post a Campus Listing</h1>
+        <p>List your item or service to sell to students at your university</p>
+      </div>
+    </section>
+
+    <div class="container form-card-container pb-3xl">
+      <div class="card card-padding-32">
+        <form id="post-item-form">
+
+          <!-- Category Selection -->
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="item-category" class="select-field" required>
+              <option value="">Select Category</option>
+              <option value="textbooks">📚 Textbooks &amp; Notes</option>
+              <option value="electronics">💻 Electronics &amp; Tech</option>
+              <option value="dorm">🛋️ Dorm Essentials</option>
+              <option value="clothing">👕 Campus Apparel</option>
+              <option value="services">🎓 Tutoring &amp; Services</option>
+              <option value="sports">🚲 Bikes &amp; Gear</option>
+            </select>
+          </div>
+
+          <!-- Item Title -->
+          <div class="form-group">
+            <label class="form-label">Listing Title *</label>
+            <input type="text" id="item-title" class="input-field" placeholder="e.g. Introduction to Algorithms (CLRS 4th Edition)" required>
+            <div class="form-hint">Include course number, edition, or model for better search visibility</div>
+          </div>
+
+          <!-- Price & Original Price Row -->
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Your Selling Price ($) *</label>
+              <input type="number" id="item-price" class="input-field" placeholder="45.00" min="0" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Original Campus Store Price ($)</label>
+              <input type="number" id="item-original-price" class="input-field" placeholder="110.00" min="0" step="0.01">
+            </div>
+          </div>
+
+          <!-- Condition & Pickup Location Row -->
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Item Condition *</label>
+              <select id="item-condition" class="select-field" required>
+                <option value="Like New">Like New (Mint)</option>
+                <option value="Good">Good (Minor wear)</option>
+                <option value="Fair">Fair (Usable condition)</option>
+                <option value="Service">Service / Tutoring</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Campus Pickup Location *</label>
+              <input type="text" id="item-location" class="input-field" placeholder="e.g. Gates CS Building / Student Union" required>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label class="form-label">Item Description *</label>
+            <textarea id="item-description" class="textarea-field" placeholder="Describe the item condition, course relevance, included accessories, or pickup availability..." required></textarea>
+          </div>
+
+          <!-- Photo Upload & Presets -->
+          <div class="form-group">
+            <label class="form-label">Item Photos</label>
+            <input type="file" id="item-photo-input" accept="image/*" class="hidden">
+            <div id="photo-preview-container">
+              <div class="card card-padding-32 text-center bg-background cursor-pointer" onclick="document.getElementById('item-photo-input').click()">
+                <div class="font-2rem mb-xs">📷</div>
+                <div class="font-weight-600 text-navy">Click to upload item photos</div>
+                <div class="font-0-8rem text-muted">PNG, JPG, or WEBP up to 5MB</div>
+              </div>
+            </div>
+
+            <!-- Quick Preset Samples -->
+            <div class="mt-sm font-0-85rem text-muted">
+              <span>Or click a sample image preset:</span>
+              <div class="flex gap-sm mt-xs">
+                <button type="button" class="btn btn-outline btn-sm" onclick="selectSamplePhoto('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80')">📚 Book</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="selectSamplePhoto('https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80')">💻 Tablet</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="selectSamplePhoto('https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=800&q=80')">🛋️ Fridge</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="selectSamplePhoto('https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80')">🚲 Bike</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="form-action-bar">
+            <a href="explore.html" class="btn btn-outline">Cancel</a>
+            <button type="submit" class="btn btn-primary btn-lg">Publish Listing 🚀</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Dynamic Global Site Footer -->
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <!-- Core Scripts -->
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/post-item.js"></script>
+</body>
+</html>

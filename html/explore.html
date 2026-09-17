@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Marketplace - CampusShare</title>
+  <meta name="description" content="Search and filter verified college student listings for textbooks, laptops, dorm furniture, bikes, and tutoring.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Dynamic Global Site Header -->
+  <header id="site-header" class="site-header"></header>
+
+  <main>
+    <!-- Page Header Banner -->
+    <section class="page-header">
+      <div class="container">
+        <h1>Campus Marketplace</h1>
+        <p>Browse verified listings posted by students across your university</p>
+      </div>
+    </section>
+
+    <div class="container pb-3xl">
+      <div class="sidebar-layout">
+
+        <!-- Filter Sidebar -->
+        <aside class="card card-padding-24 card-height-fit">
+          <div class="sidebar-header">
+            <h3 class="sidebar-heading">Filters</h3>
+            <button id="clear-filters-btn" type="button" class="btn btn-ghost btn-sm text-primary">Clear All</button>
+          </div>
+
+          <!-- Search Query Input -->
+          <div class="form-group">
+            <label class="form-label">Search Keywords</label>
+            <input type="text" id="explore-search" class="input-field" placeholder="Search title, details...">
+          </div>
+
+          <!-- Category Select -->
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="filter-category" class="select-field">
+              <option value="">All Categories</option>
+              <option value="textbooks">📚 Textbooks &amp; Notes</option>
+              <option value="electronics">💻 Electronics &amp; Tech</option>
+              <option value="dorm">🛋️ Dorm Essentials</option>
+              <option value="clothing">👕 Campus Apparel</option>
+              <option value="services">🎓 Tutoring &amp; Services</option>
+              <option value="sports">🚲 Bikes &amp; Gear</option>
+            </select>
+          </div>
+
+          <!-- Condition Select -->
+          <div class="form-group">
+            <label class="form-label">Item Condition</label>
+            <select id="filter-condition" class="select-field">
+              <option value="">All Conditions</option>
+              <option value="Like New">Like New</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+              <option value="Service">Service</option>
+            </select>
+          </div>
+
+          <!-- Max Price Filter -->
+          <div class="form-group">
+            <label class="form-label">Max Price ($)</label>
+            <input type="number" id="filter-price-max" class="input-field" placeholder="e.g. 100" min="0">
+          </div>
+        </aside>
+
+        <!-- Main Marketplace Results Area -->
+        <section>
+
+          <!-- Top Control Toolbar -->
+          <div class="card toolbar-card mb-lg">
+            <div id="results-count" class="results-count-text">
+              Loading listings...
+            </div>
+
+            <div class="flex items-center gap-md">
+              <!-- Sort Selector -->
+              <div class="sort-wrapper">
+                <label class="sort-label">Sort By:</label>
+                <select id="filter-sort" class="select-field sort-select">
+                  <option value="newest">Newest First</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="popular">Most Popular</option>
+                </select>
+              </div>
+
+              <!-- View Layout Switcher -->
+              <div class="view-btn-group">
+                <button id="view-grid-btn" type="button" class="btn btn-primary btn-sm" title="Grid View">📱 Grid</button>
+                <button id="view-list-btn" type="button" class="btn btn-outline btn-sm" title="List View">📄 List</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marketplace Dynamic Cards Grid -->
+          <div id="explore-grid" class="grid-3"></div>
+
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Dynamic Global Site Footer -->
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <!-- Core Scripts -->
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/marketplace.js"></script>
+</body>
+</html>

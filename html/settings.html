@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Settings - CampusShare</title>
+  <meta name="description" content="Manage your CampusShare user account preferences, university verification, and notification settings.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Dynamic Global Site Header -->
+  <header id="site-header" class="site-header"></header>
+
+  <main>
+    <!-- Page Header Banner -->
+    <section class="page-header">
+      <div class="container">
+        <h1>Account Settings</h1>
+        <p>Update your profile details, campus affiliation, and notification preferences</p>
+      </div>
+    </section>
+
+    <div class="container settings-card-container pb-3xl">
+      <div class="card card-padding-32">
+
+        <form id="settings-form">
+          <h3 class="settings-section-title">Profile Details</h3>
+
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="settings-name" class="input-field" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Campus Email (.edu)</label>
+            <input type="email" id="settings-email" class="input-field" required>
+            <div class="form-hint">Changing email will require re-verification</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">University</label>
+              <select id="settings-university" class="select-field">
+                <option value="Stanford University">Stanford University</option>
+                <option value="UC Berkeley">UC Berkeley</option>
+                <option value="MIT">MIT</option>
+                <option value="Harvard University">Harvard University</option>
+                <option value="UT Austin">UT Austin</option>
+                <option value="University of Michigan">University of Michigan</option>
+                <option value="NYU">NYU</option>
+                <option value="UCLA">UCLA</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Major &amp; Class Year</label>
+              <input type="text" id="settings-major" class="input-field">
+            </div>
+          </div>
+
+          <h3 class="settings-section-title-mt">Notifications &amp; Safety</h3>
+
+          <div class="settings-checkbox-group">
+            <label class="settings-checkbox-label">
+              <input type="checkbox" checked class="checkbox-blue">
+              Email notifications for new buyer chat messages
+            </label>
+            <label class="settings-checkbox-label">
+              <input type="checkbox" checked class="checkbox-blue">
+              Wishlist price drop alerts
+            </label>
+            <label class="settings-checkbox-label">
+              <input type="checkbox" checked class="checkbox-blue">
+              Campus safety &amp; meet-up reminder digest
+            </label>
+          </div>
+
+          <div class="form-action-bar">
+            <a href="profile.html" class="btn btn-outline">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Dynamic Global Site Footer -->
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <!-- Core Scripts -->
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/profile.js"></script>
+</body>
+</html>

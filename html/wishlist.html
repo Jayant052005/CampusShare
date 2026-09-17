@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist - CampusShare</title>
+  <meta name="description" content="View and manage your saved campus items, compare prices, and quickly contact sellers.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Dynamic Global Site Header -->
+  <header id="site-header" class="site-header"></header>
+
+  <main>
+    <!-- Page Header Banner -->
+    <section class="page-header">
+      <div class="container">
+        <h1>Saved Wishlist Items</h1>
+        <p>Keep track of items you are interested in buying this semester</p>
+      </div>
+    </section>
+
+    <div class="container pb-3xl">
+      <!-- Toolbar -->
+      <div class="card toolbar-card mb-xl">
+        <div id="wishlist-count" class="wishlist-count-text">
+          0 Saved Items
+        </div>
+        <button id="clear-wishlist-btn" type="button" class="btn btn-outline btn-danger btn-sm">
+          🗑️ Clear Wishlist
+        </button>
+      </div>
+
+      <!-- Saved Items Grid -->
+      <div id="wishlist-grid" class="grid-3"></div>
+    </div>
+  </main>
+
+  <!-- Dynamic Global Site Footer -->
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <!-- Core Scripts -->
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/wishlist.js"></script>
+</body>
+</html>

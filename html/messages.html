@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages &amp; Chat - CampusShare</title>
+  <meta name="description" content="Chat directly with student buyers and sellers on campus to negotiate prices and arrange safe meetups.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Dynamic Global Site Header -->
+  <header id="site-header" class="site-header"></header>
+
+  <main>
+    <div class="container section-sm">
+      <div class="card chat-layout-card">
+
+        <!-- Left Pane: Conversations List -->
+        <div class="chat-left-pane">
+          <div class="chat-left-header">
+            <h3 class="sidebar-heading">Messages</h3>
+          </div>
+          <div id="conversations-list" class="flex-1 overflow-y-auto">
+            <!-- Hydrated by messages.js -->
+          </div>
+        </div>
+
+        <!-- Right Pane: Chat Thread -->
+        <div id="chat-thread-container" class="chat-right-pane">
+          <!-- Hydrated by messages.js -->
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Dynamic Global Site Footer -->
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <!-- Core Scripts -->
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/messages.js"></script>
+</body>
+</html>

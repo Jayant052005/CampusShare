@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Listings Dashboard - CampusShare</title>
+  <meta name="description" content="Seller dashboard to manage, mark as sold, re-list, or delete your campus items.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Dynamic Global Site Header -->
+  <header id="site-header" class="site-header"></header>
+
+  <main>
+    <!-- Page Header Banner -->
+    <section class="page-header">
+      <div class="container">
+        <h1>Seller Dashboard</h1>
+        <p>Manage your active listings, mark items as sold, or update prices</p>
+      </div>
+    </section>
+
+    <div class="container pb-3xl">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Your Campus Listings</h2>
+          <p class="section-subtitle">Manage items you are selling to fellow students</p>
+        </div>
+        <a href="post-item.html" class="btn btn-primary">+ Post Another Item</a>
+      </div>
+
+      <!-- Seller Dashboard List -->
+      <div id="my-listings-grid" class="my-listings-container"></div>
+    </div>
+  </main>
+
+  <!-- Dynamic Global Site Footer -->
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <!-- Core Scripts -->
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/profile.js"></script>
+</body>
+</html>

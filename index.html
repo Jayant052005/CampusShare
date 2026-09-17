@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusShare - Student Peer-to-Peer Campus Marketplace</title>
+  <meta name="description" content="Buy, sell, rent, and trade textbooks, electronics, dorm essentials, and campus services safely with verified college students.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Dynamic Global Site Header -->
+  <header id="site-header" class="site-header"></header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="section hero-section">
+      <div class="container text-center hero-content">
+        <span class="badge badge-purple hero-badge">
+          🎓 Verified College Marketplace
+        </span>
+        <h1 class="hero-title">
+          Buy, Sell &amp; Share on Campus with Fellow Students
+        </h1>
+        <p class="hero-subtitle">
+          Save hundreds on textbooks, dorm furniture, laptops, and bikes. Connect directly with verified students at your university for fast, safe campus pickups.
+        </p>
+
+        <!-- Big Hero Search Bar -->
+        <form action="html/explore.html" method="GET" class="hero-search-form">
+          <span class="hero-search-icon">🔍</span>
+          <input type="text" name="q" placeholder="What are you looking for? (e.g. CLRS textbook, mini fridge, iPad)" class="hero-search-input">
+          <button type="submit" class="btn btn-primary btn-lg hero-search-btn">Search</button>
+        </form>
+
+        <!-- Category Chips -->
+        <div class="chip-group">
+          <a href="html/explore.html?category=textbooks" class="badge chip-badge">📚 Textbooks</a>
+          <a href="html/explore.html?category=electronics" class="badge chip-badge">💻 Electronics</a>
+          <a href="html/explore.html?category=dorm" class="badge chip-badge">🛋️ Dorm Goods</a>
+          <a href="html/explore.html?category=sports" class="badge chip-badge">🚲 Bikes</a>
+          <a href="html/explore.html?category=services" class="badge chip-badge">🎓 Tutoring</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Categories Section -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Explore Categories</h2>
+            <p class="section-subtitle">Find everything you need for the semester</p>
+          </div>
+          <a href="html/explore.html" class="btn btn-outline">View All Categories &rarr;</a>
+        </div>
+
+        <div class="grid-3">
+          <a href="html/explore.html?category=textbooks" class="card card-hover category-card-link">
+            <div class="category-icon-box category-icon-blue">📚</div>
+            <div>
+              <h3 class="mb-xs">Textbooks &amp; Notes</h3>
+              <p class="text-muted">Save up to 80% on STEM, Business, &amp; Liberal Arts textbooks</p>
+            </div>
+          </a>
+
+          <a href="html/explore.html?category=electronics" class="card card-hover category-card-link">
+            <div class="category-icon-box category-icon-purple">💻</div>
+            <div>
+              <h3 class="mb-xs">Electronics &amp; Tech</h3>
+              <p class="text-muted">Laptops, iPads, noise-canceling headphones, &amp; chargers</p>
+            </div>
+          </a>
+
+          <a href="html/explore.html?category=dorm" class="card card-hover category-card-link">
+            <div class="category-icon-box category-icon-success">🛋️</div>
+            <div>
+              <h3 class="mb-xs">Dorm Essentials</h3>
+              <p class="text-muted">Mini fridges, microwaves, desk lamps, &amp; storage units</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Listings Grid -->
+    <section class="section bg-white border-t border-b">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="badge badge-blue mb-sm">🔥 Hot Picks</span>
+            <h2 class="section-title">Featured Campus Listings</h2>
+            <p class="section-subtitle">Verified student items available for pickup today</p>
+          </div>
+          <a href="html/explore.html" class="btn btn-primary">See All Listings</a>
+        </div>
+
+        <div id="index-featured-grid" class="grid-4"></div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section">
+      <div class="container">
+        <div class="text-center mb-xl">
+          <span class="badge badge-purple mb-sm">✨ Simple &amp; Safe</span>
+          <h2 class="section-title">How CampusShare Works</h2>
+          <p class="section-subtitle max-w-540">Designed specifically for college campus safety and trust</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card text-center step-card">
+            <div class="step-number step-number-1">1</div>
+            <h3 class="mb-sm">Sign In with .edu</h3>
+            <p>Verify your student status using your official university email to access your campus marketplace.</p>
+          </div>
+
+          <div class="card text-center step-card">
+            <div class="step-number step-number-2">2</div>
+            <h3 class="mb-sm">Chat &amp; Agree</h3>
+            <p>Direct message student sellers right on CampusShare to negotiate price and ask questions.</p>
+          </div>
+
+          <div class="card text-center step-card">
+            <div class="step-number step-number-3">3</div>
+            <h3 class="mb-sm">Safe Campus Pickup</h3>
+            <p>Meet up safely at the library, student union, or dining hall to inspect and complete the exchange.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Listings Grid -->
+    <section class="section bg-white border-t">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Recently Added Items</h2>
+            <p class="section-subtitle">Fresh listings posted by students across campus</p>
+          </div>
+          <a href="html/explore.html" class="btn btn-outline">Explore Marketplace</a>
+        </div>
+
+        <div id="index-recent-grid" class="grid-3"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Dynamic Global Site Footer -->
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <!-- Core Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/marketplace.js"></script>
+</body>
+</html>

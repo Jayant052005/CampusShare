@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Profile - CampusShare</title>
+  <meta name="description" content="View student profile background, ratings, campus verification badge, and active marketplace listings.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Dynamic Global Site Header -->
+  <header id="site-header" class="site-header"></header>
+
+  <main>
+    <!-- Profile Banner -->
+    <section class="page-header profile-page-header">
+      <div class="container">
+        <!-- Hydrated by profile.js in profile-header -->
+      </div>
+    </section>
+
+    <div class="container pb-3xl">
+      <!-- Profile Header Container Card -->
+      <div class="card profile-header-card mb-xl" id="profile-header">
+        <!-- Hydrated by profile.js -->
+      </div>
+
+      <!-- User Active Listings Section -->
+      <div class="section-header mb-lg">
+        <div>
+          <h2 class="section-title">My Listed Items</h2>
+          <p class="section-subtitle">Items currently active or sold on CampusShare</p>
+        </div>
+        <a href="post-item.html" class="btn btn-primary">+ Post New Item</a>
+      </div>
+
+      <div id="profile-listings-grid" class="grid-3"></div>
+    </div>
+  </main>
+
+  <!-- Dynamic Global Site Footer -->
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <!-- Core Scripts -->
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/profile.js"></script>
+</body>
+</html>
