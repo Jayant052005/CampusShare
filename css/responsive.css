@@ -2,6 +2,12 @@
    CampusShare - Responsive & Mobile Styles
    ========================================================================== */
 
+/* Prevent Horizontal Scrolling on all viewports */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 /* Mobile Menu Hamburger Trigger */
 .mobile-toggle {
   display: none;
@@ -10,7 +16,13 @@
   font-size: 1.5rem;
   color: var(--navy);
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease;
+}
+
+.mobile-toggle:hover {
+  background-color: #F1F5F9;
 }
 
 /* Mobile Nav Drawer Overlay */
@@ -25,7 +37,7 @@
   backdrop-filter: blur(4px);
   z-index: 1500;
   opacity: 0;
-  transition: var(--transition);
+  transition: opacity 0.25s ease;
 }
 
 .mobile-nav-overlay.show {
@@ -36,8 +48,8 @@
 .mobile-nav-drawer {
   position: fixed;
   top: 0;
-  right: -300px;
-  width: 280px;
+  right: -320px;
+  width: 300px;
   height: 100vh;
   background-color: var(--white);
   z-index: 1600;
@@ -45,7 +57,8 @@
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-lg);
-  transition: var(--transition);
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
 }
 
 .mobile-nav-drawer.open {
@@ -56,7 +69,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
   padding-bottom: var(--space-md);
   border-bottom: 1px solid var(--border);
 }
@@ -64,48 +77,54 @@
 .mobile-nav-links {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
 }
 
-.mobile-nav-links .nav-link {
-  padding: 0.75rem 1rem;
+.mobile-nav-links .cs-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
   font-size: 1rem;
+  border-radius: var(--radius-md);
+  width: 100%;
+}
 
+.mobile-nav-links .cs-nav-item.active {
+  background-color: var(--navy);
+  color: var(--white) !important;
 }
 
 /* ==========================================================================
    Responsive Breakpoints
    ========================================================================== */
 
-/* Laptop & Tablet Desktop (max-width: 1024px) */
-@media (max-width: 1024px) {
-  .grid-4 {
-    grid-template-columns: repeat(3, 1fr);
+/* Tablet Desktop (max-width: 992px) */
+@media (max-width: 992px) {
+  .cs-nav-center {
+    display: none !important;
   }
 
-  .sidebar-layout {
-    grid-template-columns: 240px 1fr;
-    gap: var(--space-lg);
+  .mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .footer-grid {
-    grid-template-columns: 1.5fr repeat(3, 1fr);
-    gap: var(--space-xl);
+  .footer-top-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
   }
 }
 
 /* Tablet (max-width: 768px) */
 @media (max-width: 768px) {
   .site-header .container {
-    gap: var(--space-md);
+    gap: var(--space-sm);
   }
 
   .main-nav {
     display: none;
-  }
-
-  .mobile-toggle {
-    display: block;
   }
 
   .grid-3, .grid-4 {
@@ -116,9 +135,9 @@
     grid-template-columns: 1fr;
   }
 
-  .footer-grid {
+  .footer-top-grid {
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-xl);
+    gap: 28px;
   }
 
   .page-header {
@@ -134,6 +153,10 @@
     align-items: flex-start;
     gap: var(--space-sm);
   }
+
+  .cs-btn-post span.btn-text {
+    display: none;
+  }
 }
 
 /* Small Mobile (max-width: 480px) */
@@ -146,11 +169,12 @@
     grid-template-columns: 1fr;
   }
 
-  .footer-grid {
+  .footer-top-grid {
     grid-template-columns: 1fr;
+    gap: 32px;
   }
 
-  .footer-bottom {
+  .footer-bottom-bar {
     flex-direction: column;
     gap: var(--space-md);
     text-align: center;
@@ -164,3 +188,4 @@
     width: 100%;
   }
 }
+
