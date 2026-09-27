@@ -464,7 +464,7 @@ function initNavSearch() {
 // Global Product Card HTML Generator Helper
 function renderProductCard(item) {
   const wishlisted = isWishlisted(item.id);
-  const formattedPrice = item.price === 0 ? "Free" : `$${item.price.toFixed(2)}`;
+  const formattedPrice = item.price === 0 ? "Free" : `₹${Number(item.price).toLocaleString('en-IN')}`;
   const itemDetailsUrl = getAppUrl(`item-details.html?id=${item.id}`);
 
   return `

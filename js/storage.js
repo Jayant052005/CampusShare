@@ -8,7 +8,7 @@ const STORAGE_KEYS = {
   MESSAGES: "campus_share_messages",
   CURRENT_USER: "campus_share_user",
   USERS: "campus_share_all_users",
-  RESET_FLAG: "campus_share_clean_v2"
+  RESET_FLAG: "campus_share_clean_v3"
 };
 
 // Initialize LocalStorage as completely empty for a clean state
@@ -64,8 +64,8 @@ function saveItem(itemData) {
     originalPrice: parseFloat(itemData.originalPrice) || parseFloat(itemData.price),
     condition: itemData.condition,
     description: itemData.description,
-    image: itemData.image || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
-    images: [itemData.image || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80"],
+    image: itemData.image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23F3F6FC'/%3E%3Ctext x='200' y='158' text-anchor='middle' fill='%23B0BCD0' font-family='system-ui%2C sans-serif' font-size='14'%3ENo image uploaded%3C/text%3E%3C/svg%3E",
+    images: [itemData.image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23F3F6FC'/%3E%3Ctext x='200' y='158' text-anchor='middle' fill='%23B0BCD0' font-family='system-ui%2C sans-serif' font-size='14'%3ENo image uploaded%3C/text%3E%3C/svg%3E"],
     sellerId: currentUser ? currentUser.id : "usr_guest",
     sellerName: currentUser ? currentUser.name : "Student Seller",
     sellerUniversity: currentUser ? currentUser.university : "Campus Community",

@@ -3,158 +3,415 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CampusShare - Student Peer-to-Peer Campus Marketplace</title>
-  <meta name="description" content="Buy, sell, rent, and trade textbooks, electronics, dorm essentials, and campus services safely with verified college students.">
+  <title>CampusShare — Find What You Need. Share What You Don't.</title>
+  <meta name="description" content="Buy, sell, donate, lend, and exchange textbooks, calculators, notes, hostel gear, and project tools directly with fellow students across your campus.">
+  <meta name="keywords" content="campus marketplace, student textbooks, sell books, donate lab equipment, lend calculator, student exchange">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/homepage.css">
 </head>
 <body>
 
-  <!-- Dynamic Global Site Header -->
+  <!-- ══════════════════════════════════════════════════════════
+       GLOBAL NAVBAR (injected by main.js)
+  ══════════════════════════════════════════════════════════ -->
   <header id="navbar" class="site-header"></header>
 
   <main>
-    <!-- Hero Section -->
-    <section class="section hero-section">
-      <div class="container text-center hero-content">
-        <span class="badge badge-purple hero-badge">
-          🎓 Verified College Marketplace
-        </span>
-        <h1 class="hero-title">
-          Buy, Sell &amp; Share on Campus with Fellow Students
-        </h1>
-        <p class="hero-subtitle">
-          Save hundreds on textbooks, dorm furniture, laptops, and bikes. Connect directly with verified students at your university for fast, safe campus pickups.
-        </p>
 
-        <!-- Big Hero Search Bar -->
-        <form action="html/explore.html" method="GET" class="hero-search-form">
-          <span class="hero-search-icon">🔍</span>
-          <input type="text" name="q" placeholder="What are you looking for? (e.g. CLRS textbook, mini fridge, iPad)" class="hero-search-input">
-          <button type="submit" class="btn btn-primary btn-lg hero-search-btn">Search</button>
-        </form>
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 1 — HERO
+    ══════════════════════════════════════════════════════════ -->
+    <section class="hp-hero" id="hero">
+      <div class="container">
+        <div class="hp-hero-inner">
 
-        <!-- Category Chips -->
-        <div class="chip-group">
-          <a href="html/explore.html?category=textbooks" class="badge chip-badge">📚 Textbooks</a>
-          <a href="html/explore.html?category=electronics" class="badge chip-badge">💻 Electronics</a>
-          <a href="html/explore.html?category=dorm" class="badge chip-badge">🛋️ Dorm Goods</a>
-          <a href="html/explore.html?category=sports" class="badge chip-badge">🚲 Bikes</a>
-          <a href="html/explore.html?category=services" class="badge chip-badge">🎓 Tutoring</a>
-        </div>
-      </div>
+          <!-- LEFT COLUMN: Copy + CTA -->
+          <div class="hp-hero-left">
+
+            <!-- Platform Badge -->
+            <div class="hp-trust-badge">
+              <span class="hp-trust-badge-dot"></span>
+              Student Campus Marketplace — India
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="hp-hero-heading">
+              <span class="line-dark">Find what you need.</span>
+              <span class="line-gradient">Share what you don't.</span>
+            </h1>
+
+            <!-- Description -->
+            <p class="hp-hero-desc">
+              Buy, sell, donate, lend, and exchange textbooks, calculators,
+              notes, hostel gear, and project tools directly with fellow students
+              across your campus.
+            </p>
+
+            <!-- Search Bar -->
+            <form class="hp-search-form" action="html/explore.html" method="GET" id="hero-search-form">
+              <span class="hp-search-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </span>
+              <input
+                type="text"
+                name="q"
+                class="hp-search-input"
+                id="hero-search-input"
+                placeholder="Search books, calculators, notes, lab kits..."
+                autocomplete="off"
+              >
+              <button type="submit" class="hp-search-btn">Search</button>
+            </form>
+
+            <!-- CTA Buttons -->
+            <div class="hp-hero-actions">
+              <a href="html/explore.html" class="hp-btn-explore" id="hero-explore-btn">
+                Explore Items
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+              <a href="html/post-item.html" class="hp-btn-post" id="hero-post-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Post an Item
+              </a>
+            </div>
+
+            <!-- Live Stats (computed from real data) -->
+            <div class="hp-hero-stats">
+              <div class="hp-stat">
+                <span class="hp-stat-value" id="stat-active-items">0</span>
+                <span class="hp-stat-label">Active Items</span>
+              </div>
+              <div class="hp-stat-divider"></div>
+              <div class="hp-stat">
+                <span class="hp-stat-value" id="stat-members">0</span>
+                <span class="hp-stat-label">Members</span>
+              </div>
+              <div class="hp-stat-divider"></div>
+              <div class="hp-stat">
+                <span class="hp-stat-value">10</span>
+                <span class="hp-stat-label">Categories</span>
+              </div>
+            </div>
+
+          </div><!-- /hp-hero-left -->
+
+          <!-- RIGHT COLUMN: Marketplace Floating Card -->
+          <div class="hp-hero-visual" id="hero-market-card-wrap">
+            <div class="hp-deco-circle-1"></div>
+            <div class="hp-deco-circle-2"></div>
+
+            <section class="hp-market-card" aria-label="CampusShare platform features">
+
+              <!-- Card Header -->
+              <div class="hp-mc-header">
+                <span class="hp-mc-title">Campus Exchange Modes</span>
+                <span class="hp-mc-live-badge">
+                  <span class="hp-mc-live-dot"></span>
+                  OPEN
+                </span>
+              </div>
+
+              <div class="hp-mc-subtitle">4 ways to share with your campus</div>
+
+              <!-- Platform Feature Rows (not listings) -->
+              <div class="hp-mc-listings">
+
+                <div class="hp-mc-listing-row">
+                  <div class="hp-mc-icon hp-mc-icon-blue">💰</div>
+                  <div class="hp-mc-listing-info">
+                    <div class="hp-mc-listing-name">Sell Items</div>
+                    <div class="hp-mc-listing-cat">Set your price · Meet on campus</div>
+                  </div>
+                  <span class="hp-listing-price hp-price-green">SELL</span>
+                </div>
+
+                <div class="hp-mc-listing-row">
+                  <div class="hp-mc-icon hp-mc-icon-purple">🤝</div>
+                  <div class="hp-mc-listing-info">
+                    <div class="hp-mc-listing-name">Lend &amp; Borrow</div>
+                    <div class="hp-mc-listing-cat">Semester-long loans · Zero cost</div>
+                  </div>
+                  <span class="hp-listing-price hp-price-blue">LEND</span>
+                </div>
+
+                <div class="hp-mc-listing-row">
+                  <div class="hp-mc-icon hp-mc-icon-green">💜</div>
+                  <div class="hp-mc-listing-info">
+                    <div class="hp-mc-listing-name">Donate for Free</div>
+                    <div class="hp-mc-listing-cat">Pass it forward · Help peers</div>
+                  </div>
+                  <span class="hp-listing-price hp-price-orange">FREE</span>
+                </div>
+
+              </div>
+
+              <!-- Platform Badge -->
+              <div class="hp-mc-verify-badge">
+                <div class="hp-mc-verify-icon">✓</div>
+                <div class="hp-mc-verify-text">
+                  <span class="hp-mc-verify-title">Student Verified Platform</span>
+                  <span class="hp-mc-verify-sub">Register to start buying &amp; selling</span>
+                </div>
+              </div>
+
+            </section><!-- /hp-market-card -->
+          </div><!-- /hp-hero-visual -->
+
+        </div><!-- /hp-hero-inner -->
+      </div><!-- /container -->
     </section>
 
-    <!-- Popular Categories Section -->
-    <section class="section">
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 2 — EXPLORE CATEGORIES
+    ══════════════════════════════════════════════════════════ -->
+    <section class="hp-categories" id="categories">
       <div class="container">
-        <div class="section-header">
+
+        <div class="hp-section-head">
           <div>
-            <h2 class="section-title">Explore Categories</h2>
-            <p class="section-subtitle">Find everything you need for the semester</p>
+            <div class="hp-section-label">Browse by Subject</div>
+            <h2 class="hp-section-title">Explore Categories</h2>
+            <p class="hp-section-subtitle">Browse student essentials by subject and academic need</p>
           </div>
-          <a href="html/explore.html" class="btn btn-outline">View All Categories &rarr;</a>
+          <a href="html/explore.html" class="hp-btn-view-all" id="view-all-categories-btn">
+            View All Categories
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
         </div>
 
-        <div class="grid-3">
-          <a href="html/explore.html?category=textbooks" class="card card-hover category-card-link">
-            <div class="category-icon-box category-icon-blue">📚</div>
-            <div>
-              <h3 class="mb-xs">Textbooks &amp; Notes</h3>
-              <p class="text-muted">Save up to 80% on STEM, Business, &amp; Liberal Arts textbooks</p>
-            </div>
+        <!-- Categories Grid: 5 × 2 = 10 cards -->
+        <div class="hp-categories-grid" id="categories-grid">
+
+          <a href="html/explore.html?category=books" class="hp-category-card" id="cat-books">
+            <div class="hp-category-icon cat-blue">📚</div>
+            <span class="hp-category-name">Books</span>
           </a>
 
-          <a href="html/explore.html?category=electronics" class="card card-hover category-card-link">
-            <div class="category-icon-box category-icon-purple">💻</div>
-            <div>
-              <h3 class="mb-xs">Electronics &amp; Tech</h3>
-              <p class="text-muted">Laptops, iPads, noise-canceling headphones, &amp; chargers</p>
-            </div>
+          <a href="html/explore.html?category=notes" class="hp-category-card" id="cat-notes">
+            <div class="hp-category-icon cat-purple">📝</div>
+            <span class="hp-category-name">Notes</span>
           </a>
 
-          <a href="html/explore.html?category=dorm" class="card card-hover category-card-link">
-            <div class="category-icon-box category-icon-success">🛋️</div>
+          <a href="html/explore.html?category=electronics" class="hp-category-card" id="cat-electronics">
+            <div class="hp-category-icon cat-teal">💻</div>
+            <span class="hp-category-name">Electronics</span>
+          </a>
+
+          <a href="html/explore.html?category=stationery" class="hp-category-card" id="cat-stationery">
+            <div class="hp-category-icon cat-orange">✏️</div>
+            <span class="hp-category-name">Stationery</span>
+          </a>
+
+          <a href="html/explore.html?category=lab" class="hp-category-card" id="cat-lab">
+            <div class="hp-category-icon cat-red">🧪</div>
+            <span class="hp-category-name">Lab Equipment</span>
+          </a>
+
+          <a href="html/explore.html?category=project" class="hp-category-card" id="cat-project">
+            <div class="hp-category-icon cat-indigo">🔧</div>
+            <span class="hp-category-name">Project Materials</span>
+          </a>
+
+          <a href="html/explore.html?category=hostel" class="hp-category-card" id="cat-hostel">
+            <div class="hp-category-icon cat-green">🛋️</div>
+            <span class="hp-category-name">Hostel Items</span>
+          </a>
+
+          <a href="html/explore.html?category=bags" class="hp-category-card" id="cat-bags">
+            <div class="hp-category-icon cat-pink">🎒</div>
+            <span class="hp-category-name">Bags</span>
+          </a>
+
+          <a href="html/explore.html?category=sports" class="hp-category-card" id="cat-sports">
+            <div class="hp-category-icon cat-yellow">⚽</div>
+            <span class="hp-category-name">Sports</span>
+          </a>
+
+          <a href="html/explore.html?category=other" class="hp-category-card" id="cat-other">
+            <div class="hp-category-icon cat-slate">📦</div>
+            <span class="hp-category-name">Other</span>
+          </a>
+
+        </div><!-- /hp-categories-grid -->
+      </div><!-- /container -->
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 3 — HOW DO YOU WANT TO SHARE?
+    ══════════════════════════════════════════════════════════ -->
+    <section class="hp-sharing" id="sharing-modes">
+      <div class="container">
+
+        <div class="text-center hp-sharing-intro">
+          <div class="hp-section-label hp-section-label-inline">Choose Your Way</div>
+          <h2 class="hp-section-title">How Do You Want to Share?</h2>
+          <p class="hp-section-subtitle hp-sharing-subtitle">
+            CampusShare offers 4 distinct ways to acquire or pass on items
+          </p>
+        </div>
+
+        <div class="hp-sharing-grid" id="sharing-modes-grid">
+
+          <!-- SELL -->
+          <div class="hp-share-card hp-share-sell" id="share-mode-sell">
             <div>
-              <h3 class="mb-xs">Dorm Essentials</h3>
-              <p class="text-muted">Mini fridges, microwaves, desk lamps, &amp; storage units</p>
+              <div class="hp-share-icon-wrap icon-sell">💰</div>
             </div>
+            <span class="hp-share-type-label label-sell">SELL</span>
+            <h3 class="hp-share-title">Sell Your Items</h3>
+            <p class="hp-share-desc">
+              Turn your unused textbooks, calculators, and gear into cash. Set your
+              own price and connect with buyers on campus in minutes.
+            </p>
+            <a href="html/explore.html?type=sell" class="hp-share-cta cta-sell" id="share-sell-cta">
+              Browse Listings
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+
+          <!-- DONATE -->
+          <div class="hp-share-card hp-share-donate" id="share-mode-donate">
+            <div>
+              <div class="hp-share-icon-wrap icon-donate">💜</div>
+            </div>
+            <span class="hp-share-type-label label-donate">DONATE</span>
+            <h3 class="hp-share-title">Donate for Free</h3>
+            <p class="hp-share-desc">
+              Pay it forward to juniors and peers. Donate lab kits, books, or hostel
+              items you no longer need and make someone's semester easier.
+            </p>
+            <a href="html/explore.html?type=donate" class="hp-share-cta cta-donate" id="share-donate-cta">
+              See Donations
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+
+          <!-- LEND -->
+          <div class="hp-share-card hp-share-lend" id="share-mode-lend">
+            <div>
+              <div class="hp-share-icon-wrap icon-lend">🤝</div>
+            </div>
+            <span class="hp-share-type-label label-lend">LEND</span>
+            <h3 class="hp-share-title">Lend &amp; Borrow</h3>
+            <p class="hp-share-desc">
+              Need a textbook for just one semester? Borrow it. Own a reference book
+              you rarely use? Lend it out and help a classmate succeed.
+            </p>
+            <a href="html/explore.html?type=lend" class="hp-share-cta cta-lend" id="share-lend-cta">
+              Borrow Items
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+
+          <!-- EXCHANGE -->
+          <div class="hp-share-card hp-share-exchange" id="share-mode-exchange">
+            <div>
+              <div class="hp-share-icon-wrap icon-exchange">🔄</div>
+            </div>
+            <span class="hp-share-type-label label-exchange">EXCHANGE</span>
+            <h3 class="hp-share-title">Trade &amp; Exchange</h3>
+            <p class="hp-share-desc">
+              Swap items of equal value with fellow students. Exchange your Sem 3
+              notes for Sem 4, or swap lab kits between departments.
+            </p>
+            <a href="html/explore.html?type=exchange" class="hp-share-cta cta-exchange" id="share-exchange-cta">
+              Find Exchanges
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+
+        </div><!-- /hp-sharing-grid -->
+      </div><!-- /container -->
+    </section>
+
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 4 — FEATURED CAMPUS LISTINGS (data-driven)
+    ══════════════════════════════════════════════════════════ -->
+    <section class="hp-featured" id="featured-listings">
+      <div class="container">
+
+        <div class="hp-section-head hp-featured-head" id="featured-head">
+          <div>
+            <div class="hp-section-label">Latest from Campus</div>
+            <h2 class="hp-section-title">Campus Listings</h2>
+            <p class="hp-section-subtitle">Items posted by students on your campus</p>
+          </div>
+          <a href="html/explore.html" class="hp-btn-view-all" id="see-all-listings-link">
+            See All Listings
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
-      </div>
+
+        <!-- Listings rendered by JS from localStorage (real data only) -->
+        <div class="hp-listings-grid" id="hp-featured-grid"></div>
+
+      </div><!-- /container -->
     </section>
 
-    <!-- Featured Listings Grid -->
-    <section class="section bg-white border-t border-b">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <span class="badge badge-blue mb-sm">🔥 Hot Picks</span>
-            <h2 class="section-title">Featured Campus Listings</h2>
-            <p class="section-subtitle">Verified student items available for pickup today</p>
-          </div>
-          <a href="html/explore.html" class="btn btn-primary">See All Listings</a>
-        </div>
-
-        <div id="index-featured-grid" class="grid-4"></div>
-      </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="section">
-      <div class="container">
-        <div class="text-center mb-xl">
-          <span class="badge badge-purple mb-sm">✨ Simple &amp; Safe</span>
-          <h2 class="section-title">How CampusShare Works</h2>
-          <p class="section-subtitle max-w-540">Designed specifically for college campus safety and trust</p>
-        </div>
-
-        <div class="grid-3">
-          <div class="card text-center step-card">
-            <div class="step-number step-number-1">1</div>
-            <h3 class="mb-sm">Sign In with .edu</h3>
-            <p>Verify your student status using your official university email to access your campus marketplace.</p>
-          </div>
-
-          <div class="card text-center step-card">
-            <div class="step-number step-number-2">2</div>
-            <h3 class="mb-sm">Chat &amp; Agree</h3>
-            <p>Direct message student sellers right on CampusShare to negotiate price and ask questions.</p>
-          </div>
-
-          <div class="card text-center step-card">
-            <div class="step-number step-number-3">3</div>
-            <h3 class="mb-sm">Safe Campus Pickup</h3>
-            <p>Meet up safely at the library, student union, or dining hall to inspect and complete the exchange.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Recent Listings Grid -->
-    <section class="section bg-white border-t">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Recently Added Items</h2>
-            <p class="section-subtitle">Fresh listings posted by students across campus</p>
-          </div>
-          <a href="html/explore.html" class="btn btn-outline">Explore Marketplace</a>
-        </div>
-
-        <div id="index-recent-grid" class="grid-3"></div>
-      </div>
-    </section>
   </main>
 
-  <!-- Dynamic Global Site Footer -->
+  <!-- ══════════════════════════════════════════════════════════
+       GLOBAL FOOTER (injected by main.js)
+  ══════════════════════════════════════════════════════════ -->
   <footer id="footer" class="site-footer"></footer>
 
   <!-- Core Scripts -->
   <script src="js/data.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/marketplace.js"></script>
+
+  <!-- Homepage: populate live stats + featured listings from real data -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // ── Live stats from real localStorage data ──────────────────
+      var allItems   = getItems();
+      var allUsers   = JSON.parse(localStorage.getItem('campus_share_all_users') || '[]');
+
+      var statItems   = document.getElementById('stat-active-items');
+      var statMembers = document.getElementById('stat-members');
+      if (statItems)   statItems.textContent   = allItems.filter(function(i){ return i.status === 'active'; }).length;
+      if (statMembers) statMembers.textContent = allUsers.length;
+
+      // ── Featured listings grid ──────────────────────────────────
+      var grid    = document.getElementById('hp-featured-grid');
+      var postUrl = getAppUrl('post-item.html');
+      if (!grid) return;
+
+      var recent = allItems.slice(0, 6);
+
+      if (recent.length === 0) {
+        grid.innerHTML = [
+          '<div class="hp-empty-state" id="featured-empty-state">',
+          '  <div class="hp-empty-icon">📦</div>',
+          '  <h3 class="hp-empty-title">No listings yet</h3>',
+          '  <p class="hp-empty-desc">Be the first student to share something with your campus community.</p>',
+          '  <a href="' + postUrl + '" class="hp-btn-see-all" id="empty-post-btn">',
+          '    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+          '    Post an Item',
+          '  </a>',
+          '</div>'
+        ].join('');
+      } else {
+        grid.innerHTML = recent.map(function(item) { return renderProductCard(item); }).join('');
+
+        // Show see-all button only when there are listings
+        var seeAllRow = document.createElement('div');
+        seeAllRow.className = 'hp-see-all-row';
+        seeAllRow.innerHTML =
+          '<a href="' + getAppUrl('explore.html') + '" class="hp-btn-see-all" id="browse-all-btn">' +
+          '  Browse All Campus Listings' +
+          '  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+          '</a>';
+        grid.parentElement.appendChild(seeAllRow);
+      }
+    });
+  </script>
+
 </body>
 </html>
