@@ -280,30 +280,30 @@
 }
 
 .hp-mc-title {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.55);
+  text-transform: none;
+  letter-spacing: normal;
+  color: #FFFFFF;
 }
 
 .hp-mc-live-badge {
   display: flex;
   align-items: center;
   gap: 5px;
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 3px 10px;
   border-radius: 9999px;
   font-size: 0.7rem;
   font-weight: 600;
-  color: #22C55E;
+  color: #FFFFFF;
 }
 
 .hp-mc-live-dot {
   width: 5px;
   height: 5px;
-  background: #22C55E;
+  background: #60A5FA;
   border-radius: 50%;
   animation: pulse-dot 2s ease-in-out infinite;
 }
@@ -383,6 +383,7 @@
 .hp-price-green { color: #22C55E; }
 .hp-price-blue { color: #60A5FA; }
 .hp-price-orange { color: #FB923C; }
+.hp-price-sm { font-size: 0.7rem; }
 
 /* Verified badge on card */
 .hp-mc-verify-badge {
@@ -654,6 +655,10 @@
 .label-lend     { background: #FFEDD5; color: #C2410C; }
 .label-exchange { background: #DBEAFE; color: #1D4ED8; }
 
+.hp-sharing-intro {
+  margin-bottom: 40px;
+}
+
 .hp-share-title {
   font-size: 1.15rem;
   font-weight: 700;
@@ -661,6 +666,11 @@
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
+
+.hp-share-sell .hp-share-title { color: #16A34A; }
+.hp-share-donate .hp-share-title { color: #7C3AED; }
+.hp-share-lend .hp-share-title { color: #EA580C; }
+.hp-share-exchange .hp-share-title { color: #1769FF; }
 
 .hp-share-desc {
   font-size: 0.875rem;
@@ -710,6 +720,7 @@
   flex-direction: column;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  cursor: pointer;
 }
 
 .hp-listing-card:hover {

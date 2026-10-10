@@ -23,8 +23,9 @@ function initStorage() {
     localStorage.setItem(STORAGE_KEYS.RESET_FLAG, "true");
   }
 
-  if (!localStorage.getItem(STORAGE_KEYS.ITEMS)) {
-    localStorage.setItem(STORAGE_KEYS.ITEMS, JSON.stringify([]));
+  if (!localStorage.getItem(STORAGE_KEYS.ITEMS) || JSON.parse(localStorage.getItem(STORAGE_KEYS.ITEMS) || "[]").length === 0) {
+    const defaultItems = (typeof INITIAL_ITEMS !== 'undefined' && Array.isArray(INITIAL_ITEMS)) ? INITIAL_ITEMS : [];
+    localStorage.setItem(STORAGE_KEYS.ITEMS, JSON.stringify(defaultItems));
   }
   if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
