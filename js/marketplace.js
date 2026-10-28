@@ -289,7 +289,7 @@ function initExploreMarketplace() {
     state.type = "all";
     state.category = "all";
     state.condition = "all";
-    state.maxPrice = 250;
+    state.maxPrice = 10000;
     state.college = "all";
     state.sort = "newest";
 

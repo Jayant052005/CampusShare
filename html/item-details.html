@@ -38,7 +38,9 @@
       <button type="button" onclick="closeContactModal()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.3rem; color: #9CA3AF; cursor: pointer;">✕</button>
       
       <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 20px;">
-        <img id="modal-seller-avatar" src="" alt="Seller" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;" />
+        <div id="modal-seller-avatar-wrap" style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--blue)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0;">
+          <span id="modal-seller-initials">AR</span>
+        </div>
         <div>
           <h3 id="modal-seller-title" style="font-size: 1.15rem; color: var(--navy); margin-bottom: 2px;">Message Seller</h3>
           <span id="modal-item-title" style="font-size: 0.85rem; color: var(--secondary-text);"></span>

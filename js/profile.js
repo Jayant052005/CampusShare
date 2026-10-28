@@ -395,10 +395,16 @@ function initMyListingsPage() {
   // Action Handlers using showConfirmModal
   window.handleMarkSold = function(itemId) {
     if (typeof showConfirmModal === "function") {
-      showConfirmModal("Mark Item as Sold", "Are you sure you want to mark this campus item as SOLD? It will move to your Sold records.", () => {
-        updateItemStatus(itemId, "sold");
-        if (typeof showToast === "function") showToast("Item successfully marked as SOLD!", "success");
-        renderListingsDashboard();
+      showConfirmModal({
+        title: "Mark Item as Sold",
+        message: "Are you sure you want to mark this campus item as SOLD? It will move to your Sold records.",
+        confirmText: "Mark as Sold",
+        confirmClass: "btn-primary",
+        onConfirm: () => {
+          updateItemStatus(itemId, "sold");
+          if (typeof showToast === "function") showToast("Item successfully marked as SOLD!", "success");
+          renderListingsDashboard();
+        }
       });
     } else {
       updateItemStatus(itemId, "sold");
@@ -417,10 +423,16 @@ function initMyListingsPage() {
     const msg = currentlyPaused ? "Resume this listing for student buyers?" : "Pause this listing? It will temporarily be hidden from search results.";
 
     if (typeof showConfirmModal === "function") {
-      showConfirmModal(currentlyPaused ? "Resume Listing" : "Pause Listing", msg, () => {
-        updateItemStatus(itemId, nextStatus);
-        if (typeof showToast === "function") showToast(currentlyPaused ? "Listing resumed as ACTIVE" : "Listing PAUSED", "info");
-        renderListingsDashboard();
+      showConfirmModal({
+        title: currentlyPaused ? "Resume Listing" : "Pause Listing",
+        message: msg,
+        confirmText: currentlyPaused ? "Resume" : "Pause",
+        confirmClass: currentlyPaused ? "btn-primary" : "btn-warning",
+        onConfirm: () => {
+          updateItemStatus(itemId, nextStatus);
+          if (typeof showToast === "function") showToast(currentlyPaused ? "Listing resumed as ACTIVE" : "Listing PAUSED", "info");
+          renderListingsDashboard();
+        }
       });
     } else {
       updateItemStatus(itemId, nextStatus);
@@ -430,10 +442,16 @@ function initMyListingsPage() {
 
   window.handleDeleteListing = function(itemId) {
     if (typeof showConfirmModal === "function") {
-      showConfirmModal("Delete Listing", "Are you sure you want to permanently delete this listing? This action cannot be undone.", () => {
-        deleteItem(itemId);
-        if (typeof showToast === "function") showToast("Listing permanently deleted", "info");
-        renderListingsDashboard();
+      showConfirmModal({
+        title: "Delete Listing",
+        message: "Are you sure you want to permanently delete this listing? This action cannot be undone.",
+        confirmText: "Delete",
+        confirmClass: "btn-danger",
+        onConfirm: () => {
+          deleteItem(itemId);
+          if (typeof showToast === "function") showToast("Listing permanently deleted", "info");
+          renderListingsDashboard();
+        }
       });
     } else {
       deleteItem(itemId);

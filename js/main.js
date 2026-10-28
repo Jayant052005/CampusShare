@@ -91,7 +91,15 @@ function showToast(message, type = "info") {
 }
 
 // Confirmation Modal Manager (Replaces native alert/confirm)
-function showConfirmModal({ title, message, confirmText = "Confirm", confirmClass = "btn-danger", onConfirm }) {
+// Supports both object-style: showConfirmModal({title, message, confirmText, confirmClass, onConfirm})
+// and positional-style: showConfirmModal(title, message, onConfirm) for backward compat
+function showConfirmModal(titleOrConfig, message, onConfirm, confirmText = "Confirm", confirmClass = "btn-danger") {
+  // Detect object-style call
+  if (titleOrConfig && typeof titleOrConfig === "object") {
+    const cfg = titleOrConfig;
+    return showConfirmModal(cfg.title, cfg.message, cfg.onConfirm, cfg.confirmText || "Confirm", cfg.confirmClass || "btn-danger");
+  }
+  const title = titleOrConfig;
   let modal = document.getElementById("cs-confirm-modal");
   if (!modal) {
     modal = document.createElement("div");

@@ -58,7 +58,20 @@ function initWishlistPage() {
       const currentList = getWishlist();
       if (currentList.length === 0) return;
 
-      if (confirm("Are you sure you want to remove all saved items from your wishlist?")) {
+      if (typeof showConfirmModal === "function") {
+        showConfirmModal({
+          title: "Clear Wishlist",
+          message: "Are you sure you want to remove all saved items from your wishlist?",
+          confirmText: "Clear All",
+          confirmClass: "btn-danger",
+          onConfirm: () => {
+            localStorage.setItem(STORAGE_KEYS.WISHLIST, JSON.stringify([]));
+            updateHeaderWishlistCount();
+            renderWishlist();
+            showToast("Wishlist cleared", "info");
+          }
+        });
+      } else {
         localStorage.setItem(STORAGE_KEYS.WISHLIST, JSON.stringify([]));
         updateHeaderWishlistCount();
         renderWishlist();

@@ -100,6 +100,17 @@
   background-color: var(--purple-hover);
 }
 
+.btn-warning {
+  background-color: #F59E0B;
+  color: var(--white);
+  border: 1.5px solid #F59E0B;
+}
+
+.btn-warning:hover {
+  background-color: #D97706;
+  border-color: #D97706;
+}
+
 .btn-sm {
   padding: 0.4rem 0.85rem;
   font-size: 0.85rem;
@@ -325,6 +336,27 @@
 .badge-neutral {
   background-color: var(--border);
   color: var(--text);
+}
+
+/* Listing-type specific badge aliases used in My Listings dashboard */
+.badge-sell {
+  background-color: #EFF6FF;
+  color: #1D4ED8;
+}
+
+.badge-donate {
+  background-color: #F0FDF4;
+  color: #15803D;
+}
+
+.badge-lend {
+  background-color: #FFF7ED;
+  color: #C2410C;
+}
+
+.badge-exchange {
+  background-color: #FAF5FF;
+  color: #7E22CE;
 }
 
 /* --------------------------------------------------------------------------

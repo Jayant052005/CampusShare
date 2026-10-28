@@ -98,7 +98,7 @@ function renderItemDetails(container, item) {
     conditionalBtnIcon = "🔄";
   }
 
-  let priceText = item.priceDisplay || (item.price === 0 ? "FREE" : `$${item.price}`);
+  let priceText = item.priceDisplay || (item.price === 0 ? "FREE" : (typeof formatINR === 'function' ? formatINR(item.price) : '₹' + item.price));
   let priceClass = "";
   if (type === "donate" || String(priceText).toUpperCase() === "FREE") {
     priceClass = "free";
@@ -164,7 +164,7 @@ function renderItemDetails(container, item) {
             <h3 style="font-size: 1.1rem; color: #C2410C; margin-bottom: 8px;">🤝 Lending Terms</h3>
             <p style="font-size: 0.925rem; color: #9A3412;">
               <strong>Duration:</strong> ${item.lendDuration || "1 Semester"}<br>
-              <strong>Security Deposit:</strong> ${item.deposit ? `$${item.deposit} (refundable upon safe return)` : "None required"}
+              <strong>Security Deposit:</strong> ${item.deposit ? (typeof formatINR === 'function' ? formatINR(item.deposit) : '₹' + item.deposit) + ' (refundable upon safe return)' : "None required"}
             </p>
           </div>
         ` : ''}
@@ -207,7 +207,7 @@ function renderItemDetails(container, item) {
           <div class="id-price-row">
             <span class="id-price-main ${priceClass}">${priceText}</span>
             ${item.originalPrice && item.originalPrice > item.price ? `
-              <span class="id-price-orig">$${item.originalPrice}</span>
+              <span class="id-price-orig">${typeof formatINR === 'function' ? formatINR(item.originalPrice) : '₹' + item.originalPrice}</span>
             ` : ''}
             ${item.negotiable ? `
               <span class="badge badge-warning" style="font-size: 0.75rem;">Price Negotiable</span>
@@ -283,12 +283,12 @@ function renderItemDetails(container, item) {
 
           <div class="id-seller-stats">
             <div>
-              <div class="id-seller-stat-val">⭐ ${item.rating || 4.9} ★</div>
-              <div class="id-seller-stat-lbl">38 student reviews</div>
+              <div class="id-seller-stat-val">⭐ ${item.rating && item.rating !== '—' ? item.rating + ' ★' : '—'}</div>
+              <div class="id-seller-stat-lbl">${item.reviewsCount ? `${item.reviewsCount} student reviews` : 'Verified Peer'}</div>
             </div>
             <div>
-              <div class="id-seller-stat-val">⚡ &lt; 1 hour</div>
-              <div class="id-seller-stat-lbl">Average response time</div>
+              <div class="id-seller-stat-val">⚡ Fast</div>
+              <div class="id-seller-stat-lbl">Campus response time</div>
             </div>
           </div>
         </div>
@@ -366,13 +366,15 @@ window.openContactModal = function(btnTitle) {
   const modal = document.getElementById("id-contact-modal");
   if (!modal || !currentItem) return;
 
-  const avatar = document.getElementById("modal-seller-avatar");
+  const sellerInitialsEl = document.getElementById("modal-seller-initials");
   const title = document.getElementById("modal-seller-title");
   const itemTitle = document.getElementById("modal-item-title");
   const customChip = document.getElementById("modal-custom-type-chip");
   const submitBtn = document.getElementById("modal-submit-btn");
 
-  if (avatar) avatar.src = currentItem.sellerAvatar;
+  if (sellerInitialsEl) {
+    sellerInitialsEl.textContent = typeof getUserInitials === "function" ? getUserInitials(currentItem.sellerName) : "CS";
+  }
   if (title) title.textContent = `Message ${currentItem.sellerName}`;
   if (itemTitle) itemTitle.textContent = `Regarding: "${currentItem.title}"`;
   if (customChip) {
@@ -405,27 +407,29 @@ window.fillQuickMessage = function(text) {
   }
 };
 
-// Send Message Handler
-const contactForm = document.getElementById("contact-seller-form");
-if (contactForm) {
-  contactForm.addEventListener("submit", function(e) {
-    e.preventDefault();
-    const input = document.getElementById("modal-message-input");
-    const msg = input ? input.value.trim() : "";
-    if (!msg || !currentItem) return;
+// Send Message Handler — must run after DOM is ready
+document.addEventListener("DOMContentLoaded", function() {
+  const contactForm = document.getElementById("contact-seller-form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const input = document.getElementById("modal-message-input");
+      const msg = input ? input.value.trim() : "";
+      if (!msg || !currentItem) return;
 
-    const conv = typeof createOrGetConversation === "function" ? createOrGetConversation(currentItem.id, msg) : null;
+      const conv = typeof createOrGetConversation === "function" ? createOrGetConversation(currentItem.id, msg) : null;
 
-    closeContactModal();
-    if (input) input.value = "";
-    showToast(`Message sent to ${currentItem.sellerName}!`, "success");
+      closeContactModal();
+      if (input) input.value = "";
+      showToast(`Message sent to ${currentItem.sellerName}!`, "success");
 
-    const msgUrl = typeof getAppUrl === "function" ? getAppUrl("messages.html?conv=" + (conv ? conv.id : "")) : "messages.html";
-    setTimeout(() => {
-      window.location.href = msgUrl;
-    }, 800);
-  });
-}
+      const msgUrl = typeof getAppUrl === "function" ? getAppUrl("messages.html?conv=" + (conv ? conv.id : "")) : "messages.html";
+      setTimeout(() => {
+        window.location.href = msgUrl;
+      }, 800);
+    });
+  }
+});
 
 // Report Modal Controls
 window.openReportModal = function() {
