@@ -2412,3 +2412,33 @@
 }
 
 
+
+/* --------------------------------------------------------------------------
+   MISSING CLASS DEFINITIONS — Profile, Settings, Modal
+   -------------------------------------------------------------------------- */
+
+/* Profile page tab content area */
+.profile-tab-content-wrap {
+  margin-top: 24px;
+}
+
+/* Settings page section panels — JS controls display via inline style */
+.settings-tab-section {
+  /* no extra styling needed; visibility controlled by JS */
+}
+
+/* Modal overlay — shared by contact, report, and confirm modals */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(7, 24, 46, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 2100;
+  align-items: center;
+  justify-content: center;
+}
+
