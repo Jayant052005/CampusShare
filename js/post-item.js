@@ -383,21 +383,7 @@ function hydrateStep5Review() {
   const revLoc = document.getElementById("review-location");
   const revDesc = document.getElementById("review-desc");
 
-  // Default fallback image if none uploaded
-  const fallbackImages = {
-    Books: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
-    Notes: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
-    Electronics: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80",
-    Stationery: "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&w=800&q=80",
-    "Lab Equipment": "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80",
-    "Project Materials": "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=800&q=80",
-    "Hostel Items": "https://images.unsplash.com/photo-1580481077111-9a746522c091?auto=format&fit=crop&w=800&q=80",
-    Bags: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
-    Sports: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80",
-    Other: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=800&q=80"
-  };
-
-  const primaryPhoto = (formData.photos.length > 0) ? formData.photos[0] : (fallbackImages[formData.category] || fallbackImages.Books);
+  const primaryPhoto = (formData.photos.length > 0) ? formData.photos[0] : (typeof getCategoryPlaceholderSvg === "function" ? getCategoryPlaceholderSvg(formData.category) : "");
   if (revImg) revImg.src = primaryPhoto;
 
   const type = formData.type;
@@ -417,11 +403,14 @@ function hydrateStep5Review() {
     if (type === "donate") {
       revPrice.innerHTML = `<span style="color: #16A34A;">FREE DONATION</span>`;
     } else if (type === "lend") {
-      revPrice.innerHTML = `<span style="color: #EA580C; font-size: 1.4rem;">LEND • ${formData.lendDuration}</span> ${formData.deposit ? `<span style="font-size: 0.9rem; color: #64748B;">(Deposit: $${formData.deposit})</span>` : ''}`;
+      const depositStr = formData.deposit ? `(Deposit: ${typeof formatINR === 'function' ? formatINR(formData.deposit) : '₹' + formData.deposit})` : '';
+      revPrice.innerHTML = `<span style="color: #EA580C; font-size: 1.4rem;">LEND • ${formData.lendDuration}</span> ${depositStr ? `<span style="font-size: 0.9rem; color: #64748B;">${depositStr}</span>` : ''}`;
     } else if (type === "exchange") {
       revPrice.innerHTML = `<span style="color: #1769FF; font-size: 1.4rem;">EXCHANGE</span> <div style="font-size: 0.85rem; color: #64748B; font-weight: 500;">For: "${formData.exchangeFor}"</div>`;
     } else {
-      revPrice.innerHTML = `<span>$${formData.price}</span> ${formData.originalPrice > formData.price ? `<span style="font-size: 1.1rem; color: #9CA3AF; text-decoration: line-through; margin-left: 8px;">$${formData.originalPrice}</span>` : ''} ${formData.negotiable ? '<span class="badge badge-warning" style="margin-left: 8px; font-size: 0.75rem;">Negotiable</span>' : ''}`;
+      const priceFmt = typeof formatINR === 'function' ? formatINR(formData.price) : '₹' + formData.price;
+      const origFmt = formData.originalPrice > formData.price ? (typeof formatINR === 'function' ? formatINR(formData.originalPrice) : '₹' + formData.originalPrice) : '';
+      revPrice.innerHTML = `<span>${priceFmt}</span> ${origFmt ? `<span style="font-size: 1.1rem; color: #9CA3AF; text-decoration: line-through; margin-left: 8px;">${origFmt}</span>` : ''} ${formData.negotiable ? '<span class="badge badge-warning" style="margin-left: 8px; font-size: 0.75rem;">Negotiable</span>' : ''}`;
     }
   }
 }
@@ -434,24 +423,11 @@ window.publishListing = function() {
     publishBtn.textContent = "Publishing to Campus...";
   }
 
-  // Ensure fallback photo if none provided
-  const fallbackImages = {
-    Books: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
-    Notes: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
-    Electronics: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80",
-    Stationery: "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&w=800&q=80",
-    "Lab Equipment": "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80",
-    "Project Materials": "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=800&q=80",
-    "Hostel Items": "https://images.unsplash.com/photo-1580481077111-9a746522c091?auto=format&fit=crop&w=800&q=80",
-    Bags: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
-    Sports: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80",
-    Other: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=800&q=80"
-  };
-
-  const primaryPhoto = (formData.photos.length > 0) ? formData.photos[0] : (fallbackImages[formData.category] || fallbackImages.Books);
+  // Ensure clean SVG placeholder photo if none provided
+  const primaryPhoto = (formData.photos.length > 0) ? formData.photos[0] : (typeof getCategoryPlaceholderSvg === "function" ? getCategoryPlaceholderSvg(formData.category) : "");
   const allPhotos = (formData.photos.length > 0) ? formData.photos : [primaryPhoto];
 
-  let priceDisplay = `$${formData.price}`;
+  let priceDisplay = typeof formatINR === 'function' ? formatINR(formData.price) : `₹${formData.price}`;
   if (formData.type === "donate") {
     priceDisplay = "FREE";
   } else if (formData.type === "lend") {

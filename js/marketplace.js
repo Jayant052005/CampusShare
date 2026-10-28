@@ -37,7 +37,7 @@ function initExploreMarketplace() {
     type: "all",
     category: "all",
     condition: "all",
-    maxPrice: 250,
+    maxPrice: 10000,
     college: "all",
     sort: "newest"
   };
@@ -63,12 +63,16 @@ function initExploreMarketplace() {
     }
   }
 
-  if (urlParams.has("category")) {
-    state.category = urlParams.get("category");
-    const activeCat = catListContainer.querySelector(`.mp-cat-item[data-category="${state.category}"]`);
-    if (activeCat) {
+  if (urlParams.has("category") && catListContainer) {
+    const rawCat = urlParams.get("category").trim().toLowerCase();
+    const matchingItem = Array.from(catListContainer.querySelectorAll(".mp-cat-item")).find(el => {
+      const cat = (el.getAttribute("data-category") || "").toLowerCase();
+      return cat === rawCat || cat.includes(rawCat) || rawCat.includes(cat);
+    });
+    if (matchingItem) {
+      state.category = matchingItem.getAttribute("data-category");
       catListContainer.querySelectorAll(".mp-cat-item").forEach(c => c.classList.remove("active"));
-      activeCat.classList.add("active");
+      matchingItem.classList.add("active");
     }
   }
 
@@ -112,7 +116,7 @@ function initExploreMarketplace() {
     }
 
     // Max Price Filter
-    if (state.maxPrice < 250) {
+    if (state.maxPrice < 10000) {
       items = items.filter(item => {
         const itemPrice = parseFloat(item.price) || 0;
         return itemPrice <= state.maxPrice;
@@ -247,11 +251,11 @@ function initExploreMarketplace() {
       `;
     }
 
-    if (state.maxPrice < 250) {
+    if (state.maxPrice < 10000) {
       activeFilterCount++;
       chipsHtml += `
         <span class="mp-chip">
-          Under $${state.maxPrice}
+          Under ${typeof formatINR === 'function' ? formatINR(state.maxPrice) : '₹' + state.maxPrice}
           <span class="mp-chip-remove" onclick="window.resetPriceFilter()">✕</span>
         </span>
       `;
@@ -310,8 +314,8 @@ function initExploreMarketplace() {
       if (allPill) allPill.classList.add("active");
     }
 
-    if (priceSlider) priceSlider.value = 250;
-    if (priceValDisplay) priceValDisplay.textContent = "$250+";
+    if (priceSlider) priceSlider.value = 10000;
+    if (priceValDisplay) priceValDisplay.textContent = "₹10,000+";
 
     if (collegeSelect) collegeSelect.value = "all";
     if (sortSelect) sortSelect.value = "newest";
@@ -359,9 +363,9 @@ function initExploreMarketplace() {
   };
 
   window.resetPriceFilter = function() {
-    state.maxPrice = 250;
-    if (priceSlider) priceSlider.value = 250;
-    if (priceValDisplay) priceValDisplay.textContent = "$250+";
+    state.maxPrice = 10000;
+    if (priceSlider) priceSlider.value = 10000;
+    if (priceValDisplay) priceValDisplay.textContent = "₹10,000+";
     renderMarketplace();
   };
 
@@ -427,7 +431,7 @@ function initExploreMarketplace() {
     priceSlider.addEventListener("input", function() {
       state.maxPrice = parseFloat(this.value);
       if (priceValDisplay) {
-        priceValDisplay.textContent = state.maxPrice >= 250 ? "$250+" : `$${state.maxPrice}`;
+        priceValDisplay.textContent = state.maxPrice >= 10000 ? "₹10,000+" : (typeof formatINR === 'function' ? formatINR(state.maxPrice) : '₹' + state.maxPrice);
       }
       renderMarketplace();
     });

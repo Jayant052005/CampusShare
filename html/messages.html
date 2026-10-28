@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Messages &amp; Chat - CampusShare</title>
-  <meta name="description" content="Chat directly with student buyers and sellers on campus to negotiate prices and arrange safe meetups.">
+  <title>Campus Messages &amp; Peer Chat - CampusShare</title>
+  <meta name="description" content="Chat securely with verified student buyers and sellers on campus to negotiate prices, ask questions, and propose safe campus meetups.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/marketplace.css">
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body>
@@ -14,24 +15,41 @@
   <!-- Dynamic Global Site Header -->
   <header id="navbar" class="site-header"></header>
 
-  <main>
-    <div class="container section-sm">
-      <div class="card chat-layout-card">
+  <main class="cs-msg-page">
+    <div class="container">
+      <div id="cs-msg-container" class="cs-msg-container">
 
-        <!-- Left Pane: Conversations List -->
-        <div class="chat-left-pane">
-          <div class="chat-left-header">
-            <h3 class="sidebar-heading">Messages</h3>
+        <!-- LEFT COLUMN: Conversation Directory -->
+        <aside class="cs-msg-sidebar" id="cs-msg-sidebar">
+          <div class="cs-msg-sidebar-header">
+            <div class="cs-msg-sidebar-title-row">
+              <h2 class="cs-msg-sidebar-title">
+                Campus Messages
+                <span id="cs-msg-unread-pill" class="cs-msg-unread-pill" style="display: none;">0 new</span>
+              </h2>
+            </div>
+            <div class="cs-msg-search-wrap">
+              <span class="cs-msg-search-icon">🔍</span>
+              <input
+                type="text"
+                id="cs-msg-search"
+                class="cs-msg-search-input"
+                placeholder="Search conversations..."
+                autocomplete="off"
+              />
+            </div>
           </div>
-          <div id="conversations-list" class="flex-1 overflow-y-auto">
-            <!-- Hydrated by messages.js -->
-          </div>
-        </div>
 
-        <!-- Right Pane: Chat Thread -->
-        <div id="chat-thread-container" class="chat-right-pane">
-          <!-- Hydrated by messages.js -->
-        </div>
+          <!-- Scrollable Conversations List -->
+          <div id="cs-conv-list" class="cs-conv-list" role="tablist" aria-label="Campus Conversations">
+            <!-- Injected by messages.js -->
+          </div>
+        </aside>
+
+        <!-- RIGHT COLUMN: Interactive Chat Room -->
+        <section class="cs-msg-chat" id="cs-chat-pane" aria-label="Conversation Thread">
+          <!-- Injected by messages.js -->
+        </section>
 
       </div>
     </div>

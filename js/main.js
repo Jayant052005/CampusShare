@@ -1,5 +1,6 @@
 /* ==========================================================================
    CampusShare - Main Global Controller
+   Currency: Indian Rupees (₹ INR) only
    ========================================================================== */
 
 // Smart URL routing helper for multi-folder structure
@@ -50,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function() {
   initFooter();
   initMobileDrawer();
   updateHeaderWishlistCount();
+  updateHeaderNotifications();
   initNavSearch();
 });
 
@@ -88,6 +90,41 @@ function showToast(message, type = "info") {
   }, 3500);
 }
 
+// Confirmation Modal Manager (Replaces native alert/confirm)
+function showConfirmModal({ title, message, confirmText = "Confirm", confirmClass = "btn-danger", onConfirm }) {
+  let modal = document.getElementById("cs-confirm-modal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "cs-confirm-modal";
+    modal.className = "modal-overlay";
+    modal.style.cssText = "display:none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(7, 24, 46, 0.6); backdrop-filter: blur(4px); z-index: 2500; align-items: center; justify-content: center;";
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = `
+    <div style="background: white; border-radius: 20px; width: 90%; max-width: 440px; padding: 28px; box-shadow: 0 20px 50px rgba(0,0,0,0.25); position: relative;">
+      <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--navy); margin-bottom: 8px;">${title}</h3>
+      <p style="font-size: 0.95rem; color: var(--secondary-text); line-height: 1.5; margin-bottom: 24px;">${message}</p>
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button type="button" class="btn btn-outline" id="cs-confirm-cancel-btn">Cancel</button>
+        <button type="button" class="btn ${confirmClass}" id="cs-confirm-ok-btn">${confirmText}</button>
+      </div>
+    </div>
+  `;
+
+  modal.style.display = "flex";
+
+  const cancelBtn = modal.querySelector("#cs-confirm-cancel-btn");
+  const okBtn = modal.querySelector("#cs-confirm-ok-btn");
+
+  const closeModal = () => { modal.style.display = "none"; };
+  cancelBtn.onclick = closeModal;
+  okBtn.onclick = () => {
+    closeModal();
+    if (typeof onConfirm === "function") onConfirm();
+  };
+}
+
 // SVG Icons Catalog
 const CS_ICONS = {
   logo: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
@@ -109,6 +146,8 @@ function initNavbar() {
 
   const currentUser = getCurrentUser();
   const wishlist = getWishlist();
+  const unreadNotifs = typeof getUnreadNotificationCount === "function" ? getUnreadNotificationCount() : 0;
+  const conversations = typeof getConversations === "function" ? getConversations() : [];
 
   // Route active detector
   const currentPath = window.location.pathname.split("/").pop() || "index.html";
@@ -133,6 +172,8 @@ function initNavbar() {
     }
     return "";
   }
+
+  const userInitial = currentUser ? (currentUser.name || "U").charAt(0).toUpperCase() : "U";
 
   headerContainer.innerHTML = `
     <div class="container">
@@ -174,14 +215,25 @@ function initNavbar() {
         <!-- Messages Icon -->
         <a href="${getAppUrl('messages.html')}" class="cs-icon-btn" title="Messages">
           ${CS_ICONS.messages}
-          <span class="cs-icon-badge" style="background-color: var(--purple);">2</span>
+          <span class="cs-icon-badge" style="background-color: var(--purple); ${conversations.length > 0 ? '' : 'display:none;'}">${conversations.length}</span>
         </a>
 
-        <!-- Notifications Bell Icon -->
-        <button type="button" class="cs-icon-btn" title="Notifications" onclick="showToast('You have 1 new campus price update', 'info')">
-          ${CS_ICONS.bell}
-          <span class="cs-icon-dot-badge"></span>
-        </button>
+        <!-- Notifications Bell Dropdown -->
+        <div class="dropdown" id="notif-dropdown" style="position: relative;">
+          <button type="button" class="cs-icon-btn" id="notif-dropdown-btn" title="Campus Notifications">
+            ${CS_ICONS.bell}
+            <span class="cs-icon-badge" id="nav-notif-badge" style="${unreadNotifs > 0 ? '' : 'display:none;'}">${unreadNotifs}</span>
+          </button>
+          <div class="dropdown-menu" id="notif-dropdown-menu" style="right: 0; min-width: 320px; max-width: 360px; padding: 0;">
+            <div style="padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+              <strong style="color: var(--navy); font-size: 0.9rem;">Notifications</strong>
+              <button type="button" id="notif-mark-read-btn" style="background: none; border: none; color: var(--blue); font-size: 0.75rem; font-weight: 600; cursor: pointer;">Mark all as read</button>
+            </div>
+            <div id="notif-items-list" style="max-height: 280px; overflow-y: auto;">
+              <!-- Hydrated dynamically -->
+            </div>
+          </div>
+        </div>
 
         <!-- Post an Item CTA Button -->
         <a href="${getAppUrl('post-item.html')}" class="cs-btn-post">
@@ -193,7 +245,7 @@ function initNavbar() {
         ${currentUser ? `
           <div class="dropdown" id="user-dropdown">
             <button class="cs-user-dropdown-toggle" id="user-dropdown-btn" aria-label="User Menu">
-              <img src="${currentUser.avatar}" alt="${currentUser.name}" class="cs-user-avatar" />
+              ${currentUser.avatar ? `<img src="${currentUser.avatar}" alt="${currentUser.name}" class="cs-user-avatar" />` : `<div style="width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--blue)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">${userInitial}</div>`}
               ${CS_ICONS.chevronDown}
             </button>
             <div class="dropdown-menu" id="user-dropdown-menu">
@@ -224,7 +276,7 @@ function initNavbar() {
       <!-- Quick Search Overlay Form -->
       <form class="cs-search-overlay" id="cs-search-overlay-form">
         ${CS_ICONS.search}
-        <input type="text" id="cs-search-overlay-input" placeholder="Search textbooks, dorm gear, electronics..." />
+        <input type="text" id="cs-search-overlay-input" placeholder="Search textbooks, notes, electronics, hostel gear..." />
         <button type="button" class="cs-icon-btn" id="cs-search-close-btn">
           ${CS_ICONS.close}
         </button>
@@ -261,31 +313,95 @@ function initNavbar() {
     });
   }
 
-  // Dropdown Listener
+  // User Dropdown Listener
   const dropdownBtn = document.getElementById("user-dropdown-btn");
   const dropdownMenu = document.getElementById("user-dropdown-menu");
   if (dropdownBtn && dropdownMenu) {
     dropdownBtn.addEventListener("click", function(e) {
       e.stopPropagation();
       dropdownMenu.classList.toggle("show");
-    });
-    document.addEventListener("click", function() {
-      dropdownMenu.classList.remove("show");
+      const notifMenu = document.getElementById("notif-dropdown-menu");
+      if (notifMenu) notifMenu.classList.remove("show");
     });
   }
+
+  // Notifications Dropdown Listener
+  const notifBtn = document.getElementById("notif-dropdown-btn");
+  const notifMenu = document.getElementById("notif-dropdown-menu");
+  if (notifBtn && notifMenu) {
+    notifBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      notifMenu.classList.toggle("show");
+      if (dropdownMenu) dropdownMenu.classList.remove("show");
+      renderNotificationList();
+    });
+  }
+
+  const markReadBtn = document.getElementById("notif-mark-read-btn");
+  if (markReadBtn) {
+    markReadBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      markNotificationsRead();
+      renderNotificationList();
+      updateHeaderNotifications();
+      showToast("All notifications marked as read", "info");
+    });
+  }
+
+  document.addEventListener("click", function() {
+    if (dropdownMenu) dropdownMenu.classList.remove("show");
+    if (notifMenu) notifMenu.classList.remove("show");
+  });
 
   // Logout Listener
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function(e) {
       e.preventDefault();
-      logoutUser();
-      showToast("Logged out successfully", "info");
+      setCurrentUser(null);
+      showToast("Signed out of CampusShare", "info");
       setTimeout(() => {
-        window.location.href = getAppUrl("index.html");
-      }, 400);
+        window.location.href = getAppUrl("login.html");
+      }, 500);
     });
   }
+}
+
+function updateHeaderNotifications() {
+  const badge = document.getElementById("nav-notif-badge");
+  if (badge && typeof getUnreadNotificationCount === "function") {
+    const unread = getUnreadNotificationCount();
+    badge.textContent = unread;
+    badge.style.display = unread > 0 ? "inline-flex" : "none";
+  }
+}
+
+function renderNotificationList() {
+  const container = document.getElementById("notif-items-list");
+  if (!container || typeof getNotifications !== "function") return;
+
+  const notifs = getNotifications();
+  if (notifs.length === 0) {
+    container.innerHTML = `
+      <div style="padding: 24px; text-align: center; color: var(--secondary-text); font-size: 0.85rem;">
+        No notifications yet.<br>You're all caught up!
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = notifs.map(n => `
+    <div style="padding: 10px 16px; border-bottom: 1px solid #F1F5F9; background: ${n.unread ? '#F0F7FF' : 'white'}; cursor: pointer; transition: background 0.15s ease;" onclick="window.location.href='${getAppUrl(n.link)}'">
+      <div style="display: flex; gap: 8px; align-items: flex-start;">
+        <span style="font-size: 1.1rem; line-height: 1;">${n.icon || 'ℹ️'}</span>
+        <div style="flex: 1;">
+          <div style="font-size: 0.825rem; font-weight: ${n.unread ? '700' : '600'}; color: var(--navy);">${n.title}</div>
+          <div style="font-size: 0.775rem; color: #4B5563; line-height: 1.4; margin-top: 2px;">${n.message}</div>
+          <div style="font-size: 0.7rem; color: #9CA3AF; margin-top: 4px;">${n.date}</div>
+        </div>
+      </div>
+    </div>
+  `).join("");
 }
 
 // Global Footer Render
@@ -311,7 +427,7 @@ function initFooter() {
           </a>
 
           <p class="footer-description">
-            CampusShare is the trustworthy student-driven marketplace for buying, selling, donating, lending, and exchanging textbooks, notes, lab gear, and dorm essentials.
+            CampusShare is the student-driven marketplace for buying, selling, donating, lending, and exchanging textbooks, notes, lab gear, and hostel essentials in Indian Rupees (₹).
           </p>
 
           <div class="footer-green-statement">
@@ -336,29 +452,30 @@ function initFooter() {
         <div>
           <h4 class="footer-col-title">SAFETY &amp; TRUST</h4>
           <div class="footer-nav-list">
-            <a href="#">Verified Student Status</a>
+            <a href="${getAppUrl('explore.html')}">Verified Campus Listings</a>
             <a href="${getAppUrl('index.html#how-it-works')}">How It Works</a>
             <a href="#">Safe Campus Meetups</a>
-            <a href="#">Reviews &amp; Ratings</a>
-            <a href="#">Report Suspicious Item</a>
+            <a href="#">Encrypted Student Chat</a>
+            <a href="#">Community Guidelines</a>
           </div>
         </div>
 
-        <!-- Column 3: CAMPUSSHARE -->
+        <!-- Column 3: USER ACCOUNT -->
         <div>
-          <h4 class="footer-col-title">CAMPUSSHARE</h4>
+          <h4 class="footer-col-title">MY ACCOUNT</h4>
           <div class="footer-nav-list">
-            <a href="#">About Our Mission</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact Campus Team</a>
+            <a href="${getAppUrl('profile.html')}">Student Profile</a>
+            <a href="${getAppUrl('my-listings.html')}">My Listings</a>
+            <a href="${getAppUrl('wishlist.html')}">Saved Wishlist</a>
+            <a href="${getAppUrl('messages.html')}">Campus Messages</a>
+            <a href="${getAppUrl('settings.html')}">Account Settings</a>
           </div>
         </div>
       </div>
 
       <!-- Bottom Bar -->
       <div class="footer-bottom-bar">
-        <div>&copy; ${new Date().getFullYear()} CampusShare Inc. Built for university communities.</div>
+        <div>&copy; ${new Date().getFullYear()} CampusShare Inc. Built for student communities. All values in ₹ (INR).</div>
         <div style="display: flex; gap: 20px;">
           <a href="#" style="color: inherit; text-decoration: none;">Privacy Policy</a>
           <a href="#" style="color: inherit; text-decoration: none;">Terms of Service</a>
@@ -384,67 +501,42 @@ function initMobileDrawer() {
   }
 
   if (!drawer) {
-    const currentUser = getCurrentUser();
     drawer = document.createElement("div");
     drawer.className = "mobile-nav-drawer";
     
-    // Route active detector for mobile menu
-    const currentPath = window.location.pathname.split("/").pop() || "index.html";
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentType = urlParams.get("type") || urlParams.get("category");
-
-    const isNavActive = (key) => {
-      if (key === "home") return (currentPath === "index.html" || currentPath === "" || currentPath === "/") ? "active" : "";
-      if (key === "donate") return (currentType === "donate") ? "active" : "";
-      if (key === "lend") return (currentType === "lend") ? "active" : "";
-      if (key === "exchange") return (currentType === "exchange") ? "active" : "";
-      if (key === "explore") return (currentPath === "explore.html" && !["donate", "lend", "exchange"].includes(currentType)) ? "active" : "";
-      return "";
-    };
-
     drawer.innerHTML = `
       <div class="mobile-nav-header">
         <a href="${getAppUrl('index.html')}" class="cs-logo">
-          <div class="cs-logo-icon" style="width: 36px; height: 36px;">
-            ${CS_ICONS.logo}
-          </div>
+          <div class="cs-logo-icon">${CS_ICONS.logo}</div>
           <div class="cs-logo-text-group">
-            <div class="cs-logo-title" style="font-size: 1.15rem;">
-              CampusShare<span class="cs-logo-dot"></span>
-            </div>
+            <div class="cs-logo-title">CampusShare</div>
           </div>
         </a>
-        <button id="close-mobile-drawer" class="cs-icon-btn">
-          ${CS_ICONS.close}
-        </button>
+        <button class="cs-icon-btn" id="mobile-drawer-close-btn">${CS_ICONS.close}</button>
       </div>
 
       <div class="mobile-nav-links">
-        <a href="${getAppUrl('index.html')}" class="cs-nav-item ${isNavActive('home')}">🏠 Home</a>
-        <a href="${getAppUrl('explore.html')}" class="cs-nav-item ${isNavActive('explore')}">🔍 Explore Marketplace</a>
-        <a href="${getAppUrl('explore.html?type=donate')}" class="cs-nav-item ${isNavActive('donate')}">🎁 Free Donations</a>
-        <a href="${getAppUrl('explore.html?type=lend')}" class="cs-nav-item ${isNavActive('lend')}">🤝 Lend &amp; Borrow</a>
-        <a href="${getAppUrl('explore.html?type=exchange')}" class="cs-nav-item ${isNavActive('exchange')}">🔄 Item Exchange</a>
-        <a href="${getAppUrl('wishlist.html')}" class="cs-nav-item">❤️ Wishlist</a>
+        <a href="${getAppUrl('index.html')}" class="cs-nav-item">🏠 Home</a>
+        <a href="${getAppUrl('explore.html')}" class="cs-nav-item">🔍 Explore Marketplace</a>
+        <a href="${getAppUrl('explore.html?type=donate')}" class="cs-nav-item">🎁 Free Donations</a>
+        <a href="${getAppUrl('explore.html?type=lend')}" class="cs-nav-item">🤝 Lend &amp; Borrow</a>
+        <a href="${getAppUrl('explore.html?type=exchange')}" class="cs-nav-item">🔄 Item Exchange</a>
+        <div style="height: 1px; background: var(--border); margin: 8px 0;"></div>
+        <a href="${getAppUrl('wishlist.html')}" class="cs-nav-item">❤️ Saved Wishlist</a>
         <a href="${getAppUrl('messages.html')}" class="cs-nav-item">💬 Messages</a>
-        
-        <div style="height: 1px; background: var(--border); margin: 12px 0;"></div>
+        <a href="${getAppUrl('my-listings.html')}" class="cs-nav-item">📦 My Listings</a>
+        <a href="${getAppUrl('profile.html')}" class="cs-nav-item">👤 Profile</a>
+        <a href="${getAppUrl('settings.html')}" class="cs-nav-item">⚙️ Settings</a>
+      </div>
 
-        ${currentUser ? `
-          <a href="${getAppUrl('post-item.html')}" class="cs-btn-post" style="justify-content: center; width: 100%;">+ Post an Item</a>
-          <a href="${getAppUrl('profile.html')}" class="cs-nav-item mt-sm">👤 My Profile</a>
-          <a href="${getAppUrl('my-listings.html')}" class="cs-nav-item">📦 My Listings</a>
-          <a href="${getAppUrl('settings.html')}" class="cs-nav-item">⚙️ Settings</a>
-        ` : `
-          <a href="${getAppUrl('login.html')}" class="btn btn-outline btn-block mt-md">Log In</a>
-          <a href="${getAppUrl('register.html')}" class="btn btn-primary btn-block mt-sm">Register</a>
-        `}
+      <div style="margin-top: auto; padding-top: 20px;">
+        <a href="${getAppUrl('post-item.html')}" class="btn btn-primary btn-block btn-lg">+ Post an Item</a>
       </div>
     `;
     document.body.appendChild(drawer);
   }
 
-  const closeBtn = document.getElementById("close-mobile-drawer");
+  const closeBtn = document.getElementById("mobile-drawer-close-btn");
 
   toggleBtn.addEventListener("click", () => {
     overlay.classList.add("show");
@@ -491,7 +583,7 @@ function renderProductCard(item) {
   return renderListingCard(item);
 }
 
-// Global ListingCard HTML Generator (Figma design compliant)
+// Global ListingCard HTML Generator (Figma design compliant with ₹ INR Currency)
 function renderListingCard(item) {
   const wishlisted = isWishlisted(item.id);
   const type = (item.type || "sell").toLowerCase();
@@ -509,7 +601,7 @@ function renderListingCard(item) {
     badgeClass = "type-exchange";
   }
 
-  let priceText = item.priceDisplay || (item.price === 0 ? "FREE" : `$${item.price}`);
+  let priceText = item.priceDisplay || (item.price === 0 ? "FREE" : formatINR(item.price));
   let priceClass = "";
   if (type === "donate" || String(priceText).toUpperCase() === "FREE") {
     priceClass = "free";
@@ -523,11 +615,12 @@ function renderListingCard(item) {
   const heartStroke = wishlisted ? '#EF4444' : 'currentColor';
   const itemDetailsUrl = getAppUrl(`item-details.html?id=${encodeURIComponent(item.id)}`);
   const sellerInitial = (item.sellerName || "S").charAt(0).toUpperCase();
+  const fallbackSvg = getCategoryPlaceholderSvg(item.category || "Other");
 
   return `
     <div class="hp-listing-card" data-id="${item.id}" onclick="if(!event.target.closest('.hp-listing-fav-btn') && !event.target.closest('a')) window.location.href='${itemDetailsUrl}'">
       <div class="hp-listing-img-wrap">
-        <img src="${item.image}" alt="${item.title}" class="hp-listing-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'" />
+        <img src="${item.image || fallbackSvg}" alt="${item.title}" class="hp-listing-img" loading="lazy" onerror="this.src='${fallbackSvg}'" />
         <span class="hp-listing-type-badge ${badgeClass}">${badgeLabel}</span>
         <button class="hp-listing-fav-btn ${wishlisted ? 'active' : ''}" data-id="${item.id}" title="${wishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}" onclick="handleWishlistClick(event, '${item.id}')">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="${heartFill}" stroke="${heartStroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

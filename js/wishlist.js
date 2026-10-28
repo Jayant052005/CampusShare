@@ -114,7 +114,7 @@ function initWishlistPage() {
         badgeClass = "type-exchange";
       }
 
-      let priceText = item.priceDisplay || (item.price === 0 ? "FREE" : `$${item.price}`);
+      let priceText = item.priceDisplay || (item.price === 0 ? "FREE" : (typeof formatINR === 'function' ? formatINR(item.price) : '₹' + item.price));
       let priceClass = "";
       if (type === "donate" || String(priceText).toUpperCase() === "FREE") {
         priceClass = "free";
@@ -125,11 +125,12 @@ function initWishlistPage() {
       }
 
       const itemDetailsUrl = getAppUrl(`item-details.html?id=${encodeURIComponent(item.id)}`);
+      const placeholderImg = typeof getCategoryPlaceholderSvg === "function" ? getCategoryPlaceholderSvg(item.category) : "";
 
       return `
         <div class="wl-card" data-id="${item.id}">
           <div class="wl-img-wrap">
-            <img src="${item.image}" alt="${item.title}" class="wl-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'" />
+            <img src="${item.image || placeholderImg}" alt="${item.title}" class="wl-img" loading="lazy" onerror="this.src='${placeholderImg}'" />
             <span class="hp-listing-type-badge ${badgeClass}">${badgeLabel}</span>
             <button type="button" class="wl-delete-btn" title="Remove from Wishlist" onclick="removeWishlistItem(event, '${item.id}')">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">

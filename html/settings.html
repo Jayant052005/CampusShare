@@ -3,88 +3,201 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Account Settings - CampusShare</title>
-  <meta name="description" content="Manage your CampusShare user account preferences, university verification, and notification settings.">
+  <title>Settings &amp; Preferences - CampusShare</title>
+  <meta name="description" content="Manage your student profile, campus authentication, notifications, and privacy settings on CampusShare.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/marketplace.css">
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
-<body>
+<body class="bg-background">
 
   <!-- Dynamic Global Site Header -->
   <header id="navbar" class="site-header"></header>
 
-  <main>
-    <!-- Page Header Banner -->
-    <section class="page-header">
-      <div class="container">
-        <h1>Account Settings</h1>
-        <p>Update your profile details, campus affiliation, and notification preferences</p>
+  <main class="section-sm pb-3xl">
+    <div class="container">
+
+      <div style="margin-bottom: 28px;">
+        <h1 style="color: var(--navy); font-size: 2rem; font-weight: 800; margin-bottom: 6px;">Settings</h1>
+        <p style="color: var(--secondary-text); font-size: 1rem; margin: 0;">Manage your student profile, account credentials, notifications, and campus privacy</p>
       </div>
-    </section>
 
-    <div class="container settings-card-container pb-3xl">
-      <div class="card card-padding-32">
+      <div class="settings-layout">
 
-        <form id="settings-form">
-          <h3 class="settings-section-title">Profile Details</h3>
+        <!-- LEFT SIDEBAR: 4 Settings Sections per prompt -->
+        <aside class="settings-nav-sidebar" role="tablist">
+          <button type="button" class="settings-nav-link active" data-tab="profile" role="tab" aria-selected="true">
+            <span>👤</span> Profile Settings
+          </button>
+          <button type="button" class="settings-nav-link" data-tab="account" role="tab" aria-selected="false">
+            <span>🔒</span> Account Settings
+          </button>
+          <button type="button" class="settings-nav-link" data-tab="notifications" role="tab" aria-selected="false">
+            <span>🔔</span> Notification Settings
+          </button>
+          <button type="button" class="settings-nav-link" data-tab="privacy" role="tab" aria-selected="false">
+            <span>🛡️</span> Privacy Settings
+          </button>
+        </aside>
 
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input type="text" id="settings-name" class="input-field" required>
-          </div>
+        <!-- RIGHT SETTINGS CONTENT -->
+        <div class="settings-card">
+          <form id="settings-unified-form">
 
-          <div class="form-group">
-            <label class="form-label">Campus Email (.edu)</label>
-            <input type="email" id="settings-email" class="input-field" required>
-            <div class="form-hint">Changing email will require re-verification</div>
-          </div>
+            <!-- 1. PROFILE SETTINGS -->
+            <div id="settings-section-profile" class="settings-tab-section active">
+              <div class="settings-group">
+                <h2 class="settings-group-title">Profile Settings</h2>
+                <p class="settings-group-desc">Information visible to students at your university</p>
 
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">University</label>
-              <select id="settings-university" class="select-field">
-                <option value="Stanford University">Stanford University</option>
-                <option value="UC Berkeley">UC Berkeley</option>
-                <option value="MIT">MIT</option>
-                <option value="Harvard University">Harvard University</option>
-                <option value="UT Austin">UT Austin</option>
-                <option value="University of Michigan">University of Michigan</option>
-                <option value="NYU">NYU</option>
-                <option value="UCLA">UCLA</option>
-              </select>
+                <div class="form-group mb-md">
+                  <label class="form-label" for="settings-name">Full Name *</label>
+                  <input type="text" id="settings-name" class="input-field" required />
+                </div>
+
+                <div class="grid-2 mb-md">
+                  <div class="form-group">
+                    <label class="form-label" for="settings-university">University *</label>
+                    <select id="settings-university" class="select-field">
+                      <option value="Stanford University">Stanford University</option>
+                      <option value="UC Berkeley">UC Berkeley</option>
+                      <option value="MIT">MIT</option>
+                      <option value="Harvard University">Harvard University</option>
+                      <option value="UT Austin">UT Austin</option>
+                      <option value="University of Michigan">University of Michigan</option>
+                      <option value="NYU">NYU</option>
+                      <option value="UCLA">UCLA</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="settings-major">Major &amp; Class Year</label>
+                    <input type="text" id="settings-major" class="input-field" placeholder="e.g. Computer Science '26" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="settings-bio">Student Bio</label>
+                  <textarea id="settings-bio" class="input-field" rows="3" placeholder="Tell campus peers what you study or what items you're interested in exchanging..."></textarea>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label class="form-label">Major &amp; Class Year</label>
-              <input type="text" id="settings-major" class="input-field">
+
+            <!-- 2. ACCOUNT SETTINGS -->
+            <div id="settings-section-account" class="settings-tab-section" style="display: none;">
+              <div class="settings-group">
+                <h2 class="settings-group-title">Account Settings</h2>
+                <p class="settings-group-desc">Manage your campus login credentials and security</p>
+
+                <div class="form-group mb-md">
+                  <label class="form-label" for="settings-email">Campus Email (.edu) *</label>
+                  <input type="email" id="settings-email" class="input-field" required />
+                  <div class="form-hint" style="font-size: 0.8rem; color: var(--secondary-text); margin-top: 4px;">
+                    Changing your campus email requires re-verifying student enrollment
+                  </div>
+                </div>
+
+                <div class="grid-2 mb-md">
+                  <div class="form-group">
+                    <label class="form-label" for="settings-new-pass">New Password</label>
+                    <input type="password" id="settings-new-pass" class="input-field" placeholder="Leave blank to keep unchanged" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="settings-confirm-pass">Confirm New Password</label>
+                    <input type="password" id="settings-confirm-pass" class="input-field" placeholder="Re-enter new password" />
+                  </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div style="margin-top: 32px; padding: 20px; background: #FEF2F2; border: 1.5px solid #FCA5A5; border-radius: 12px;">
+                  <h4 style="color: #991B1B; margin: 0 0 6px 0; font-size: 1rem;">Danger Zone</h4>
+                  <p style="color: #B91C1C; font-size: 0.85rem; margin: 0 0 14px 0;">
+                    Reset your local session or remove your profile from this browser.
+                  </p>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="window.confirmSignOut()">
+                    Sign Out of CampusShare
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <h3 class="settings-section-title-mt">Notifications &amp; Safety</h3>
+            <!-- 3. NOTIFICATION SETTINGS -->
+            <div id="settings-section-notifications" class="settings-tab-section" style="display: none;">
+              <div class="settings-group">
+                <h2 class="settings-group-title">Notification Settings</h2>
+                <p class="settings-group-desc">Choose how you want to be notified about messages and items</p>
 
-          <div class="settings-checkbox-group">
-            <label class="settings-checkbox-label">
-              <input type="checkbox" checked class="checkbox-blue">
-              Email notifications for new buyer chat messages
-            </label>
-            <label class="settings-checkbox-label">
-              <input type="checkbox" checked class="checkbox-blue">
-              Wishlist price drop alerts
-            </label>
-            <label class="settings-checkbox-label">
-              <input type="checkbox" checked class="checkbox-blue">
-              Campus safety &amp; meet-up reminder digest
-            </label>
-          </div>
+                <div class="settings-toggle-row">
+                  <div>
+                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">New Message Alerts</strong>
+                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Get notified immediately when a student replies to your listing</span>
+                  </div>
+                  <input type="checkbox" id="pref-notif-msg" checked style="width: 18px; height: 18px;" />
+                </div>
 
-          <div class="form-action-bar">
-            <a href="profile.html" class="btn btn-outline">Cancel</a>
-            <button type="submit" class="btn btn-primary">Save Settings</button>
-          </div>
+                <div class="settings-toggle-row">
+                  <div>
+                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Wishlist Price Drops</strong>
+                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Receive alerts when saved items are discounted or available for lending</span>
+                  </div>
+                  <input type="checkbox" id="pref-notif-wishlist" checked style="width: 18px; height: 18px;" />
+                </div>
 
-        </form>
+                <div class="settings-toggle-row">
+                  <div>
+                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Campus Safety &amp; Meetup Digests</strong>
+                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Weekly tips for safe on-campus library and quad exchanges</span>
+                  </div>
+                  <input type="checkbox" id="pref-notif-safety" checked style="width: 18px; height: 18px;" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. PRIVACY SETTINGS -->
+            <div id="settings-section-privacy" class="settings-tab-section" style="display: none;">
+              <div class="settings-group">
+                <h2 class="settings-group-title">Privacy Settings</h2>
+                <p class="settings-group-desc">Control what other students can see on your public profile</p>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Show University Email to Peers</strong>
+                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Allow fellow verified students to view your .edu address</span>
+                  </div>
+                  <input type="checkbox" id="pref-priv-email" checked style="width: 18px; height: 18px;" />
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Show Quad / Dorm Zone</strong>
+                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Show approximate pickup area (e.g. Science Quad, Moffitt Library)</span>
+                  </div>
+                  <input type="checkbox" id="pref-priv-loc" checked style="width: 18px; height: 18px;" />
+                </div>
+
+                <div class="settings-toggle-row">
+                  <div>
+                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Verified Student Checkmark</strong>
+                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Display your official campus verification badge</span>
+                  </div>
+                  <input type="checkbox" id="pref-priv-verified" checked style="width: 18px; height: 18px;" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Action Bar -->
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+              <a href="profile.html" class="btn btn-outline" style="border-radius: 12px; padding: 10px 20px;">Cancel</a>
+              <button type="submit" class="btn btn-primary" style="border-radius: 12px; padding: 10px 24px; font-weight: 700;">
+                Save Settings
+              </button>
+            </div>
+
+          </form>
+        </div>
 
       </div>
+
     </div>
   </main>
 

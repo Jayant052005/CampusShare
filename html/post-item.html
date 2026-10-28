@@ -244,13 +244,13 @@
             <div id="pi-fields-sell" class="pi-conditional-fields">
               <div class="grid-2">
                 <div class="form-group">
-                  <label for="pi-price" class="form-label">Selling Price ($) *</label>
-                  <input type="number" id="pi-price" class="input-field" placeholder="45.00" min="0" step="1" required />
+                  <label for="pi-price" class="form-label">Selling Price (₹) *</label>
+                  <input type="number" id="pi-price" class="input-field" placeholder="450" min="0" step="1" required />
                   <div class="form-error-msg" id="err-pi-price" style="color: #EF4444; font-size: 0.8rem; margin-top: 4px; display: none;">Please enter a valid price</div>
                 </div>
                 <div class="form-group">
-                  <label for="pi-orig-price" class="form-label">Original Retail / Store Price ($)</label>
-                  <input type="number" id="pi-orig-price" class="input-field" placeholder="120.00" min="0" step="1" />
+                  <label for="pi-orig-price" class="form-label">Original Retail / Store Price (₹)</label>
+                  <input type="number" id="pi-orig-price" class="input-field" placeholder="1200" min="0" step="1" />
                   <div class="form-hint">Shows savings percentage to interested student buyers</div>
                 </div>
               </div>
@@ -298,9 +298,9 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="pi-lend-deposit" class="form-label">Security Deposit ($)</label>
-                  <input type="number" id="pi-lend-deposit" class="input-field" placeholder="20.00" min="0" step="1" />
-                  <div class="form-hint">Refundable to borrower when item is safely returned (or $0 if none)</div>
+                  <label for="pi-lend-deposit" class="form-label">Security Deposit (₹)</label>
+                  <input type="number" id="pi-lend-deposit" class="input-field" placeholder="200" min="0" step="1" />
+                  <div class="form-hint">Refundable to borrower when item is safely returned (or ₹0 if none)</div>
                 </div>
               </div>
             </div>
@@ -368,15 +368,15 @@
 
             <!-- Quick Presets -->
             <div class="pi-presets-bar">
-              <span style="font-size: 0.85rem; font-weight: 600; color: var(--navy);">Or select from realistic sample photos:</span>
+              <span style="font-size: 0.85rem; font-weight: 600; color: var(--navy);">Or select category icon preset:</span>
               <div class="pi-preset-btns">
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80')">📚 Textbook</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto('https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?auto=format&fit=crop&w=800&q=80')">🧮 Calculator</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto('https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80')">💻 Tablet / Tech</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto('https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80')">📝 Study Notes</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto('https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80')">🧪 Lab Kit</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto('https://images.unsplash.com/photo-1580481077111-9a746522c091?auto=format&fit=crop&w=800&q=80')">🛋️ Hostel Chair</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto('https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80')">🎒 Backpack</button>
+                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Books'))">📚 Textbook</button>
+                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Electronics'))">🧮 Calculator</button>
+                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Electronics'))">💻 Tech / Device</button>
+                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Notes'))">📝 Study Notes</button>
+                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Lab Equipment'))">🧪 Lab Kit</button>
+                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Hostel Items'))">🛋️ Hostel Item</button>
+                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Bags'))">🎒 Backpack</button>
               </div>
             </div>
 

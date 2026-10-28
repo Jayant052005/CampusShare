@@ -140,7 +140,7 @@ function renderItemDetails(container, item) {
         
         <!-- Main Large Image -->
         <div class="id-gallery-main">
-          <img id="id-main-photo" src="${galleryImages[0]}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'" />
+          <img id="id-main-photo" src="${galleryImages[0]}" alt="${item.title}" onerror="this.src='${typeof getCategoryPlaceholderSvg === 'function' ? getCategoryPlaceholderSvg(item.category) : ''}'" />
         </div>
 
         <!-- Thumbnails Strip -->
@@ -271,7 +271,7 @@ function renderItemDetails(container, item) {
         <!-- Verified Seller Profile Card -->
         <div class="id-seller-card">
           <div class="id-seller-header">
-            <img src="${item.sellerAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80'}" alt="${item.sellerName}" class="id-seller-avatar" />
+            ${item.sellerAvatar ? `<img src="${item.sellerAvatar}" alt="${item.sellerName}" class="id-seller-avatar" />` : `<div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--blue)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0;">${typeof getUserInitials === 'function' ? getUserInitials(item.sellerName) : 'CS'}</div>`}
             <div>
               <div class="id-seller-name">
                 <span>${item.sellerName}</span>
@@ -414,12 +414,16 @@ if (contactForm) {
     const msg = input ? input.value.trim() : "";
     if (!msg || !currentItem) return;
 
-    const currentUser = getCurrentUser();
-    sendMessage(currentUser.id, currentItem.sellerId, currentItem.id, msg);
+    const conv = typeof createOrGetConversation === "function" ? createOrGetConversation(currentItem.id, msg) : null;
 
     closeContactModal();
     if (input) input.value = "";
     showToast(`Message sent to ${currentItem.sellerName}!`, "success");
+
+    const msgUrl = typeof getAppUrl === "function" ? getAppUrl("messages.html?conv=" + (conv ? conv.id : "")) : "messages.html";
+    setTimeout(() => {
+      window.location.href = msgUrl;
+    }, 800);
   });
 }
 

@@ -4,40 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Profile - CampusShare</title>
-  <meta name="description" content="View student profile background, ratings, campus verification badge, and active marketplace listings.">
+  <meta name="description" content="View your verified student profile, active campus marketplace listings, saved items, and campus reputation score.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/marketplace.css">
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
-<body>
+<body class="bg-background">
 
   <!-- Dynamic Global Site Header -->
   <header id="navbar" class="site-header"></header>
 
-  <main>
-    <!-- Profile Banner -->
-    <section class="page-header profile-page-header">
-      <div class="container">
-        <!-- Hydrated by profile.js in profile-header -->
-      </div>
-    </section>
+  <main class="section-sm pb-3xl">
+    <div class="container">
 
-    <div class="container pb-3xl">
-      <!-- Profile Header Container Card -->
-      <div class="card profile-header-card mb-xl" id="profile-header">
-        <!-- Hydrated by profile.js -->
-      </div>
+      <!-- Profile Container Card -->
+      <div class="profile-main-card">
+        <div class="profile-cover-banner"></div>
 
-      <!-- User Active Listings Section -->
-      <div class="section-header mb-lg">
-        <div>
-          <h2 class="section-title">My Listed Items</h2>
-          <p class="section-subtitle">Items currently active or sold on CampusShare</p>
+        <div class="profile-header-content" id="profile-header-content">
+          <!-- Injected dynamically by profile.js -->
         </div>
-        <a href="post-item.html" class="btn btn-primary">+ Post New Item</a>
       </div>
 
-      <div id="profile-listings-grid" class="grid-3"></div>
+      <!-- Profile 4-Tabs Navigation Bar -->
+      <div class="cs-tabs-nav" id="profile-tabs-nav" role="tablist">
+        <button type="button" class="cs-tab-btn active" data-tab="listings" role="tab" aria-selected="true">
+          My Listings (<span id="profile-tab-listings-count">0</span>)
+        </button>
+        <button type="button" class="cs-tab-btn" data-tab="saved" role="tab" aria-selected="false">
+          Saved (<span id="profile-tab-saved-count">0</span>)
+        </button>
+        <button type="button" class="cs-tab-btn" data-tab="transactions" role="tab" aria-selected="false">
+          Transactions (<span id="profile-tab-transactions-count">0</span>)
+        </button>
+        <button type="button" class="cs-tab-btn" data-tab="reviews" role="tab" aria-selected="false">
+          Reviews (<span id="profile-tab-reviews-count">0</span>)
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div id="profile-tab-content" class="profile-tab-content-wrap">
+        <!-- Injected dynamically by profile.js -->
+      </div>
+
     </div>
   </main>
 

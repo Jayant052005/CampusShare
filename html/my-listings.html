@@ -3,37 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Listings Dashboard - CampusShare</title>
-  <meta name="description" content="Seller dashboard to manage, mark as sold, re-list, or delete your campus items.">
+  <title>My Campus Listings - CampusShare</title>
+  <meta name="description" content="Seller and student lender dashboard to manage listings, track views, mark items as sold, or pause listings.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/marketplace.css">
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
-<body>
+<body class="bg-background">
 
   <!-- Dynamic Global Site Header -->
   <header id="navbar" class="site-header"></header>
 
-  <main>
-    <!-- Page Header Banner -->
-    <section class="page-header">
-      <div class="container">
-        <h1>Seller Dashboard</h1>
-        <p>Manage your active listings, mark items as sold, or update prices</p>
-      </div>
-    </section>
+  <main class="section-sm pb-3xl">
+    <div class="container">
 
-    <div class="container pb-3xl">
-      <div class="section-header">
+      <!-- Header Section -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
         <div>
-          <h2 class="section-title">Your Campus Listings</h2>
-          <p class="section-subtitle">Manage items you are selling to fellow students</p>
+          <h1 style="color: var(--navy); font-size: 2rem; font-weight: 800; margin-bottom: 6px;">
+            My Campus Listings
+          </h1>
+          <p style="color: var(--secondary-text); font-size: 1rem; margin: 0;">
+            Track views, update prices, or mark items as sold to campus peers
+          </p>
         </div>
-        <a href="post-item.html" class="btn btn-primary">+ Post Another Item</a>
+        <a href="post-item.html" class="btn btn-primary" style="padding: 12px 22px; font-weight: 700; border-radius: 12px;">
+          + Post New Item
+        </a>
       </div>
 
-      <!-- Seller Dashboard List -->
-      <div id="my-listings-grid" class="my-listings-container"></div>
+      <!-- 5 Status Tabs per prompt: Active, Pending, Sold, Donated, Lent -->
+      <div class="cs-tabs-nav" id="listings-status-tabs" role="tablist">
+        <button type="button" class="cs-tab-btn active" data-status="active" role="tab" aria-selected="true">
+          Active (<span id="status-count-active">0</span>)
+        </button>
+        <button type="button" class="cs-tab-btn" data-status="pending" role="tab" aria-selected="false">
+          Pending (<span id="status-count-pending">0</span>)
+        </button>
+        <button type="button" class="cs-tab-btn" data-status="sold" role="tab" aria-selected="false">
+          Sold (<span id="status-count-sold">0</span>)
+        </button>
+        <button type="button" class="cs-tab-btn" data-status="donated" role="tab" aria-selected="false">
+          Donated (<span id="status-count-donated">0</span>)
+        </button>
+        <button type="button" class="cs-tab-btn" data-status="lent" role="tab" aria-selected="false">
+          Lent (<span id="status-count-lent">0</span>)
+        </button>
+      </div>
+
+      <!-- Listings List Container -->
+      <div id="my-listings-container">
+        <!-- Injected dynamically by profile.js -->
+      </div>
+
     </div>
   </main>
 
