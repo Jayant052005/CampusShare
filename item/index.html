@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Listing Details</title>
+  <script>
+    // Extract ID from query param or path
+    const urlParams = new URLSearchParams(window.location.search);
+    let id = urlParams.get("id");
+    if (!id) {
+      const match = window.location.pathname.match(/\/item\/([^\/\?#]+)/);
+      if (match) id = match[1];
+    }
+    if (!id) id = "1";
+    window.location.replace("../html/item-details.html?id=" + encodeURIComponent(id));
+  </script>
+</head>
+<body>
+  <p>Loading campus listing details...</p>
+</body>
+</html>
+

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CampusShare - LocalStorage Manager Layer (Empty Start State)
+   CampusShare - LocalStorage Manager Layer
    ========================================================================== */
 
 const STORAGE_KEYS = {
@@ -8,19 +8,20 @@ const STORAGE_KEYS = {
   MESSAGES: "campus_share_messages",
   CURRENT_USER: "campus_share_user",
   USERS: "campus_share_all_users",
-  RESET_FLAG: "campus_share_clean_v3"
+  RESET_FLAG: "campus_share_catalog_v5"
 };
 
-// Initialize LocalStorage as completely empty for a clean state
+// Initialize LocalStorage with rich mock dataset or persist user data
 function initStorage() {
-  // Check if we need to purge old mock data
   if (!localStorage.getItem(STORAGE_KEYS.RESET_FLAG)) {
+    // Preserve any existing wishlist if possible, but load complete updated items catalog
+    const oldWishlist = localStorage.getItem(STORAGE_KEYS.WISHLIST);
     localStorage.removeItem(STORAGE_KEYS.ITEMS);
-    localStorage.removeItem(STORAGE_KEYS.WISHLIST);
-    localStorage.removeItem(STORAGE_KEYS.MESSAGES);
-    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-    localStorage.removeItem(STORAGE_KEYS.USERS);
     localStorage.setItem(STORAGE_KEYS.RESET_FLAG, "true");
+    if (!oldWishlist) {
+      // Default initial wishlist with 2 items to showcase saved items
+      localStorage.setItem(STORAGE_KEYS.WISHLIST, JSON.stringify(["1", "3"]));
+    }
   }
 
   if (!localStorage.getItem(STORAGE_KEYS.ITEMS) || JSON.parse(localStorage.getItem(STORAGE_KEYS.ITEMS) || "[]").length === 0) {
@@ -28,13 +29,14 @@ function initStorage() {
     localStorage.setItem(STORAGE_KEYS.ITEMS, JSON.stringify(defaultItems));
   }
   if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
+    const defaultUsers = (typeof INITIAL_USERS !== 'undefined' && Array.isArray(INITIAL_USERS)) ? INITIAL_USERS : [];
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(defaultUsers));
   }
   if (!localStorage.getItem(STORAGE_KEYS.MESSAGES)) {
     localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify([]));
   }
   if (!localStorage.getItem(STORAGE_KEYS.WISHLIST)) {
-    localStorage.setItem(STORAGE_KEYS.WISHLIST, JSON.stringify([]));
+    localStorage.setItem(STORAGE_KEYS.WISHLIST, JSON.stringify(["1", "3"]));
   }
 }
 
@@ -50,33 +52,56 @@ function getItems() {
 
 function getItemById(id) {
   const items = getItems();
-  return items.find(item => item.id === id) || null;
+  return items.find(item => String(item.id) === String(id)) || null;
 }
 
 function saveItem(itemData) {
   const items = getItems();
   const currentUser = getCurrentUser();
   
+  const type = (itemData.type || "sell").toLowerCase();
+  const priceVal = parseFloat(itemData.price) || 0;
+  
+  let priceDisplay = `$${priceVal}`;
+  if (type === "donate") {
+    priceDisplay = "FREE";
+  } else if (type === "lend") {
+    priceDisplay = itemData.lendDuration ? `Lend • ${itemData.lendDuration}` : "Lend";
+  } else if (type === "exchange") {
+    priceDisplay = "Exchange";
+  }
+
+  const primaryImage = itemData.image || (itemData.images && itemData.images[0]) || "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80";
+  const allImages = (itemData.images && itemData.images.length > 0) ? itemData.images : [primaryImage];
+
   const newItem = {
     id: "item_" + Date.now(),
     title: itemData.title,
-    category: itemData.category,
-    price: parseFloat(itemData.price) || 0,
-    originalPrice: parseFloat(itemData.originalPrice) || parseFloat(itemData.price),
-    condition: itemData.condition,
-    description: itemData.description,
-    image: itemData.image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23F3F6FC'/%3E%3Ctext x='200' y='158' text-anchor='middle' fill='%23B0BCD0' font-family='system-ui%2C sans-serif' font-size='14'%3ENo image uploaded%3C/text%3E%3C/svg%3E",
-    images: [itemData.image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23F3F6FC'/%3E%3Ctext x='200' y='158' text-anchor='middle' fill='%23B0BCD0' font-family='system-ui%2C sans-serif' font-size='14'%3ENo image uploaded%3C/text%3E%3C/svg%3E"],
-    sellerId: currentUser ? currentUser.id : "usr_guest",
-    sellerName: currentUser ? currentUser.name : "Student Seller",
-    sellerUniversity: currentUser ? currentUser.university : "Campus Community",
-    sellerAvatar: currentUser ? currentUser.avatar : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80",
+    category: itemData.category || "Other",
+    type: type,
+    price: priceVal,
+    priceDisplay: priceDisplay,
+    originalPrice: parseFloat(itemData.originalPrice) || (priceVal > 0 ? priceVal * 1.5 : 0),
+    condition: itemData.condition || "Like New",
+    description: itemData.description || "",
+    image: primaryImage,
+    images: allImages,
+    sellerId: currentUser ? currentUser.id : "usr_alex",
+    sellerName: currentUser ? currentUser.name : "Alex Chen",
+    sellerUniversity: currentUser ? currentUser.university : "Stanford University",
+    sellerAvatar: currentUser ? currentUser.avatar : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
     location: itemData.location || "Campus Center",
     postedDate: "Just now",
     status: "active",
     views: 1,
     savedCount: 0,
-    featured: false
+    rating: 5.0,
+    reviewsCount: 1,
+    verified: true,
+    negotiable: !!itemData.negotiable,
+    lendDuration: itemData.lendDuration || "",
+    deposit: parseFloat(itemData.deposit) || 0,
+    exchangeFor: itemData.exchangeFor || ""
   };
 
   items.unshift(newItem);
@@ -86,7 +111,7 @@ function saveItem(itemData) {
 
 function updateItemStatus(id, newStatus) {
   const items = getItems();
-  const index = items.findIndex(item => item.id === id);
+  const index = items.findIndex(item => String(item.id) === String(id));
   if (index !== -1) {
     items[index].status = newStatus;
     localStorage.setItem(STORAGE_KEYS.ITEMS, JSON.stringify(items));
@@ -97,7 +122,7 @@ function updateItemStatus(id, newStatus) {
 
 function deleteItem(id) {
   let items = getItems();
-  items = items.filter(item => item.id !== id);
+  items = items.filter(item => String(item.id) !== String(id));
   localStorage.setItem(STORAGE_KEYS.ITEMS, JSON.stringify(items));
 }
 
@@ -113,17 +138,18 @@ function getWishlist() {
 
 function isWishlisted(itemId) {
   const wishlist = getWishlist();
-  return wishlist.includes(itemId);
+  return wishlist.includes(String(itemId));
 }
 
 function toggleWishlist(itemId) {
   let wishlist = getWishlist();
+  const sId = String(itemId);
   let isAdded = false;
   
-  if (wishlist.includes(itemId)) {
-    wishlist = wishlist.filter(id => id !== itemId);
+  if (wishlist.includes(sId)) {
+    wishlist = wishlist.filter(id => id !== sId);
   } else {
-    wishlist.push(itemId);
+    wishlist.push(sId);
     isAdded = true;
   }
 
@@ -131,11 +157,14 @@ function toggleWishlist(itemId) {
   
   // Update saved count on item
   const items = getItems();
-  const item = items.find(i => i.id === itemId);
+  const item = items.find(i => String(i.id) === sId);
   if (item) {
-    item.savedCount = isAdded ? (item.savedCount + 1) : Math.max(0, item.savedCount - 1);
+    item.savedCount = isAdded ? ((item.savedCount || 0) + 1) : Math.max(0, (item.savedCount || 0) - 1);
     localStorage.setItem(STORAGE_KEYS.ITEMS, JSON.stringify(items));
   }
+
+  // Dispatch custom event so all listeners sync
+  document.dispatchEvent(new CustomEvent("wishlistUpdated", { detail: { itemId: sId, added: isAdded, count: wishlist.length } }));
 
   return isAdded;
 }
@@ -150,97 +179,45 @@ function getMessages() {
   }
 }
 
-function sendMessage(convId, text) {
-  const conversations = getMessages();
-  const conv = conversations.find(c => c.id === convId);
-  const currentUser = getCurrentUser();
-
-  if (conv) {
-    const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const userMsg = {
-      senderId: currentUser ? currentUser.id : "usr_guest",
-      text: text,
-      timestamp: timeNow
-    };
-    conv.messages.push(userMsg);
-    conv.lastUpdated = "Just now";
-    localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(conversations));
-    return userMsg;
-  }
-  return null;
-}
-
-function createConversation(item, initialText) {
-  const conversations = getMessages();
-  const existing = conversations.find(c => c.itemId === item.id);
-  const currentUser = getCurrentUser();
-  
-  if (existing) {
-    if (initialText) {
-      sendMessage(existing.id, initialText);
-    }
-    return existing.id;
-  }
-
-  const newConvId = "conv_" + Date.now();
-  const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  const newConv = {
-    id: newConvId,
-    itemId: item.id,
-    itemTitle: item.title,
-    itemImage: item.image,
-    price: item.price,
-    otherUser: {
-      id: item.sellerId,
-      name: item.sellerName,
-      avatar: item.sellerAvatar,
-      status: "online"
-    },
-    lastUpdated: "Just now",
-    unread: false,
-    messages: [
-      {
-        senderId: currentUser ? currentUser.id : "usr_guest",
-        text: initialText || `Hi ${item.sellerName}, I'm interested in your "${item.title}". Is it still available?`,
-        timestamp: timeNow
-      }
-    ]
+function sendMessage(senderId, receiverId, itemId, text) {
+  const messages = getMessages();
+  const newMsg = {
+    id: "msg_" + Date.now(),
+    senderId,
+    receiverId,
+    itemId,
+    text,
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    date: new Date().toLocaleDateString()
   };
-
-  conversations.unshift(newConv);
-  localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(conversations));
-  return newConvId;
+  messages.push(newMsg);
+  localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messages));
+  return newMsg;
 }
 
-// User Authentication & Session
+// Current User Mock Authentication
 function getCurrentUser() {
   initStorage();
-  try {
-    const user = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-    return user ? JSON.parse(user) : null;
-  } catch (e) {
-    return null;
+  const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+  if (storedUser) {
+    try {
+      return JSON.parse(storedUser);
+    } catch (e) {}
   }
+  return {
+    id: "usr_alex",
+    name: "Alex Chen",
+    email: "alex@stanford.edu",
+    university: "Stanford University",
+    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
+    verified: true,
+    rating: 4.9,
+    major: "Computer Science & EE",
+    joinedDate: "Fall 2024",
+    reviewsCount: 38
+  };
 }
 
-function setCurrentUser(userObj) {
-  localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(userObj));
+function setCurrentUser(user) {
+  localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
 }
-
-function logoutUser() {
-  localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-}
-
-// Clear all data helper
-function clearAllAppData() {
-  localStorage.removeItem(STORAGE_KEYS.ITEMS);
-  localStorage.removeItem(STORAGE_KEYS.WISHLIST);
-  localStorage.removeItem(STORAGE_KEYS.MESSAGES);
-  localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-  localStorage.removeItem(STORAGE_KEYS.USERS);
-  initStorage();
-}
-
-// Auto-run initialization on script load
-initStorage();

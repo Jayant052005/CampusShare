@@ -3,43 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Wishlist - CampusShare</title>
-  <meta name="description" content="View and manage your saved campus items, compare prices, and quickly contact sellers.">
+  <title>My Saved Wishlist — CampusShare</title>
+  <meta name="description" content="Keep track of saved textbooks, electronics, notes, and dorm gear you want to buy, borrow, or exchange across your campus.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/homepage.css">
+  <link rel="stylesheet" href="../css/marketplace.css">
 </head>
 <body>
 
-  <!-- Dynamic Global Site Header -->
+  <!-- ══════════════════════════════════════════════════════════
+       GLOBAL NAVBAR (injected by main.js)
+  ══════════════════════════════════════════════════════════ -->
   <header id="navbar" class="site-header"></header>
 
   <main>
-    <!-- Page Header Banner -->
-    <section class="page-header">
+
+    <!-- ══════════════════════════════════════════════════════════
+         WISHLIST HEADER (Figma design compliant)
+    ══════════════════════════════════════════════════════════ -->
+    <section class="wl-page-header">
       <div class="container">
-        <h1>Saved Wishlist Items</h1>
-        <p>Keep track of items you are interested in buying this semester</p>
+        
+        <!-- Small Pink/Red Badge -->
+        <div class="wl-badge">
+          <span>❤️</span>
+          <span>Saved Campus Items</span>
+        </div>
+
+        <div class="wl-header-inner">
+          <div class="wl-titles">
+            <h1>My Saved Wishlist</h1>
+            <p>Keep track of items you want to buy, borrow, or exchange</p>
+          </div>
+
+          <!-- Right side: Notify me toggle button -->
+          <button type="button" id="wl-notify-toggle-btn" class="wl-notify-btn" title="Toggle Notifications for Similar Items">
+            <span id="wl-notify-icon">🔔</span>
+            <span id="wl-notify-text">Notify me when similar items are posted</span>
+          </button>
+        </div>
+
       </div>
     </section>
 
+    <!-- ══════════════════════════════════════════════════════════
+         SAVED ITEMS CONTENT & GRID
+    ══════════════════════════════════════════════════════════ -->
     <div class="container pb-3xl">
-      <!-- Toolbar -->
-      <div class="card toolbar-card mb-xl">
-        <div id="wishlist-count" class="wishlist-count-text">
-          0 Saved Items
+
+      <!-- Wishlist Toolbar -->
+      <div class="wl-toolbar" id="wl-toolbar">
+        <div class="wl-count-label" id="wl-count-text">
+          Loading saved items...
         </div>
-        <button id="clear-wishlist-btn" type="button" class="btn btn-outline btn-danger btn-sm">
-          🗑️ Clear Wishlist
-        </button>
+
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <a href="explore.html" class="btn btn-outline btn-sm">+ Browse More Items</a>
+          <button type="button" id="wl-clear-all-btn" class="wl-clear-btn">
+            Clear Wishlist
+          </button>
+        </div>
       </div>
 
-      <!-- Saved Items Grid -->
-      <div id="wishlist-grid" class="grid-3"></div>
+      <!-- Responsive Saved Listings Grid -->
+      <div id="wl-grid" class="mp-grid">
+        <!-- Rendered dynamically by wishlist.js -->
+      </div>
+
     </div>
+
   </main>
 
-  <!-- Dynamic Global Site Footer -->
+  <!-- ══════════════════════════════════════════════════════════
+       GLOBAL FOOTER (injected by main.js)
+  ══════════════════════════════════════════════════════════ -->
   <footer id="footer" class="site-footer"></footer>
 
   <!-- Core Scripts -->

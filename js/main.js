@@ -4,21 +4,45 @@
 
 // Smart URL routing helper for multi-folder structure
 function getAppUrl(pageWithQuery) {
-  const isInSubfolder = window.location.pathname.includes("/html/");
+  const isInHtmlFolder = window.location.pathname.includes("/html/");
+  const isInItemFolder = window.location.pathname.includes("/item/");
   
   let page = pageWithQuery;
-  let query = "";
-  if (pageWithQuery.includes("?")) {
-    const parts = pageWithQuery.split("?");
-    page = parts[0];
-    query = "?" + parts[1];
+  let extra = "";
+  
+  // Separate query and hash
+  const qIdx = page.indexOf("?");
+  const hIdx = page.indexOf("#");
+  
+  let splitIdx = -1;
+  if (qIdx !== -1 && hIdx !== -1) {
+    splitIdx = Math.min(qIdx, hIdx);
+  } else if (qIdx !== -1) {
+    splitIdx = qIdx;
+  } else if (hIdx !== -1) {
+    splitIdx = hIdx;
+  }
+  
+  if (splitIdx !== -1) {
+    extra = page.substring(splitIdx);
+    page = page.substring(0, splitIdx);
   }
 
   if (page === "index.html") {
-    return (isInSubfolder ? "../index.html" : "index.html") + query;
+    if (isInHtmlFolder || isInItemFolder) {
+      return "../index.html" + extra;
+    }
+    return "index.html" + extra;
   }
 
-  return (isInSubfolder ? page : `html/${page}`) + query;
+  if (isInHtmlFolder) {
+    return page + extra;
+  }
+  if (isInItemFolder) {
+    return "../html/" + page + extra;
+  }
+
+  return `html/${page}` + extra;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -442,6 +466,7 @@ function updateHeaderWishlistCount() {
   if (badge) {
     const wishlist = getWishlist();
     badge.textContent = wishlist.length;
+    badge.style.display = wishlist.length > 0 ? "inline-flex" : "none";
   }
 }
 
@@ -463,35 +488,68 @@ function initNavSearch() {
 
 // Global Product Card HTML Generator Helper
 function renderProductCard(item) {
+  return renderListingCard(item);
+}
+
+// Global ListingCard HTML Generator (Figma design compliant)
+function renderListingCard(item) {
   const wishlisted = isWishlisted(item.id);
-  const formattedPrice = item.price === 0 ? "Free" : `₹${Number(item.price).toLocaleString('en-IN')}`;
-  const itemDetailsUrl = getAppUrl(`item-details.html?id=${item.id}`);
+  const type = (item.type || "sell").toLowerCase();
+  
+  let badgeLabel = "SELL";
+  let badgeClass = "type-sell";
+  if (type === "donate") {
+    badgeLabel = "DONATE";
+    badgeClass = "type-donate";
+  } else if (type === "lend") {
+    badgeLabel = "LEND";
+    badgeClass = "type-lend";
+  } else if (type === "exchange") {
+    badgeLabel = "EXCHANGE";
+    badgeClass = "type-exchange";
+  }
+
+  let priceText = item.priceDisplay || (item.price === 0 ? "FREE" : `$${item.price}`);
+  let priceClass = "";
+  if (type === "donate" || String(priceText).toUpperCase() === "FREE") {
+    priceClass = "free";
+  } else if (type === "lend") {
+    priceClass = "lend";
+  } else if (type === "exchange") {
+    priceClass = "exchange";
+  }
+
+  const heartFill = wishlisted ? '#EF4444' : 'none';
+  const heartStroke = wishlisted ? '#EF4444' : 'currentColor';
+  const itemDetailsUrl = getAppUrl(`item-details.html?id=${encodeURIComponent(item.id)}`);
+  const sellerInitial = (item.sellerName || "S").charAt(0).toUpperCase();
 
   return `
-    <div class="item-card" data-id="${item.id}">
-      <div class="item-card-image">
-        <img src="${item.image}" alt="${item.title}" loading="lazy" />
-        <button class="item-card-wishlist-btn ${wishlisted ? 'active' : ''}" 
-                onclick="handleWishlistClick(event, '${item.id}')" 
-                title="${wishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}">
-          ${wishlisted ? '❤️' : '🤍'}
+    <div class="hp-listing-card" data-id="${item.id}" onclick="if(!event.target.closest('.hp-listing-fav-btn') && !event.target.closest('a')) window.location.href='${itemDetailsUrl}'">
+      <div class="hp-listing-img-wrap">
+        <img src="${item.image}" alt="${item.title}" class="hp-listing-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'" />
+        <span class="hp-listing-type-badge ${badgeClass}">${badgeLabel}</span>
+        <button class="hp-listing-fav-btn ${wishlisted ? 'active' : ''}" data-id="${item.id}" title="${wishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}" onclick="handleWishlistClick(event, '${item.id}')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="${heartFill}" stroke="${heartStroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
         </button>
       </div>
-      <div class="item-card-body">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="item-card-category">${item.category}</span>
-          <span class="badge badge-neutral" style="font-size: 0.7rem;">${item.condition}</span>
+      <div class="hp-listing-body">
+        <div class="hp-listing-top-row">
+          <span class="hp-listing-category">${item.category}</span>
+          <span class="hp-listing-condition">${item.condition}</span>
         </div>
-        <h4 class="item-card-title">
-          <a href="${itemDetailsUrl}">${item.title}</a>
-        </h4>
-        <div class="item-card-meta">
-          <span>📍 ${item.sellerUniversity.split(' ')[0]}</span>
-          <span>🕒 ${item.postedDate}</span>
+        <a href="${itemDetailsUrl}" class="hp-listing-title" onclick="event.stopPropagation();">${item.title}</a>
+        <div class="hp-listing-seller-row">
+          <div class="hp-listing-seller-avatar">${sellerInitial}</div>
+          <span class="hp-listing-seller-name">${item.sellerName}</span>
+          <span class="hp-listing-seller-uni">🎓 ${item.sellerUniversity}</span>
+          <span class="hp-listing-time">🕒 ${item.postedDate || 'Recent'}</span>
         </div>
-        <div class="item-card-price-row">
-          <div class="item-card-price">${formattedPrice}</div>
-          <a href="${itemDetailsUrl}" class="btn btn-outline btn-sm">View Details</a>
+        <div class="hp-listing-price-row">
+          <span class="hp-listing-price ${priceClass}">${priceText}</span>
+          <a href="${itemDetailsUrl}" class="hp-listing-view-btn" onclick="event.stopPropagation();">View Details</a>
         </div>
       </div>
     </div>
@@ -500,22 +558,38 @@ function renderProductCard(item) {
 
 // Global Wishlist Button Click Handler
 function handleWishlistClick(event, itemId) {
-  event.preventDefault();
-  event.stopPropagation();
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
   const added = toggleWishlist(itemId);
   updateHeaderWishlistCount();
 
-  const btn = event.currentTarget;
+  // Update all matching favorite buttons on the active page
+  document.querySelectorAll(`.hp-listing-fav-btn[data-id="${itemId}"], .item-card-wishlist-btn[data-id="${itemId}"]`).forEach(btn => {
+    if (added) {
+      btn.classList.add("active");
+      const svg = btn.querySelector("svg");
+      if (svg) {
+        svg.setAttribute("fill", "#EF4444");
+        svg.setAttribute("stroke", "#EF4444");
+      }
+    } else {
+      btn.classList.remove("active");
+      const svg = btn.querySelector("svg");
+      if (svg) {
+        svg.setAttribute("fill", "none");
+        svg.setAttribute("stroke", "currentColor");
+      }
+    }
+  });
+
   if (added) {
-    btn.classList.add("active");
-    btn.innerHTML = "❤️";
     showToast("Added to your wishlist", "success");
   } else {
-    btn.classList.remove("active");
-    btn.innerHTML = "🤍";
     showToast("Removed from wishlist", "info");
   }
 
-  // Trigger event if wishlist page needs re-render
+  // Trigger event if wishlist page or other listeners need re-render
   document.dispatchEvent(new CustomEvent("wishlistUpdated", { detail: { itemId, added } }));
 }

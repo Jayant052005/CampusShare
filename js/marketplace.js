@@ -1,188 +1,505 @@
 /* ==========================================================================
-   CampusShare - Marketplace & Explore Controller
+   CampusShare - Marketplace Controller
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", function() {
-  if (document.getElementById("explore-grid")) {
-    initExplorePage();
-  }
-  if (document.getElementById("index-featured-grid")) {
-    initIndexPage();
+  if (document.getElementById("mp-listings-grid")) {
+    initExploreMarketplace();
   }
 });
 
-// Explore Page Logic
-function initExplorePage() {
-  const exploreGrid = document.getElementById("explore-grid");
-  const resultsCount = document.getElementById("results-count");
-  const searchInput = document.getElementById("explore-search");
-  const categorySelect = document.getElementById("filter-category");
-  const conditionSelect = document.getElementById("filter-condition");
-  const sortSelect = document.getElementById("filter-sort");
-  const maxPriceInput = document.getElementById("filter-price-max");
-  const clearBtn = document.getElementById("clear-filters-btn");
-  const viewGridBtn = document.getElementById("view-grid-btn");
-  const viewListBtn = document.getElementById("view-list-btn");
+function initExploreMarketplace() {
+  // DOM Elements
+  const grid = document.getElementById("mp-listings-grid");
+  const countDisplay = document.getElementById("mp-results-count");
+  const searchInput = document.getElementById("mp-search-input");
+  const searchClearBtn = document.getElementById("mp-search-clear");
+  const typeTabsContainer = document.getElementById("mp-type-tabs");
+  const catListContainer = document.getElementById("mp-category-list");
+  const conditionPillsContainer = document.getElementById("mp-condition-pills");
+  const priceSlider = document.getElementById("mp-price-slider");
+  const priceValDisplay = document.getElementById("mp-price-val");
+  const collegeSelect = document.getElementById("mp-college-select");
+  const sortSelect = document.getElementById("mp-sort");
+  const resetBtn = document.getElementById("mp-reset-filters-btn");
+  const chipsContainer = document.getElementById("mp-active-chips");
 
-  // Read URL query parameters (e.g. explore.html?q=textbook&category=textbooks)
+  // Mobile Filter Drawer Elements
+  const mobileToggleBtn = document.getElementById("mp-mobile-toggle-btn");
+  const mobileCloseBtn = document.getElementById("mp-mobile-close-btn");
+  const mobileApplyBtn = document.getElementById("mp-mobile-apply-btn");
+  const mobileActiveCount = document.getElementById("mp-mobile-active-count");
+  const sidebar = document.getElementById("mp-sidebar");
+
+  // Filter State
+  const state = {
+    search: "",
+    type: "all",
+    category: "all",
+    condition: "all",
+    maxPrice: 250,
+    college: "all",
+    sort: "newest"
+  };
+
+  // 1. Parse initial URL Query Parameters
   const urlParams = new URLSearchParams(window.location.search);
-  const qParam = urlParams.get("q");
-  const catParam = urlParams.get("category");
+  if (urlParams.has("q")) {
+    state.search = urlParams.get("q").trim();
+    if (searchInput) searchInput.value = state.search;
+    if (searchClearBtn && state.search) searchClearBtn.style.display = "block";
+  }
 
-  if (qParam && searchInput) searchInput.value = qParam;
-  if (catParam && categorySelect) categorySelect.value = catParam;
+  if (urlParams.has("type")) {
+    const paramType = urlParams.get("type").toLowerCase();
+    if (["sell", "donate", "lend", "exchange"].includes(paramType)) {
+      state.type = paramType;
+      // Activate tab button
+      const activeTab = typeTabsContainer.querySelector(`.mp-filter-tab[data-type="${paramType}"]`);
+      if (activeTab) {
+        typeTabsContainer.querySelectorAll(".mp-filter-tab").forEach(t => t.classList.remove("active"));
+        activeTab.classList.add("active");
+      }
+    }
+  }
 
+  if (urlParams.has("category")) {
+    state.category = urlParams.get("category");
+    const activeCat = catListContainer.querySelector(`.mp-cat-item[data-category="${state.category}"]`);
+    if (activeCat) {
+      catListContainer.querySelectorAll(".mp-cat-item").forEach(c => c.classList.remove("active"));
+      activeCat.classList.add("active");
+    }
+  }
+
+  if (urlParams.has("college")) {
+    state.college = urlParams.get("college");
+    if (collegeSelect) collegeSelect.value = state.college;
+  }
+
+  // 2. Main Filter & Render Engine
   function renderMarketplace() {
     let items = getItems();
 
-    // Search query filter
-    const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
-    if (query) {
-      items = items.filter(item => 
-        item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query) ||
-        item.location.toLowerCase().includes(query)
-      );
+    // Search Filter
+    if (state.search) {
+      const q = state.search.toLowerCase();
+      items = items.filter(item => {
+        return (
+          (item.title && item.title.toLowerCase().includes(q)) ||
+          (item.description && item.description.toLowerCase().includes(q)) ||
+          (item.category && item.category.toLowerCase().includes(q)) ||
+          (item.sellerName && item.sellerName.toLowerCase().includes(q)) ||
+          (item.sellerUniversity && item.sellerUniversity.toLowerCase().includes(q)) ||
+          (item.location && item.location.toLowerCase().includes(q))
+        );
+      });
     }
 
-    // Category filter
-    const selectedCategory = categorySelect ? categorySelect.value : "";
-    if (selectedCategory) {
-      items = items.filter(item => item.category.toLowerCase() === selectedCategory.toLowerCase());
+    // Listing Type Filter (sell, donate, lend, exchange)
+    if (state.type !== "all") {
+      items = items.filter(item => (item.type || "").toLowerCase() === state.type.toLowerCase());
     }
 
-    // Condition filter
-    const selectedCondition = conditionSelect ? conditionSelect.value : "";
-    if (selectedCondition) {
-      items = items.filter(item => item.condition.toLowerCase() === selectedCondition.toLowerCase());
+    // Category Filter
+    if (state.category !== "all") {
+      items = items.filter(item => (item.category || "").toLowerCase() === state.category.toLowerCase());
     }
 
-    // Max Price filter
-    const maxPrice = maxPriceInput ? parseFloat(maxPriceInput.value) : NaN;
-    if (!isNaN(maxPrice) && maxPrice >= 0) {
-      items = items.filter(item => item.price <= maxPrice);
+    // Condition Filter
+    if (state.condition !== "all") {
+      items = items.filter(item => (item.condition || "").toLowerCase() === state.condition.toLowerCase());
     }
 
-    // Sorting
-    const sortBy = sortSelect ? sortSelect.value : "newest";
-    if (sortBy === "price-low") {
-      items.sort((a, b) => a.price - b.price);
-    } else if (sortBy === "price-high") {
-      items.sort((a, b) => b.price - a.price);
-    } else if (sortBy === "popular") {
-      items.sort((a, b) => b.views - a.views);
+    // Max Price Filter
+    if (state.maxPrice < 250) {
+      items = items.filter(item => {
+        const itemPrice = parseFloat(item.price) || 0;
+        return itemPrice <= state.maxPrice;
+      });
+    }
+
+    // College Filter
+    if (state.college !== "all") {
+      items = items.filter(item => {
+        return (item.sellerUniversity || "").toLowerCase() === state.college.toLowerCase();
+      });
+    }
+
+    // Sorting Engine
+    if (state.sort === "price-low") {
+      items.sort((a, b) => (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0));
+    } else if (state.sort === "price-high") {
+      items.sort((a, b) => (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0));
+    } else if (state.sort === "popular") {
+      items.sort((a, b) => (b.views || 0) - (a.views || 0));
     } else {
-      // Default: newest first
-      items.sort((a, b) => b.id.localeCompare(a.id));
+      // Default: newest first (higher ID / unshift)
+      items.sort((a, b) => {
+        if (typeof a.id === "string" && a.id.startsWith("item_") && typeof b.id === "string" && b.id.startsWith("item_")) {
+          return b.id.localeCompare(a.id);
+        }
+        return parseInt(b.id || 0) - parseInt(a.id || 0);
+      });
     }
 
-    // Update results count
-    if (resultsCount) {
-      resultsCount.textContent = `Showing ${items.length} item${items.length === 1 ? '' : 's'}`;
+    // Update Result Counter
+    if (countDisplay) {
+      countDisplay.textContent = `Showing ${items.length} verified listing${items.length === 1 ? '' : 's'}`;
     }
 
-    // Render items
+    // Update Active Filter Chips & Mobile Counter
+    updateActiveFilterChips();
+    updateCategoryCounts();
+
+    // Render Grid
     if (items.length === 0) {
-      const postUrl = getAppUrl("post-item.html");
-      exploreGrid.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 48px 24px; background: var(--white); border-radius: var(--radius-md); border: 1px solid var(--border);">
-          <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
-          <h3 style="color: var(--navy); margin-bottom: 8px;">No campus items match your criteria</h3>
-          <p style="color: var(--secondary-text); max-width: 400px; margin: 0 auto 20px auto;">Be the first student to post an item on CampusShare!</p>
-          <div style="display: flex; gap: 12px; justify-content: center;">
-            <button class="btn btn-outline" onclick="resetExploreFilters()">Reset Filters</button>
-            <a href="${postUrl}" class="btn btn-primary">+ Post Item</a>
+      grid.innerHTML = `
+        <div class="mp-empty-state">
+          <div class="mp-empty-icon">🔍</div>
+          <h3 class="mp-empty-title">No matching campus listings found</h3>
+          <p class="mp-empty-desc">
+            Try adjusting your search keywords, expanding the max price range, or clearing specific filters to see more student items.
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline" onclick="window.resetMarketplaceFilters()">Reset Filters</button>
+            <a href="${getAppUrl('post-item.html')}" class="btn btn-primary">+ Post an Item</a>
           </div>
         </div>
       `;
     } else {
-      exploreGrid.innerHTML = items.map(item => renderProductCard(item)).join("");
+      grid.innerHTML = items.map(item => renderListingCard(item)).join("");
     }
   }
 
-  // Event Listeners for Filters
-  if (searchInput) searchInput.addEventListener("input", renderMarketplace);
-  if (categorySelect) categorySelect.addEventListener("change", renderMarketplace);
-  if (conditionSelect) conditionSelect.addEventListener("change", renderMarketplace);
-  if (sortSelect) sortSelect.addEventListener("change", renderMarketplace);
-  if (maxPriceInput) maxPriceInput.addEventListener("input", renderMarketplace);
+  // 3. Dynamic Category Counts Calculator
+  function updateCategoryCounts() {
+    const allItems = getItems();
+    const countCatAll = document.getElementById("count-cat-all");
+    if (countCatAll) countCatAll.textContent = allItems.length;
 
-  if (clearBtn) {
-    clearBtn.addEventListener("click", function() {
-      resetExploreFilters();
+    const catMapping = {
+      "count-cat-books": "Books",
+      "count-cat-notes": "Notes",
+      "count-cat-electronics": "Electronics",
+      "count-cat-stationery": "Stationery",
+      "count-cat-lab": "Lab Equipment",
+      "count-cat-project": "Project Materials",
+      "count-cat-hostel": "Hostel Items",
+      "count-cat-bags": "Bags",
+      "count-cat-sports": "Sports",
+      "count-cat-other": "Other"
+    };
+
+    Object.keys(catMapping).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        const catName = catMapping[id];
+        const count = allItems.filter(item => (item.category || "").toLowerCase() === catName.toLowerCase()).length;
+        el.textContent = count;
+      }
     });
   }
 
-  window.resetExploreFilters = function() {
+  // 4. Active Chips Bar
+  function updateActiveFilterChips() {
+    if (!chipsContainer) return;
+    let chipsHtml = "";
+    let activeFilterCount = 0;
+
+    if (state.search) {
+      activeFilterCount++;
+      chipsHtml += `
+        <span class="mp-chip">
+          Search: "${state.search}"
+          <span class="mp-chip-remove" onclick="window.clearSearchFilter()">✕</span>
+        </span>
+      `;
+    }
+
+    if (state.type !== "all") {
+      activeFilterCount++;
+      chipsHtml += `
+        <span class="mp-chip">
+          Type: ${state.type.toUpperCase()}
+          <span class="mp-chip-remove" onclick="window.setTypeFilter('all')">✕</span>
+        </span>
+      `;
+    }
+
+    if (state.category !== "all") {
+      activeFilterCount++;
+      chipsHtml += `
+        <span class="mp-chip">
+          ${state.category}
+          <span class="mp-chip-remove" onclick="window.setCategoryFilter('all')">✕</span>
+        </span>
+      `;
+    }
+
+    if (state.condition !== "all") {
+      activeFilterCount++;
+      chipsHtml += `
+        <span class="mp-chip">
+          ${state.condition}
+          <span class="mp-chip-remove" onclick="window.setConditionFilter('all')">✕</span>
+        </span>
+      `;
+    }
+
+    if (state.maxPrice < 250) {
+      activeFilterCount++;
+      chipsHtml += `
+        <span class="mp-chip">
+          Under $${state.maxPrice}
+          <span class="mp-chip-remove" onclick="window.resetPriceFilter()">✕</span>
+        </span>
+      `;
+    }
+
+    if (state.college !== "all") {
+      activeFilterCount++;
+      chipsHtml += `
+        <span class="mp-chip">
+          ${state.college}
+          <span class="mp-chip-remove" onclick="window.setCollegeFilter('all')">✕</span>
+        </span>
+      `;
+    }
+
+    chipsContainer.innerHTML = chipsHtml;
+
+    if (mobileActiveCount) {
+      if (activeFilterCount > 0) {
+        mobileActiveCount.style.display = "inline-flex";
+        mobileActiveCount.textContent = activeFilterCount;
+      } else {
+        mobileActiveCount.style.display = "none";
+      }
+    }
+  }
+
+  // 5. Global Reset & Filter Setter Handlers
+  window.resetMarketplaceFilters = function() {
+    state.search = "";
+    state.type = "all";
+    state.category = "all";
+    state.condition = "all";
+    state.maxPrice = 250;
+    state.college = "all";
+    state.sort = "newest";
+
     if (searchInput) searchInput.value = "";
-    if (categorySelect) categorySelect.value = "";
-    if (conditionSelect) conditionSelect.value = "";
+    if (searchClearBtn) searchClearBtn.style.display = "none";
+
+    if (typeTabsContainer) {
+      typeTabsContainer.querySelectorAll(".mp-filter-tab").forEach(t => t.classList.remove("active"));
+      const allTab = typeTabsContainer.querySelector('.mp-filter-tab[data-type="all"]');
+      if (allTab) allTab.classList.add("active");
+    }
+
+    if (catListContainer) {
+      catListContainer.querySelectorAll(".mp-cat-item").forEach(c => c.classList.remove("active"));
+      const allCat = catListContainer.querySelector('.mp-cat-item[data-category="all"]');
+      if (allCat) allCat.classList.add("active");
+    }
+
+    if (conditionPillsContainer) {
+      conditionPillsContainer.querySelectorAll(".mp-condition-pill").forEach(p => p.classList.remove("active"));
+      const allPill = conditionPillsContainer.querySelector('.mp-condition-pill[data-condition="all"]');
+      if (allPill) allPill.classList.add("active");
+    }
+
+    if (priceSlider) priceSlider.value = 250;
+    if (priceValDisplay) priceValDisplay.textContent = "$250+";
+
+    if (collegeSelect) collegeSelect.value = "all";
     if (sortSelect) sortSelect.value = "newest";
-    if (maxPriceInput) maxPriceInput.value = "";
+
+    // Clean up query string
     window.history.replaceState({}, document.title, window.location.pathname);
     renderMarketplace();
   };
 
-  // Grid / List View Toggle
-  if (viewGridBtn && viewListBtn) {
-    viewGridBtn.addEventListener("click", () => {
-      exploreGrid.className = "grid-3";
-      viewGridBtn.classList.add("btn-primary");
-      viewGridBtn.classList.remove("btn-outline");
-      viewListBtn.classList.add("btn-outline");
-      viewListBtn.classList.remove("btn-primary");
-    });
-    viewListBtn.addEventListener("click", () => {
-      exploreGrid.className = "grid-1";
-      viewListBtn.classList.add("btn-primary");
-      viewListBtn.classList.remove("btn-outline");
-      viewGridBtn.classList.add("btn-outline");
-      viewGridBtn.classList.remove("btn-primary");
+  window.clearSearchFilter = function() {
+    state.search = "";
+    if (searchInput) searchInput.value = "";
+    if (searchClearBtn) searchClearBtn.style.display = "none";
+    renderMarketplace();
+  };
+
+  window.setTypeFilter = function(type) {
+    state.type = type;
+    if (typeTabsContainer) {
+      typeTabsContainer.querySelectorAll(".mp-filter-tab").forEach(t => t.classList.remove("active"));
+      const target = typeTabsContainer.querySelector(`.mp-filter-tab[data-type="${type}"]`);
+      if (target) target.classList.add("active");
+    }
+    renderMarketplace();
+  };
+
+  window.setCategoryFilter = function(cat) {
+    state.category = cat;
+    if (catListContainer) {
+      catListContainer.querySelectorAll(".mp-cat-item").forEach(c => c.classList.remove("active"));
+      const target = catListContainer.querySelector(`.mp-cat-item[data-category="${cat}"]`);
+      if (target) target.classList.add("active");
+    }
+    renderMarketplace();
+  };
+
+  window.setConditionFilter = function(cond) {
+    state.condition = cond;
+    if (conditionPillsContainer) {
+      conditionPillsContainer.querySelectorAll(".mp-condition-pill").forEach(p => p.classList.remove("active"));
+      const target = conditionPillsContainer.querySelector(`.mp-condition-pill[data-condition="${cond}"]`);
+      if (target) target.classList.add("active");
+    }
+    renderMarketplace();
+  };
+
+  window.resetPriceFilter = function() {
+    state.maxPrice = 250;
+    if (priceSlider) priceSlider.value = 250;
+    if (priceValDisplay) priceValDisplay.textContent = "$250+";
+    renderMarketplace();
+  };
+
+  window.setCollegeFilter = function(coll) {
+    state.college = coll;
+    if (collegeSelect) collegeSelect.value = coll;
+    renderMarketplace();
+  };
+
+  // 6. Bind Event Listeners
+  if (searchInput) {
+    searchInput.addEventListener("input", function() {
+      state.search = this.value.trim();
+      if (searchClearBtn) {
+        searchClearBtn.style.display = state.search ? "block" : "none";
+      }
+      renderMarketplace();
     });
   }
+
+  if (searchClearBtn) {
+    searchClearBtn.addEventListener("click", window.clearSearchFilter);
+  }
+
+  // Type Tabs
+  if (typeTabsContainer) {
+    typeTabsContainer.addEventListener("click", function(e) {
+      const tab = e.target.closest(".mp-filter-tab");
+      if (!tab) return;
+      typeTabsContainer.querySelectorAll(".mp-filter-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      state.type = tab.getAttribute("data-type") || "all";
+      renderMarketplace();
+    });
+  }
+
+  // Category List
+  if (catListContainer) {
+    catListContainer.addEventListener("click", function(e) {
+      const item = e.target.closest(".mp-cat-item");
+      if (!item) return;
+      catListContainer.querySelectorAll(".mp-cat-item").forEach(c => c.classList.remove("active"));
+      item.classList.add("active");
+      state.category = item.getAttribute("data-category") || "all";
+      renderMarketplace();
+    });
+  }
+
+  // Condition Pills
+  if (conditionPillsContainer) {
+    conditionPillsContainer.addEventListener("click", function(e) {
+      const pill = e.target.closest(".mp-condition-pill");
+      if (!pill) return;
+      conditionPillsContainer.querySelectorAll(".mp-condition-pill").forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      state.condition = pill.getAttribute("data-condition") || "all";
+      renderMarketplace();
+    });
+  }
+
+  // Price Slider
+  if (priceSlider) {
+    priceSlider.addEventListener("input", function() {
+      state.maxPrice = parseFloat(this.value);
+      if (priceValDisplay) {
+        priceValDisplay.textContent = state.maxPrice >= 250 ? "$250+" : `$${state.maxPrice}`;
+      }
+      renderMarketplace();
+    });
+  }
+
+  // College Dropdown
+  if (collegeSelect) {
+    collegeSelect.addEventListener("change", function() {
+      state.college = this.value;
+      renderMarketplace();
+    });
+  }
+
+  // Sort Dropdown
+  if (sortSelect) {
+    sortSelect.addEventListener("change", function() {
+      state.sort = this.value;
+      renderMarketplace();
+    });
+  }
+
+  // Reset Filters Button
+  if (resetBtn) {
+    resetBtn.addEventListener("click", window.resetMarketplaceFilters);
+  }
+
+  // Mobile Filter Drawer Toggle
+  if (mobileToggleBtn && sidebar) {
+    mobileToggleBtn.addEventListener("click", function() {
+      sidebar.classList.add("show-mobile");
+      if (mobileCloseBtn) mobileCloseBtn.style.display = "inline-block";
+      if (mobileApplyBtn) mobileApplyBtn.style.display = "block";
+    });
+  }
+
+  if (mobileCloseBtn && sidebar) {
+    mobileCloseBtn.addEventListener("click", function() {
+      sidebar.classList.remove("show-mobile");
+    });
+  }
+
+  if (mobileApplyBtn && sidebar) {
+    mobileApplyBtn.addEventListener("click", function() {
+      sidebar.classList.remove("show-mobile");
+    });
+  }
+
+  // Wishlist Sync Listener (if an item is wishlisted from this page or elsewhere)
+  document.addEventListener("wishlistUpdated", function() {
+    // Re-sync favorite buttons
+    const wishlist = getWishlist();
+    document.querySelectorAll(".hp-listing-fav-btn").forEach(btn => {
+      const id = btn.getAttribute("data-id");
+      const isSaved = wishlist.includes(String(id));
+      if (isSaved) {
+        btn.classList.add("active");
+        const svg = btn.querySelector("svg");
+        if (svg) {
+          svg.setAttribute("fill", "#EF4444");
+          svg.setAttribute("stroke", "#EF4444");
+        }
+      } else {
+        btn.classList.remove("active");
+        const svg = btn.querySelector("svg");
+        if (svg) {
+          svg.setAttribute("fill", "none");
+          svg.setAttribute("stroke", "currentColor");
+        }
+      }
+    });
+  });
 
   // Initial Render
   renderMarketplace();
-}
-
-// Index Landing Page Featured Section
-function initIndexPage() {
-  const featuredGrid = document.getElementById("index-featured-grid");
-  const recentGrid = document.getElementById("index-recent-grid");
-
-  const items = getItems();
-  const postUrl = getAppUrl("post-item.html");
-
-  if (featuredGrid) {
-    const featuredItems = items.filter(i => i.featured).slice(0, 4);
-    if (featuredItems.length === 0) {
-      featuredGrid.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: var(--background); border-radius: var(--radius-md); border: 1px solid var(--border);">
-          <div style="font-size: 2.5rem; margin-bottom: 8px;">📦</div>
-          <h3 style="color: var(--navy); margin-bottom: 4px;">No featured items yet</h3>
-          <p style="color: var(--secondary-text); margin-bottom: 16px;">Be the first student to list an item on your campus!</p>
-          <a href="${postUrl}" class="btn btn-primary">+ Post an Item</a>
-        </div>
-      `;
-    } else {
-      featuredGrid.innerHTML = featuredItems.map(item => renderProductCard(item)).join("");
-    }
-  }
-
-  if (recentGrid) {
-    const recentItems = items.slice(0, 6);
-    if (recentItems.length === 0) {
-      recentGrid.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: var(--background); border-radius: var(--radius-md); border: 1px solid var(--border);">
-          <div style="font-size: 2.5rem; margin-bottom: 8px;">✨</div>
-          <h3 style="color: var(--navy); margin-bottom: 4px;">No campus listings yet</h3>
-          <p style="color: var(--secondary-text); margin-bottom: 16px;">Create a new listing to start trading textbooks, tech, and dorm items.</p>
-          <a href="${postUrl}" class="btn btn-primary btn-sm">+ Post a New Listing</a>
-        </div>
-      `;
-    } else {
-      recentGrid.innerHTML = recentItems.map(item => renderProductCard(item)).join("");
-    }
-  }
 }

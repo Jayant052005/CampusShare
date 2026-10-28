@@ -146,7 +146,7 @@ function initMyListingsPage() {
               ${item.status === 'sold' ? 'SOLD' : 'ACTIVE'}
             </span>
             <h4 style="margin: 0; font-size: 1.05rem; color: var(--navy);">${item.title}</h4>
-            <div style="color: var(--blue); font-weight: 700; font-size: 1.1rem; margin-top: 4px;">$${item.price.toFixed(2)}</div>
+            <div style="color: var(--blue); font-weight: 700; font-size: 1.1rem; margin-top: 4px;">${item.priceDisplay || (parseFloat(item.price) > 0 ? '$' + parseFloat(item.price).toFixed(2) : 'FREE')}</div>
             <div style="font-size: 0.8rem; color: var(--secondary-text); margin-top: 2px;">Listed ${item.postedDate} &bull; ${item.views} views</div>
           </div>
         </div>

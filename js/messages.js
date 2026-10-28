@@ -82,7 +82,7 @@ function renderChatThread(conv) {
         <img src="${conv.itemImage}" alt="${conv.itemTitle}" style="width: 36px; height: 36px; object-fit: cover; border-radius: 4px;" />
         <div>
           <div style="font-size: 0.85rem; font-weight: 600; color: var(--navy); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${conv.itemTitle}</div>
-          <div style="font-size: 0.8rem; color: var(--blue); font-weight: 700;">$${conv.price.toFixed(2)}</div>
+          <div style="font-size: 0.8rem; color: var(--blue); font-weight: 700;">${conv.price !== undefined && conv.price !== null ? (parseFloat(conv.price) > 0 ? '$' + parseFloat(conv.price).toFixed(2) : 'FREE') : ''}</div>
         </div>
       </a>
     </div>

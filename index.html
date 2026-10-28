@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/homepage.css">
+  <link rel="stylesheet" href="css/marketplace.css">
 </head>
 <body>
 
@@ -339,100 +340,16 @@
 
   <!-- Homepage Featured Listings Rendering logic -->
   <script>
-    function handleWishlistToggle(btn, itemId) {
-      if (typeof toggleWishlist === 'function') {
-        const isAdded = toggleWishlist(itemId);
-        btn.classList.toggle('active', isAdded);
-        const svg = btn.querySelector('svg');
-        if (svg) {
-          svg.setAttribute('fill', isAdded ? '#EF4444' : 'none');
-          svg.setAttribute('stroke', isAdded ? '#EF4444' : 'currentColor');
-        }
-        if (typeof updateHeaderWishlistCount === 'function') {
-          updateHeaderWishlistCount();
-        }
-        if (typeof showToast === 'function') {
-          showToast(isAdded ? 'Added to your wishlist' : 'Removed from wishlist', 'info');
-        }
-      } else {
-        btn.classList.toggle('active');
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      const featuredData = [
-        {
-          id: '1', title: 'TI-84 Plus CE Graphing Calculator', category: 'Electronics', condition: 'Like New',
-          sellerName: 'Alex', university: 'Stanford University', price: '$45', badge: 'SELL', badgeClass: 'type-sell',
-          image: 'https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?auto=format&fit=crop&w=600&q=80'
-        },
-        {
-          id: '2', title: 'CLRS Algorithms 4th Edition', category: 'Books', condition: 'Good',
-          sellerName: 'Sarah', university: 'UC Berkeley', price: 'FREE', badge: 'LEND', badgeClass: 'type-lend',
-          image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=600&q=80'
-        },
-        {
-          id: '3', title: 'Organic Chemistry Lab Kit', category: 'Lab Equipment', condition: 'Used',
-          sellerName: 'Mike', university: 'MIT', price: 'FREE', badge: 'DONATE', badgeClass: 'type-donate',
-          image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80'
-        },
-        {
-          id: '4', title: 'Tablet', category: 'Electronics', condition: 'Fair',
-          sellerName: 'Jessica', university: 'NYU', price: '$150', badge: 'SELL', badgeClass: 'type-sell',
-          image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=600&q=80'
-        },
-        {
-          id: '5', title: 'Academic Books', category: 'Books', condition: 'Excellent',
-          sellerName: 'David', university: 'UCLA', price: '$30', badge: 'EXCHANGE', badgeClass: 'type-exchange',
-          image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=600&q=80'
-        },
-        {
-          id: '6', title: 'Hostel Chair', category: 'Hostel Items', condition: 'Good',
-          sellerName: 'Emily', university: 'UT Austin', price: '$15', badge: 'SELL', badgeClass: 'type-sell',
-          image: 'https://images.unsplash.com/photo-1580481077111-9a746522c091?auto=format&fit=crop&w=600&q=80'
-        }
-      ];
-
-      const grid = document.getElementById('hp-featured-grid');
+    document.addEventListener("DOMContentLoaded", function () {
+      const grid = document.getElementById("hp-featured-grid");
       if (grid) {
-        const savedList = (typeof getWishlist === 'function') ? getWishlist() : [];
-
-        grid.innerHTML = featuredData.map(function(item) {
-          const isSaved = savedList.includes(item.id);
-          const heartFill = isSaved ? '#EF4444' : 'none';
-          const heartStroke = isSaved ? '#EF4444' : 'currentColor';
-          const isFree = item.price.toUpperCase() === 'FREE';
-
-          return (
-            '<div class="hp-listing-card" data-id="' + item.id + '" onclick="if(!event.target.closest(\'.hp-listing-fav-btn\')) window.location.href=\'html/item-details.html?id=' + item.id + '\'">' +
-              '<div class="hp-listing-img-wrap">' +
-                '<img src="' + item.image + '" alt="' + item.title + '" class="hp-listing-img" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=600&q=80\'" />' +
-                '<span class="hp-listing-type-badge ' + item.badgeClass + '">' + item.badge + '</span>' +
-                '<button class="hp-listing-fav-btn ' + (isSaved ? 'active' : '') + '" data-id="' + item.id + '" title="Add to Wishlist" onclick="event.stopPropagation(); handleWishlistToggle(this, \'' + item.id + '\')">' +
-                  '<svg width="18" height="18" viewBox="0 0 24 24" fill="' + heartFill + '" stroke="' + heartStroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-                    '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>' +
-                  '</svg>' +
-                '</button>' +
-              '</div>' +
-              '<div class="hp-listing-body">' +
-                '<div class="hp-listing-top-row">' +
-                  '<span class="hp-listing-category">' + item.category + '</span>' +
-                  '<span class="hp-listing-condition">' + item.condition + '</span>' +
-                '</div>' +
-                '<a href="html/item-details.html?id=' + item.id + '" class="hp-listing-title" onclick="event.stopPropagation();">' + item.title + '</a>' +
-                '<div class="hp-listing-seller-row">' +
-                  '<div class="hp-listing-seller-avatar">' + item.sellerName.charAt(0) + '</div>' +
-                  '<span class="hp-listing-seller-name">' + item.sellerName + '</span>' +
-                  '<span class="hp-listing-seller-uni">🎓 ' + item.university + '</span>' +
-                '</div>' +
-                '<div class="hp-listing-price-row">' +
-                  '<span class="hp-listing-price ' + (isFree ? 'free' : '') + '">' + item.price + '</span>' +
-                  '<a href="html/item-details.html?id=' + item.id + '" class="hp-listing-view-btn" onclick="event.stopPropagation();">View Details</a>' +
-                '</div>' +
-              '</div>' +
-            '</div>'
-          );
-        }).join('');
+        const allItems = (typeof getItems === "function") ? getItems() : [];
+        const displayItems = allItems.slice(0, 6);
+        if (typeof renderListingCard === "function" && displayItems.length > 0) {
+          grid.innerHTML = displayItems.map(function(item) {
+            return renderListingCard(item);
+          }).join("");
+        }
       }
     });
   </script>

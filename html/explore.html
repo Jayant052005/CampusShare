@@ -3,114 +3,260 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Explore Marketplace - CampusShare</title>
-  <meta name="description" content="Search and filter verified college student listings for textbooks, laptops, dorm furniture, bikes, and tutoring.">
+  <title>Explore Marketplace — CampusShare</title>
+  <meta name="description" content="Browse verified student items across Stanford and neighboring campuses. Buy, sell, donate, lend, or exchange textbooks, notes, electronics, and gear.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/homepage.css">
+  <link rel="stylesheet" href="../css/marketplace.css">
 </head>
 <body>
 
-  <!-- Dynamic Global Site Header -->
+  <!-- ══════════════════════════════════════════════════════════
+       GLOBAL NAVBAR (injected by main.js)
+  ══════════════════════════════════════════════════════════ -->
   <header id="navbar" class="site-header"></header>
 
   <main>
-    <!-- Page Header Banner -->
-    <section class="page-header">
+
+    <!-- ══════════════════════════════════════════════════════════
+         PAGE HEADER SECTION
+    ══════════════════════════════════════════════════════════ -->
+    <section class="mp-header-section">
       <div class="container">
-        <h1>Campus Marketplace</h1>
-        <p>Browse verified listings posted by students across your university</p>
+        
+        <!-- Header Top: Titles & Sort Dropdown -->
+        <div class="mp-header-top">
+          <div class="mp-header-titles">
+            <h1>Explore Marketplace</h1>
+            <p>Browse verified student items across Stanford and neighboring campuses</p>
+          </div>
+
+          <div class="mp-sort-wrapper">
+            <label for="mp-sort" class="mp-sort-label">Sort by:</label>
+            <select id="mp-sort" class="mp-sort-select">
+              <option value="newest" selected>Newest First</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="popular">Most Popular</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Search Bar & Filter Tabs -->
+        <div class="mp-search-container">
+          <!-- Large Search Input -->
+          <div class="mp-search-bar">
+            <span class="mp-search-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input
+              type="text"
+              id="mp-search-input"
+              class="mp-search-input"
+              placeholder="Search books, notes, calculators, lab equipment, hostel chairs..."
+              autocomplete="off"
+            />
+            <button type="button" id="mp-search-clear" class="mp-search-clear" title="Clear search">✕</button>
+          </div>
+
+          <!-- Filter Tabs: All Types, Sell, Donate, Lend, Exchange -->
+          <div class="mp-filter-tabs" id="mp-type-tabs" role="tablist">
+            <button type="button" class="mp-filter-tab active" data-type="all">All Types</button>
+            <button type="button" class="mp-filter-tab" data-type="sell">Sell</button>
+            <button type="button" class="mp-filter-tab" data-type="donate">Donate</button>
+            <button type="button" class="mp-filter-tab" data-type="lend">Lend</button>
+            <button type="button" class="mp-filter-tab" data-type="exchange">Exchange</button>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <div class="container pb-3xl">
-      <div class="sidebar-layout">
+    <!-- ══════════════════════════════════════════════════════════
+         MAIN MARKETPLACE LAYOUT (Sidebar + Listing Grid)
+    ══════════════════════════════════════════════════════════ -->
+    <div class="container">
+      
+      <!-- Mobile Filter Drawer Trigger -->
+      <button type="button" class="mp-mobile-filter-btn" id="mp-mobile-toggle-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+        <span>Filter Listings</span>
+        <span id="mp-mobile-active-count" class="badge badge-purple" style="display:none;">0</span>
+      </button>
 
-        <!-- Filter Sidebar -->
-        <aside class="card card-padding-24 card-height-fit">
-          <div class="sidebar-header">
-            <h3 class="sidebar-heading">Filters</h3>
-            <button id="clear-filters-btn" type="button" class="btn btn-ghost btn-sm text-primary">Clear All</button>
+      <div class="mp-main-layout">
+
+        <!-- ────────────────────────────────────────────────────────
+             LEFT COLUMN: FILTER SIDEBAR
+        ──────────────────────────────────────────────────────── -->
+        <aside class="mp-sidebar" id="mp-sidebar">
+          
+          <div class="mp-sidebar-head">
+            <h3 class="mp-sidebar-title">Filter Listings</h3>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button type="button" id="mp-reset-filters-btn" class="mp-reset-btn">Reset</button>
+              <button type="button" id="mp-mobile-close-btn" class="btn btn-ghost btn-sm" style="display:none; font-size: 1.2rem;">✕</button>
+            </div>
           </div>
 
-          <!-- Search Query Input -->
-          <div class="form-group">
-            <label class="form-label">Search Keywords</label>
-            <input type="text" id="explore-search" class="input-field" placeholder="Search title, details...">
+          <!-- CATEGORY FILTER -->
+          <div class="mp-filter-group">
+            <div class="mp-filter-group-title">
+              <span>Category</span>
+              <span id="mp-cat-badge" style="color: var(--blue); font-size: 0.72rem;"></span>
+            </div>
+            <div class="mp-cat-list" id="mp-category-list">
+              <div class="mp-cat-item active" data-category="all">
+                <span>All Categories</span>
+                <span class="mp-cat-count" id="count-cat-all">16</span>
+              </div>
+              <div class="mp-cat-item" data-category="Books">
+                <span>📚 Books</span>
+                <span class="mp-cat-count" id="count-cat-books">2</span>
+              </div>
+              <div class="mp-cat-item" data-category="Notes">
+                <span>📝 Notes</span>
+                <span class="mp-cat-count" id="count-cat-notes">1</span>
+              </div>
+              <div class="mp-cat-item" data-category="Electronics">
+                <span>💻 Electronics</span>
+                <span class="mp-cat-count" id="count-cat-electronics">3</span>
+              </div>
+              <div class="mp-cat-item" data-category="Stationery">
+                <span>📐 Stationery</span>
+                <span class="mp-cat-count" id="count-cat-stationery">1</span>
+              </div>
+              <div class="mp-cat-item" data-category="Lab Equipment">
+                <span>🧪 Lab Equipment</span>
+                <span class="mp-cat-count" id="count-cat-lab">1</span>
+              </div>
+              <div class="mp-cat-item" data-category="Project Materials">
+                <span>⚙️ Project Materials</span>
+                <span class="mp-cat-count" id="count-cat-project">1</span>
+              </div>
+              <div class="mp-cat-item" data-category="Hostel Items">
+                <span>🛋️ Hostel Items</span>
+                <span class="mp-cat-count" id="count-cat-hostel">3</span>
+              </div>
+              <div class="mp-cat-item" data-category="Bags">
+                <span>🎒 Bags</span>
+                <span class="mp-cat-count" id="count-cat-bags">1</span>
+              </div>
+              <div class="mp-cat-item" data-category="Sports">
+                <span>🚲 Sports</span>
+                <span class="mp-cat-count" id="count-cat-sports">2</span>
+              </div>
+              <div class="mp-cat-item" data-category="Other">
+                <span>📦 Other</span>
+                <span class="mp-cat-count" id="count-cat-other">1</span>
+              </div>
+            </div>
           </div>
 
-          <!-- Category Select -->
-          <div class="form-group">
-            <label class="form-label">Category</label>
-            <select id="filter-category" class="select-field">
-              <option value="">All Categories</option>
-              <option value="textbooks">📚 Textbooks &amp; Notes</option>
-              <option value="electronics">💻 Electronics &amp; Tech</option>
-              <option value="dorm">🛋️ Dorm Essentials</option>
-              <option value="clothing">👕 Campus Apparel</option>
-              <option value="services">🎓 Tutoring &amp; Services</option>
-              <option value="sports">🚲 Bikes &amp; Gear</option>
+          <!-- CONDITION FILTER -->
+          <div class="mp-filter-group">
+            <div class="mp-filter-group-title">Condition</div>
+            <div class="mp-condition-pills" id="mp-condition-pills">
+              <button type="button" class="mp-condition-pill active" data-condition="all">All</button>
+              <button type="button" class="mp-condition-pill" data-condition="Brand New">Brand New</button>
+              <button type="button" class="mp-condition-pill" data-condition="Like New">Like New</button>
+              <button type="button" class="mp-condition-pill" data-condition="Good">Good</button>
+              <button type="button" class="mp-condition-pill" data-condition="Fair">Fair</button>
+            </div>
+          </div>
+
+          <!-- MAX PRICE SLIDER -->
+          <div class="mp-filter-group">
+            <div class="mp-filter-group-title">
+              <span>Max Price</span>
+              <span id="mp-price-val" class="mp-price-val">$250</span>
+            </div>
+            <div class="mp-price-slider-wrap">
+              <input
+                type="range"
+                id="mp-price-slider"
+                class="mp-slider"
+                min="0"
+                max="250"
+                step="5"
+                value="250"
+              />
+              <div class="mp-price-val-row">
+                <span>$0</span>
+                <span>$250+</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLLEGE DROPDOWN -->
+          <div class="mp-filter-group">
+            <div class="mp-filter-group-title">College</div>
+            <select id="mp-college-select" class="mp-college-select">
+              <option value="all" selected>All Campuses</option>
+              <option value="Stanford University">Stanford University</option>
+              <option value="UC Berkeley">UC Berkeley</option>
+              <option value="MIT">MIT</option>
+              <option value="Harvard University">Harvard University</option>
+              <option value="UT Austin">UT Austin</option>
+              <option value="UCLA">UCLA</option>
+              <option value="NYU">NYU</option>
+              <option value="University of Michigan">University of Michigan</option>
+              <option value="Columbia University">Columbia University</option>
+              <option value="University of Washington">University of Washington</option>
             </select>
           </div>
 
-          <!-- Condition Select -->
-          <div class="form-group">
-            <label class="form-label">Item Condition</label>
-            <select id="filter-condition" class="select-field">
-              <option value="">All Conditions</option>
-              <option value="Like New">Like New</option>
-              <option value="Good">Good</option>
-              <option value="Fair">Fair</option>
-              <option value="Service">Service</option>
-            </select>
-          </div>
+          <!-- Apply Filter button for mobile -->
+          <button type="button" id="mp-mobile-apply-btn" class="btn btn-primary btn-block btn-lg mt-md" style="display:none;">
+            Apply Filters
+          </button>
 
-          <!-- Max Price Filter -->
-          <div class="form-group">
-            <label class="form-label">Max Price ($)</label>
-            <input type="number" id="filter-price-max" class="input-field" placeholder="e.g. 100" min="0">
-          </div>
         </aside>
 
-        <!-- Main Marketplace Results Area -->
-        <section>
+        <!-- ────────────────────────────────────────────────────────
+             RIGHT COLUMN: LISTINGS GRID
+        ──────────────────────────────────────────────────────── -->
+        <section class="mp-main">
 
-          <!-- Top Control Toolbar -->
-          <div class="card toolbar-card mb-lg">
-            <div id="results-count" class="results-count-text">
-              Loading listings...
+          <!-- Results Bar (Count & Active Filters Chips) -->
+          <div class="mp-results-bar">
+            <div id="mp-results-count" class="mp-results-count">
+              Showing verified listings...
             </div>
 
-            <div class="flex items-center gap-md">
-              <!-- Sort Selector -->
-              <div class="sort-wrapper">
-                <label class="sort-label">Sort By:</label>
-                <select id="filter-sort" class="select-field sort-select">
-                  <option value="newest">Newest First</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="popular">Most Popular</option>
-                </select>
-              </div>
-
-              <!-- View Layout Switcher -->
-              <div class="view-btn-group">
-                <button id="view-grid-btn" type="button" class="btn btn-primary btn-sm" title="Grid View">📱 Grid</button>
-                <button id="view-list-btn" type="button" class="btn btn-outline btn-sm" title="List View">📄 List</button>
-              </div>
-            </div>
+            <div id="mp-active-chips" class="mp-active-filters-chips"></div>
           </div>
 
-          <!-- Marketplace Dynamic Cards Grid -->
-          <div id="explore-grid" class="grid-3"></div>
+          <!-- Responsive 3-Column Listings Grid -->
+          <div id="mp-listings-grid" class="mp-grid">
+            <!-- Hydrated dynamically by marketplace.js using ListingCard -->
+          </div>
 
         </section>
 
       </div>
     </div>
+
   </main>
 
-  <!-- Dynamic Global Site Footer -->
+  <!-- ══════════════════════════════════════════════════════════
+       GLOBAL FOOTER (injected by main.js)
+  ══════════════════════════════════════════════════════════ -->
   <footer id="footer" class="site-footer"></footer>
 
   <!-- Core Scripts -->
