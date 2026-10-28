@@ -243,6 +243,7 @@
 .mp-cat-list::-webkit-scrollbar {
   width: 4px;
 }
+
 .mp-cat-list::-webkit-scrollbar-thumb {
   background: #DCE3ED;
   border-radius: 4px;
@@ -876,9 +877,19 @@
   letter-spacing: -0.03em;
 }
 
-.id-price-main.free { color: #16A34A; }
-.id-price-main.lend { color: #EA580C; font-size: 2rem; }
-.id-price-main.exchange { color: #1769FF; font-size: 2rem; }
+.id-price-main.free {
+  color: #16A34A;
+}
+
+.id-price-main.lend {
+  color: #EA580C;
+  font-size: 2rem;
+}
+
+.id-price-main.exchange {
+  color: #1769FF;
+  font-size: 2rem;
+}
 
 .id-price-orig {
   font-size: 1.2rem;
@@ -1335,7 +1346,10 @@
 .pi-slider-round {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #CBD5E1;
   transition: .3s;
   border-radius: 34px;
@@ -1353,11 +1367,11 @@
   border-radius: 50%;
 }
 
-.pi-switch input:checked + .pi-slider-round {
+.pi-switch input:checked+.pi-slider-round {
   background-color: var(--blue);
 }
 
-.pi-switch input:checked + .pi-slider-round:before {
+.pi-switch input:checked+.pi-slider-round:before {
   transform: translateX(22px);
 }
 
@@ -1499,12 +1513,15 @@
     grid-template-columns: 240px 1fr;
     gap: 24px;
   }
+
   .mp-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .id-layout {
     grid-template-columns: 1fr;
   }
+
   .id-action-column {
     position: static;
   }
@@ -1514,6 +1531,7 @@
   .mp-mobile-filter-btn {
     display: flex;
   }
+
   .mp-sidebar {
     display: none;
     position: fixed;
@@ -1525,23 +1543,29 @@
     overflow-y: auto;
     border-radius: 0;
   }
+
   .mp-sidebar.show-mobile {
     display: block;
   }
+
   .mp-main-layout {
     grid-template-columns: 1fr;
     padding-top: 16px;
   }
+
   .pi-stepper {
     overflow-x: auto;
     padding-bottom: 12px;
   }
+
   .pi-type-grid {
     grid-template-columns: 1fr;
   }
+
   .pi-review-preview {
     grid-template-columns: 1fr;
   }
+
   .pi-form-card {
     padding: 24px 18px;
   }
@@ -1551,12 +1575,15 @@
   .mp-grid {
     grid-template-columns: 1fr;
   }
+
   .mp-header-titles h1 {
     font-size: 1.75rem;
   }
+
   .wl-titles h1 {
     font-size: 1.75rem;
   }
+
   .pi-header-titles h1 {
     font-size: 1.75rem;
   }
@@ -1923,7 +1950,8 @@
 }
 
 .cs-msg-row.outgoing .cs-msg-bubble {
-  background: #07182E; /* Dark navy per prompt requirement */
+  background: #07182E;
+  /* Dark navy per prompt requirement */
   color: var(--white);
   border-radius: 18px 18px 4px 18px;
 }
@@ -2340,7 +2368,7 @@
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 32px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .settings-group {
@@ -2384,28 +2412,36 @@
     border-radius: 0;
     border: none;
   }
+
   .cs-msg-container.chat-active .cs-msg-sidebar {
     display: none;
   }
+
   .cs-msg-container.chat-active .cs-msg-chat {
     display: flex;
   }
+
   .cs-msg-container:not(.chat-active) .cs-msg-sidebar {
     display: flex;
   }
+
   .cs-msg-container:not(.chat-active) .cs-msg-chat {
     display: none;
   }
+
   .cs-mobile-back-btn {
     display: inline-flex;
   }
+
   .profile-stats-strip {
     grid-template-columns: repeat(3, 1fr);
   }
+
   .settings-layout {
     grid-template-columns: 1fr;
     gap: 20px;
   }
+
   .my-listing-row {
     grid-template-columns: 1fr;
   }
@@ -2424,7 +2460,7 @@
 
 /* Settings page section panels — JS controls display via inline style */
 .settings-tab-section {
-  /* no extra styling needed; visibility controlled by JS */
+  display: block;
 }
 
 /* Modal overlay — shared by contact, report, and confirm modals */
@@ -2441,4 +2477,3 @@
   align-items: center;
   justify-content: center;
 }
-
