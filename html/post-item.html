@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Post an Item to CampusShare — 5-Step Listing Creator</title>
-  <meta name="description" content="List textbooks, gear, or notes for sale, donation, lending, or trade to fellow campus students.">
+  <meta name="description"
+    content="List textbooks, gear, or notes for sale, donation, lending, or trade to fellow campus students.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/responsive.css">
   <link rel="stylesheet" href="../css/homepage.css">
   <link rel="stylesheet" href="../css/marketplace.css">
 </head>
+
 <body>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -25,12 +28,11 @@
     ══════════════════════════════════════════════════════════ -->
     <section class="pi-page-header">
       <div class="container">
-        
         <!-- Header Top Row: Cancel & Step Counter -->
         <div class="pi-header-top-row">
           <a href="explore.html" class="pi-cancel-btn">
             <span>&larr;</span>
-            <span>Cancel & Exit</span>
+            <span>Cancel &amp; Exit</span>
           </a>
 
           <div class="pi-step-counter" id="pi-step-badge">
@@ -86,7 +88,7 @@
           <!-- ────────────────────────────────────────────────────────
                STEP 1: BASIC INFORMATION
           ──────────────────────────────────────────────────────── -->
-          <div class="pi-step-panel" id="pi-panel-1">
+          <div class="pi-step-panel active" id="pi-panel-1">
             <div class="pi-card-header">
               <h2>Step 1 — Basic Item Information</h2>
               <p>Provide the essential details so campus peers can discover your item quickly.</p>
@@ -95,15 +97,11 @@
             <!-- Item Title -->
             <div class="form-group">
               <label for="pi-title" class="form-label">Item Title *</label>
-              <input
-                type="text"
-                id="pi-title"
-                class="input-field"
-                placeholder="e.g. Introduction to Algorithms (CLRS 4th Ed) or TI-84 Plus CE"
-                required
-              />
+              <input type="text" id="pi-title" class="input-field"
+                placeholder="e.g. Introduction to Algorithms (CLRS 4th Ed) or TI-84 Plus CE" required>
               <div class="form-hint">Include edition, model name, or course code (e.g. CS106B) for high visibility</div>
-              <div class="form-error-msg" id="err-pi-title" style="color: #EF4444; font-size: 0.8rem; margin-top: 4px; display: none;">Please enter an item title</div>
+              <div class="form-error-msg form-error" id="err-pi-title">Please enter an item title
+              </div>
             </div>
 
             <div class="grid-2">
@@ -123,7 +121,8 @@
                   <option value="Sports">🚲 Sports</option>
                   <option value="Other">📦 Other</option>
                 </select>
-                <div class="form-error-msg" id="err-pi-category" style="color: #EF4444; font-size: 0.8rem; margin-top: 4px; display: none;">Please select a category</div>
+                <div class="form-error-msg form-error" id="err-pi-category">Please select a category
+                </div>
               </div>
 
               <!-- Condition -->
@@ -136,26 +135,24 @@
                   <option value="Good">Good (Minor cosmetic wear, fully functional)</option>
                   <option value="Fair">Fair (Usable, signs of wear)</option>
                 </select>
-                <div class="form-error-msg" id="err-pi-condition" style="color: #EF4444; font-size: 0.8rem; margin-top: 4px; display: none;">Please choose a condition</div>
+                <div class="form-error-msg form-error" id="err-pi-condition">Please choose a condition
+                </div>
               </div>
             </div>
 
             <!-- Description -->
             <div class="form-group">
               <label for="pi-description" class="form-label">Description *</label>
-              <textarea
-                id="pi-description"
-                class="textarea-field"
+              <textarea id="pi-description" class="textarea-field"
                 placeholder="Describe item condition, included accessories, course relevance, notes, or availability..."
-                rows="5"
-                required
-              ></textarea>
+                rows="5" required></textarea>
               <div class="form-hint">Be thorough about any markings, battery health, or included cables/covers</div>
-              <div class="form-error-msg" id="err-pi-description" style="color: #EF4444; font-size: 0.8rem; margin-top: 4px; display: none;">Please enter a description (at least 15 characters)</div>
+              <div class="form-error-msg form-error" id="err-pi-description">Please enter a description
+                (at least 15 characters)</div>
             </div>
 
             <!-- Step 1 Actions -->
-            <div class="pi-action-bar" style="justify-content: flex-end;">
+            <div class="pi-action-bar pi-action-bar-end">
               <button type="button" id="pi-btn-step1-next" class="btn btn-primary btn-lg" disabled>
                 Continue to Listing Type &rarr;
               </button>
@@ -166,7 +163,7 @@
           <!-- ────────────────────────────────────────────────────────
                STEP 2: LISTING TYPE
           ──────────────────────────────────────────────────────── -->
-          <div class="pi-step-panel" id="pi-panel-2" style="display: none;">
+          <div class="pi-step-panel" id="pi-panel-2">
             <div class="pi-card-header">
               <h2>Step 2 — Select Listing Type</h2>
               <p>Choose how you would like to share or transfer this item with campus peers.</p>
@@ -174,7 +171,6 @@
 
             <!-- 4 Selectable Type Cards -->
             <div class="pi-type-grid" id="pi-type-grid">
-              
               <!-- SELL CARD -->
               <div class="pi-type-card selected" data-type="sell">
                 <div class="pi-type-card-head">
@@ -182,7 +178,8 @@
                   <div class="pi-type-check">✓</div>
                 </div>
                 <div class="pi-type-title">SELL</div>
-                <p class="pi-type-desc">Sell directly for cash or Venmo to peers on your campus at student-friendly prices.</p>
+                <p class="pi-type-desc">Sell directly for cash or Venmo to peers on your campus at student-friendly
+                  prices.</p>
                 <span class="hp-share-type-label label-sell">Cash Sale</span>
               </div>
 
@@ -193,7 +190,8 @@
                   <div class="pi-type-check"></div>
                 </div>
                 <div class="pi-type-title">DONATE</div>
-                <p class="pi-type-desc">Give away for free to help fellow students, juniors, or peers in need this quarter.</p>
+                <p class="pi-type-desc">Give away for free to help fellow students, juniors, or peers in need this
+                  quarter.</p>
                 <span class="hp-share-type-label label-donate">100% Free</span>
               </div>
 
@@ -204,7 +202,8 @@
                   <div class="pi-type-check"></div>
                 </div>
                 <div class="pi-type-title">LEND</div>
-                <p class="pi-type-desc">Temporarily loan an item (e.g. for a semester or midterms) with an optional security deposit.</p>
+                <p class="pi-type-desc">Temporarily loan an item (e.g. for a semester or midterms) with an optional
+                  security deposit.</p>
                 <span class="hp-share-type-label label-lend">Temporary Loan</span>
               </div>
 
@@ -215,7 +214,8 @@
                   <div class="pi-type-check"></div>
                 </div>
                 <div class="pi-type-title">EXCHANGE</div>
-                <p class="pi-type-desc">Barter and trade this item for other textbooks, notes, lab kits, or study tools.</p>
+                <p class="pi-type-desc">Barter and trade this item for other textbooks, notes, lab kits, or study tools.
+                </p>
                 <span class="hp-share-type-label label-exchange">Peer Trade</span>
               </div>
 
@@ -224,7 +224,8 @@
             <!-- Step 2 Actions -->
             <div class="pi-action-bar">
               <button type="button" class="btn btn-outline" onclick="goToStep(1)">&larr; Previous Step</button>
-              <button type="button" class="btn btn-primary btn-lg" onclick="goToStep(3)">Continue to Details &rarr;</button>
+              <button type="button" class="btn btn-primary btn-lg" onclick="goToStep(3)">Continue to Details
+                &rarr;</button>
             </div>
           </div>
 
@@ -232,25 +233,25 @@
           <!-- ────────────────────────────────────────────────────────
                STEP 3: DETAILS (Dynamic based on selected type)
           ──────────────────────────────────────────────────────── -->
-          <div class="pi-step-panel" id="pi-panel-3" style="display: none;">
+          <div class="pi-step-panel" id="pi-panel-3">
             <div class="pi-card-header">
-              <h2>Step 3 — Pricing & Campus Details</h2>
+              <h2>Step 3 — Pricing &amp; Campus Details</h2>
               <p id="pi-step3-sub">Specify terms, pricing, and pickup spot on campus.</p>
             </div>
 
             <!-- DYNAMIC FORM SECTIONS -->
 
             <!-- 1. SELL FIELDS -->
-            <div id="pi-fields-sell" class="pi-conditional-fields">
+            <div id="pi-fields-sell" class="pi-conditional-fields active">
               <div class="grid-2">
                 <div class="form-group">
                   <label for="pi-price" class="form-label">Selling Price (₹) *</label>
-                  <input type="number" id="pi-price" class="input-field" placeholder="450" min="0" step="1" required />
-                  <div class="form-error-msg" id="err-pi-price" style="color: #EF4444; font-size: 0.8rem; margin-top: 4px; display: none;">Please enter a valid price</div>
+                  <input type="number" id="pi-price" class="input-field" placeholder="450" min="0" step="1" required>
+                  <div class="form-error-msg form-error" id="err-pi-price">Please enter a valid price</div>
                 </div>
                 <div class="form-group">
                   <label for="pi-orig-price" class="form-label">Original Retail / Store Price (₹)</label>
-                  <input type="number" id="pi-orig-price" class="input-field" placeholder="1200" min="0" step="1" />
+                  <input type="number" id="pi-orig-price" class="input-field" placeholder="1200" min="0" step="1">
                   <div class="form-hint">Shows savings percentage to interested student buyers</div>
                 </div>
               </div>
@@ -258,33 +259,35 @@
               <!-- Negotiable Switch -->
               <div class="pi-switch-row mb-lg">
                 <div>
-                  <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Price is Negotiable</strong>
-                  <span style="font-size: 0.825rem; color: var(--secondary-text);">Allow peers to make respectful counter-offers</span>
+                  <strong class="pi-negotiable-title">Price is Negotiable</strong>
+                  <span class="pi-negotiable-desc">Allow peers to make respectful
+                    counter-offers</span>
                 </div>
                 <label class="pi-switch">
-                  <input type="checkbox" id="pi-negotiable" />
+                  <input type="checkbox" id="pi-negotiable">
                   <span class="pi-slider-round"></span>
                 </label>
               </div>
             </div>
 
             <!-- 2. DONATE FIELDS -->
-            <div id="pi-fields-donate" class="pi-conditional-fields" style="display: none;">
-              <div style="background: #F5F3FF; border: 1.5px solid #DDD6FE; border-radius: 16px; padding: 24px; margin-bottom: 24px;">
-                <div style="font-size: 1.8rem; margin-bottom: 8px;">🎁</div>
-                <h4 style="color: #5B21B6; margin-bottom: 6px;">Campus Giving Pledge</h4>
-                <p style="font-size: 0.9rem; color: #6D28D9; line-height: 1.6; margin-bottom: 16px;">
-                  Thank you for supporting fellow students! Items posted under Donate are offered 100% free of charge without any payment or hidden fees.
+            <div id="pi-fields-donate" class="pi-conditional-fields">
+              <div class="pi-pledge-card">
+                <div class="pi-pledge-icon">🎁</div>
+                <h4 class="pi-pledge-title">Campus Giving Pledge</h4>
+                <p class="pi-pledge-desc">
+                  Thank you for supporting fellow students! Items posted under Donate are offered 100% free of charge
+                  without any payment or hidden fees.
                 </p>
-                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #4C1D95;">
-                  <input type="checkbox" id="pi-donate-confirm" checked />
+                <label class="pi-pledge-checkbox-label">
+                  <input type="checkbox" id="pi-donate-confirm" checked>
                   <span>I confirm I am donating this item completely free to assist campus peers.</span>
                 </label>
               </div>
             </div>
 
             <!-- 3. LEND FIELDS -->
-            <div id="pi-fields-lend" class="pi-conditional-fields" style="display: none;">
+            <div id="pi-fields-lend" class="pi-conditional-fields">
               <div class="grid-2">
                 <div class="form-group">
                   <label for="pi-lend-duration" class="form-label">Lending Duration *</label>
@@ -299,45 +302,37 @@
 
                 <div class="form-group">
                   <label for="pi-lend-deposit" class="form-label">Security Deposit (₹)</label>
-                  <input type="number" id="pi-lend-deposit" class="input-field" placeholder="200" min="0" step="1" />
+                  <input type="number" id="pi-lend-deposit" class="input-field" placeholder="200" min="0" step="1">
                   <div class="form-hint">Refundable to borrower when item is safely returned (or ₹0 if none)</div>
                 </div>
               </div>
             </div>
 
             <!-- 4. EXCHANGE FIELDS -->
-            <div id="pi-fields-exchange" class="pi-conditional-fields" style="display: none;">
+            <div id="pi-fields-exchange" class="pi-conditional-fields">
               <div class="form-group">
                 <label for="pi-exchange-for" class="form-label">Desired Exchange Item(s) *</label>
-                <input
-                  type="text"
-                  id="pi-exchange-for"
-                  class="input-field"
-                  placeholder="e.g. CS106B reader, TI-84 Plus, or Organic Chemistry kit"
-                />
+                <input type="text" id="pi-exchange-for" class="input-field"
+                  placeholder="e.g. CS106B reader, TI-84 Plus, or Organic Chemistry kit">
                 <div class="form-hint">What textbooks, gear, or tools are you interested in swapping for?</div>
-                <div class="form-error-msg" id="err-pi-exchange-for" style="color: #EF4444; font-size: 0.8rem; margin-top: 4px; display: none;">Please specify what you would like to trade for</div>
+                <div class="form-error-msg form-error" id="err-pi-exchange-for">Please specify what you would like to trade for</div>
               </div>
             </div>
 
             <!-- COMMON FIELD: CAMPUS PICKUP LOCATION -->
             <div class="form-group mt-md">
               <label for="pi-location" class="form-label">Campus Pickup Location *</label>
-              <input
-                type="text"
-                id="pi-location"
-                class="input-field"
-                placeholder="e.g. Huang Engineering Center, Green Library, or Tresidder Union"
-                required
-              />
+              <input type="text" id="pi-location" class="input-field"
+                placeholder="e.g. Huang Engineering Center, Green Library, or Tresidder Union" required>
               <div class="form-hint">Suggest a safe, public spot on or near campus for the handover</div>
-              <div class="form-error-msg" id="err-pi-location" style="color: #EF4444; font-size: 0.8rem; margin-top: 4px; display: none;">Please specify a campus pickup location</div>
+              <div class="form-error-msg form-error" id="err-pi-location">Please specify a campus pickup location</div>
             </div>
 
             <!-- Step 3 Actions -->
             <div class="pi-action-bar">
               <button type="button" class="btn btn-outline" onclick="goToStep(2)">&larr; Previous Step</button>
-              <button type="button" class="btn btn-primary btn-lg" onclick="validateAndGoToStep4()">Continue to Photos &rarr;</button>
+              <button type="button" class="btn btn-primary btn-lg" onclick="validateAndGoToStep4()">Continue to Photos
+                &rarr;</button>
             </div>
           </div>
 
@@ -345,20 +340,20 @@
           <!-- ────────────────────────────────────────────────────────
                STEP 4: PHOTOS
           ──────────────────────────────────────────────────────── -->
-          <div class="pi-step-panel" id="pi-panel-4" style="display: none;">
+          <div class="pi-step-panel" id="pi-panel-4">
             <div class="pi-card-header">
               <h2>Step 4 — Add Item Photos</h2>
               <p>Upload clear photos of your item to build trust and get more peer inquiries.</p>
             </div>
 
             <!-- Hidden File Input -->
-            <input type="file" id="pi-file-input" accept="image/*" multiple style="display: none;" />
+            <input type="file" id="pi-file-input" accept="image/*" multiple>
 
             <!-- Upload Area -->
             <div class="pi-dropzone" id="pi-dropzone" onclick="document.getElementById('pi-file-input').click()">
-              <div style="font-size: 2.75rem; margin-bottom: 8px;">📷</div>
-              <h3 style="font-size: 1.15rem; color: var(--navy); margin-bottom: 4px;">Click or Drag Photos Here to Upload</h3>
-              <p style="font-size: 0.85rem; color: var(--secondary-text);">PNG, JPG, or WEBP. You can upload multiple photos.</p>
+              <div class="pi-upload-icon">📷</div>
+              <h3 class="pi-upload-title">Click or Drag Photos Here to Upload</h3>
+              <p class="pi-upload-hint">PNG, JPG, or WEBP. You can upload multiple photos.</p>
             </div>
 
             <!-- Photo Previews Grid -->
@@ -368,22 +363,30 @@
 
             <!-- Quick Presets -->
             <div class="pi-presets-bar">
-              <span style="font-size: 0.85rem; font-weight: 600; color: var(--navy);">Or select category icon preset:</span>
+              <span class="pi-fallback-label">Or select category icon preset:</span>
               <div class="pi-preset-btns">
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Books'))">📚 Textbook</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Electronics'))">🧮 Calculator</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Electronics'))">💻 Tech / Device</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Notes'))">📝 Study Notes</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Lab Equipment'))">🧪 Lab Kit</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Hostel Items'))">🛋️ Hostel Item</button>
-                <button type="button" class="pi-preset-btn" onclick="addSamplePhoto(getCategoryPlaceholderSvg('Bags'))">🎒 Backpack</button>
+                <button type="button" class="pi-preset-btn"
+                  onclick="addSamplePhoto(getCategoryPlaceholderSvg('Books'))">📚 Textbook</button>
+                <button type="button" class="pi-preset-btn"
+                  onclick="addSamplePhoto(getCategoryPlaceholderSvg('Electronics'))">🧮 Calculator</button>
+                <button type="button" class="pi-preset-btn"
+                  onclick="addSamplePhoto(getCategoryPlaceholderSvg('Electronics'))">💻 Tech / Device</button>
+                <button type="button" class="pi-preset-btn"
+                  onclick="addSamplePhoto(getCategoryPlaceholderSvg('Notes'))">📝 Study Notes</button>
+                <button type="button" class="pi-preset-btn"
+                  onclick="addSamplePhoto(getCategoryPlaceholderSvg('Lab Equipment'))">🧪 Lab Kit</button>
+                <button type="button" class="pi-preset-btn"
+                  onclick="addSamplePhoto(getCategoryPlaceholderSvg('Hostel Items'))">🛋️ Hostel Item</button>
+                <button type="button" class="pi-preset-btn"
+                  onclick="addSamplePhoto(getCategoryPlaceholderSvg('Bags'))">🎒 Backpack</button>
               </div>
             </div>
 
             <!-- Step 4 Actions -->
             <div class="pi-action-bar">
               <button type="button" class="btn btn-outline" onclick="goToStep(3)">&larr; Previous Step</button>
-              <button type="button" class="btn btn-primary btn-lg" onclick="goToStep(5)">Continue to Review &rarr;</button>
+              <button type="button" class="btn btn-primary btn-lg" onclick="goToStep(5)">Continue to Review
+                &rarr;</button>
             </div>
           </div>
 
@@ -391,7 +394,7 @@
           <!-- ────────────────────────────────────────────────────────
                STEP 5: REVIEW
           ──────────────────────────────────────────────────────── -->
-          <div class="pi-step-panel" id="pi-panel-5" style="display: none;">
+          <div class="pi-step-panel" id="pi-panel-5">
             <div class="pi-card-header">
               <h2>Step 5 — Review Your Listing</h2>
               <p>Double check your listing details before publishing it to the student marketplace.</p>
@@ -401,29 +404,27 @@
             <div class="pi-review-preview">
               <!-- Left Preview Photo -->
               <div class="pi-review-img-box">
-                <img id="review-preview-img" src="" alt="Listing Photo" />
+                <img id="review-preview-img" src="." alt="Listing Photo">
               </div>
 
               <!-- Right Preview Details -->
               <div class="pi-review-details">
-                <div style="display: flex; gap: 8px; align-items: center;">
-                  <span id="review-badge-type" class="hp-listing-type-badge type-sell" style="position: static;">SELL</span>
+                <div class="pi-review-type-row">
+                  <span id="review-badge-type" class="hp-listing-type-badge type-sell pi-review-badge">SELL</span>
                   <span id="review-badge-cat" class="hp-listing-category"></span>
                   <span id="review-badge-cond" class="hp-listing-condition"></span>
                 </div>
 
-                <h3 id="review-title" style="font-size: 1.45rem; font-weight: 800; color: var(--navy); line-height: 1.3;"></h3>
+                <div id="review-price" class="pi-review-price"></div>
 
-                <div id="review-price" style="font-size: 1.85rem; font-weight: 800; color: var(--navy);"></div>
-
-                <div style="font-size: 0.9rem; color: #4B5563; padding: 10px 0; border-top: 1px solid #EDF0F7; border-bottom: 1px solid #EDF0F7;">
+                <div class="pi-review-meta-strip">
                   <div>📍 <strong>Pickup:</strong> <span id="review-location"></span></div>
                   <div>🏫 <strong>Campus:</strong> Stanford University (Verified Student)</div>
                 </div>
 
                 <div>
-                  <h4 style="font-size: 0.85rem; text-transform: uppercase; color: #64748B; margin-bottom: 4px;">Description</h4>
-                  <p id="review-desc" style="font-size: 0.925rem; color: #374151; line-height: 1.6; white-space: pre-line; max-height: 120px; overflow-y: auto;"></p>
+                  <h4 class="pi-review-desc-heading">Description</h4>
+                  <p id="review-desc" class="pi-review-desc-text"></p>
                 </div>
               </div>
             </div>
@@ -455,4 +456,5 @@
   <script src="../js/main.js"></script>
   <script src="../js/post-item.js"></script>
 </body>
+
 </html>

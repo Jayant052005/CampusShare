@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Settings &amp; Preferences - CampusShare</title>
-  <meta name="description" content="Manage your student profile, campus authentication, notifications, and privacy settings on CampusShare.">
+  <meta name="description"
+    content="Manage your student profile, campus authentication, notifications, and privacy settings on CampusShare.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/marketplace.css">
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
+
 <body class="bg-background">
 
   <!-- Dynamic Global Site Header -->
@@ -18,9 +21,10 @@
   <main class="section-sm pb-3xl">
     <div class="container">
 
-      <div style="margin-bottom: 28px;">
-        <h1 style="color: var(--navy); font-size: 2rem; font-weight: 800; margin-bottom: 6px;">Settings</h1>
-        <p style="color: var(--secondary-text); font-size: 1rem; margin: 0;">Manage your student profile, account credentials, notifications, and campus privacy</p>
+      <div class="settings-header-wrap">
+        <h1 class="settings-page-title">Settings</h1>
+        <p class="settings-page-desc">Manage your student profile, account
+          credentials, notifications, and campus privacy</p>
       </div>
 
       <div class="settings-layout">
@@ -53,7 +57,7 @@
 
                 <div class="form-group mb-md">
                   <label class="form-label" for="settings-name">Full Name *</label>
-                  <input type="text" id="settings-name" class="input-field" required />
+                  <input type="text" id="settings-name" class="input-field" required>
                 </div>
 
                 <div class="grid-2 mb-md">
@@ -72,13 +76,14 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label" for="settings-major">Major &amp; Class Year</label>
-                    <input type="text" id="settings-major" class="input-field" placeholder="e.g. Computer Science '26" />
+                    <input type="text" id="settings-major" class="input-field" placeholder="e.g. Computer Science '26">
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="form-label" for="settings-bio">Student Bio</label>
-                  <textarea id="settings-bio" class="input-field" rows="3" placeholder="Tell campus peers what you study or what items you're interested in exchanging..."></textarea>
+                  <textarea id="settings-bio" class="input-field" rows="3"
+                    placeholder="Tell campus peers what you study or what items you're interested in exchanging..."></textarea>
                 </div>
               </div>
             </div>
@@ -91,8 +96,8 @@
 
                 <div class="form-group mb-md">
                   <label class="form-label" for="settings-email">Campus Email (.edu) *</label>
-                  <input type="email" id="settings-email" class="input-field" required />
-                  <div class="form-hint" style="font-size: 0.8rem; color: var(--secondary-text); margin-top: 4px;">
+                  <input type="email" id="settings-email" class="input-field" required>
+                  <div class="form-hint">
                     Changing your campus email requires re-verifying student enrollment
                   </div>
                 </div>
@@ -100,18 +105,20 @@
                 <div class="grid-2 mb-md">
                   <div class="form-group">
                     <label class="form-label" for="settings-new-pass">New Password</label>
-                    <input type="password" id="settings-new-pass" class="input-field" placeholder="Leave blank to keep unchanged" />
+                    <input type="password" id="settings-new-pass" class="input-field"
+                      placeholder="Leave blank to keep unchanged">
                   </div>
                   <div class="form-group">
                     <label class="form-label" for="settings-confirm-pass">Confirm New Password</label>
-                    <input type="password" id="settings-confirm-pass" class="input-field" placeholder="Re-enter new password" />
+                    <input type="password" id="settings-confirm-pass" class="input-field"
+                      placeholder="Re-enter new password">
                   </div>
                 </div>
 
                 <!-- Danger Zone -->
-                <div style="margin-top: 32px; padding: 20px; background: #FEF2F2; border: 1.5px solid #FCA5A5; border-radius: 12px;">
-                  <h4 style="color: #991B1B; margin: 0 0 6px 0; font-size: 1rem;">Danger Zone</h4>
-                  <p style="color: #B91C1C; font-size: 0.85rem; margin: 0 0 14px 0;">
+                <div class="settings-danger-zone">
+                  <h4 class="settings-danger-title">Danger Zone</h4>
+                  <p class="settings-danger-desc">
                     Reset your local session or remove your profile from this browser.
                   </p>
                   <button type="button" class="btn btn-danger btn-sm" onclick="window.confirmSignOut()">
@@ -122,73 +129,84 @@
             </div>
 
             <!-- 3. NOTIFICATION SETTINGS -->
-            <div id="settings-section-notifications" class="settings-tab-section" style="display: none;">
+            <div id="settings-section-notifications" class="settings-tab-section">
               <div class="settings-group">
                 <h2 class="settings-group-title">Notification Settings</h2>
                 <p class="settings-group-desc">Choose how you want to be notified about messages and items</p>
 
                 <div class="settings-toggle-row">
                   <div>
-                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">New Message Alerts</strong>
-                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Get notified immediately when a student replies to your listing</span>
+                    <strong class="settings-toggle-title">New Message Alerts</strong>
+                    <span class="settings-toggle-desc">Get notified immediately when a
+                      student replies to your listing</span>
                   </div>
-                  <input type="checkbox" id="pref-notif-msg" checked style="width: 18px; height: 18px;" />
+                  <input type="checkbox" id="pref-notif-msg" class="settings-checkbox" checked>
                 </div>
 
                 <div class="settings-toggle-row">
                   <div>
-                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Wishlist Price Drops</strong>
-                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Receive alerts when saved items are discounted or available for lending</span>
+                    <strong class="settings-toggle-title">Wishlist Price
+                      Drops</strong>
+                    <span class="settings-toggle-desc">Receive alerts when saved items are
+                      discounted or available for lending</span>
                   </div>
-                  <input type="checkbox" id="pref-notif-wishlist" checked style="width: 18px; height: 18px;" />
+                  <input type="checkbox" id="pref-notif-wishlist" class="settings-checkbox" checked>
                 </div>
 
                 <div class="settings-toggle-row">
                   <div>
-                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Campus Safety &amp; Meetup Digests</strong>
-                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Weekly tips for safe on-campus library and quad exchanges</span>
+                    <strong class="settings-toggle-title">Campus Safety &amp; Meetup
+                      Digests</strong>
+                    <span class="settings-toggle-desc">Weekly tips for safe on-campus
+                      library and quad exchanges</span>
                   </div>
-                  <input type="checkbox" id="pref-notif-safety" checked style="width: 18px; height: 18px;" />
+                  <input type="checkbox" id="pref-notif-safety" class="settings-checkbox" checked>
                 </div>
               </div>
             </div>
 
             <!-- 4. PRIVACY SETTINGS -->
-            <div id="settings-section-privacy" class="settings-tab-section" style="display: none;">
+            <div id="settings-section-privacy" class="settings-tab-section">
               <div class="settings-group">
                 <h2 class="settings-group-title">Privacy Settings</h2>
                 <p class="settings-group-desc">Control what other students can see on your public profile</p>
 
                 <div class="settings-toggle-row">
                   <div>
-                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Show University Email to Peers</strong>
-                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Allow fellow verified students to view your .edu address</span>
+                    <strong class="settings-toggle-title">Show University Email to
+                      Peers</strong>
+                    <span class="settings-toggle-desc">Allow fellow verified students to
+                      view your .edu address</span>
                   </div>
-                  <input type="checkbox" id="pref-priv-email" checked style="width: 18px; height: 18px;" />
+                  <input type="checkbox" id="pref-priv-email" class="settings-checkbox" checked>
                 </div>
 
                 <div class="settings-toggle-row">
                   <div>
-                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Show Quad / Dorm Zone</strong>
-                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Show approximate pickup area (e.g. Science Quad, Moffitt Library)</span>
+                    <strong class="settings-toggle-title">Show Quad / Dorm
+                      Zone</strong>
+                    <span class="settings-toggle-desc">Show approximate pickup area (e.g.
+                      Science Quad, Moffitt Library)</span>
                   </div>
-                  <input type="checkbox" id="pref-priv-loc" checked style="width: 18px; height: 18px;" />
+                  <input type="checkbox" id="pref-priv-loc" class="settings-checkbox" checked>
                 </div>
 
                 <div class="settings-toggle-row">
                   <div>
-                    <strong style="color: var(--navy); display: block; font-size: 0.95rem;">Verified Student Checkmark</strong>
-                    <span style="font-size: 0.825rem; color: var(--secondary-text);">Display your official campus verification badge</span>
+                    <strong class="settings-toggle-title">Verified Student
+                      Checkmark</strong>
+                    <span class="settings-toggle-desc">Display your official campus
+                      verification badge</span>
                   </div>
-                  <input type="checkbox" id="pref-priv-verified" checked style="width: 18px; height: 18px;" />
+                  <input type="checkbox" id="pref-priv-verified" class="settings-checkbox" checked>
                 </div>
               </div>
             </div>
 
             <!-- Form Action Bar -->
-            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
-              <a href="profile.html" class="btn btn-outline" style="border-radius: 12px; padding: 10px 20px;">Cancel</a>
-              <button type="submit" class="btn btn-primary" style="border-radius: 12px; padding: 10px 24px; font-weight: 700;">
+            <div class="settings-actions-row">
+              <a href="profile.html" class="btn btn-outline settings-btn-cancel">Cancel</a>
+              <button type="submit" class="btn btn-primary settings-btn-save">
                 Save Settings
               </button>
             </div>
@@ -210,4 +228,5 @@
   <script src="../js/main.js"></script>
   <script src="../js/profile.js"></script>
 </body>
+
 </html>

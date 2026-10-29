@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
   <link rel="stylesheet" href="../css/marketplace.css">
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
+
 <body class="bg-background">
 
   <!-- Dynamic Global Site Header -->
@@ -20,17 +22,20 @@
 
       <div class="auth-header-center">
         <div class="auth-badge-logo">C</div>
-        <h1 style="color: var(--navy); font-size: 1.75rem; margin-bottom: 6px; font-weight: 800;">Student Login</h1>
-        <p style="color: var(--secondary-text); font-size: 0.95rem; margin: 0;">Sign in with your university student email</p>
+        <h1 class="auth-title">Student Login</h1>
+        <p class="auth-subtitle">Sign in with your university student email</p>
       </div>
 
       <!-- Secondary: Continue with Google -->
       <button type="button" id="google-login-btn" class="auth-google-btn">
         <svg width="18" height="18" viewBox="0 0 18 18">
-          <path fill="#4285F4" d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.71-1.57 2.68-3.88 2.68-6.61z"/>
-          <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.92-2.26c-.8.54-1.83.86-3.04.86-2.34 0-4.32-1.58-5.03-3.71H.96v2.33C2.44 15.98 5.48 18 9 18z"/>
-          <path fill="#FBBC05" d="M3.97 10.7a5.41 5.41 0 0 1 0-3.4V4.97H.96a9 9 0 0 0 0 8.06l3.01-2.33z"/>
-          <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35L15 2.47C13.46.99 11.42 0 9 0 5.48 0 2.44 2.02.96 4.97l3.01 2.33c.71-2.13 2.69-3.72 5.03-3.72z"/>
+          <path fill="#4285F4"
+            d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.71-1.57 2.68-3.88 2.68-6.61z" />
+          <path fill="#34A853"
+            d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.92-2.26c-.8.54-1.83.86-3.04.86-2.34 0-4.32-1.58-5.03-3.71H.96v2.33C2.44 15.98 5.48 18 9 18z" />
+          <path fill="#FBBC05" d="M3.97 10.7a5.41 5.41 0 0 1 0-3.4V4.97H.96a9 9 0 0 0 0 8.06l3.01-2.33z" />
+          <path fill="#EA4335"
+            d="M9 3.58c1.32 0 2.5.45 3.44 1.35L15 2.47C13.46.99 11.42 0 9 0 5.48 0 2.44 2.02.96 4.97l3.01 2.33c.71-2.13 2.69-3.72 5.03-3.72z" />
         </svg>
         Continue with Google
       </button>
@@ -41,48 +46,34 @@
       <form id="login-form">
         <div class="form-group mb-md">
           <label class="form-label" for="login-email">Campus Email (.edu) *</label>
-          <input
-            type="email"
-            id="login-email"
-            class="input-field"
-            placeholder="student@stanford.edu"
-            value="jordan.taylor@stanford.edu"
-            required
-            autocomplete="email"
-          />
+          <input type="email" id="login-email" class="input-field" placeholder="student@stanford.edu"
+            value="jordan.taylor@stanford.edu" required autocomplete="email">
         </div>
 
         <div class="form-group mb-md">
           <label class="form-label" for="login-password">Password *</label>
-          <input
-            type="password"
-            id="login-password"
-            class="input-field"
-            placeholder="••••••••"
-            value="campuspass2026"
-            required
-            autocomplete="current-password"
-          />
+          <input type="password" id="login-password" class="input-field" placeholder="••••••••" value="campuspass2026"
+            required autocomplete="current-password">
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-          <label style="display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--navy); cursor: pointer;">
-            <input type="checkbox" id="login-remember" checked />
+        <div class="auth-options-row">
+          <label class="auth-checkbox-label">
+            <input type="checkbox" id="login-remember" checked>
             Remember me
           </label>
-          <a href="#" id="forgot-password-link" style="font-size: 0.875rem; color: var(--blue); font-weight: 600; text-decoration: none;">
+          <a href="#" id="forgot-password-link" class="auth-forgot-link">
             Forgot password?
           </a>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block btn-lg" style="font-size: 1rem; font-weight: 700; padding: 13px;">
+        <button type="submit" class="btn btn-primary btn-block btn-lg auth-submit-btn">
           Login
         </button>
       </form>
 
-      <div style="text-align: center; margin-top: 24px; font-size: 0.9rem; color: var(--secondary-text);">
+      <div class="auth-footer-text">
         Don't have an account?
-        <a href="register.html" style="color: var(--blue); font-weight: 700; text-decoration: none; margin-left: 4px;">
+        <a href="register.html" class="auth-switch-link">
           Register
         </a>
       </div>
@@ -99,4 +90,5 @@
   <script src="../js/main.js"></script>
   <script src="../js/auth.js"></script>
 </body>
+
 </html>
