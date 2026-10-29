@@ -83,7 +83,7 @@
     <div class="container">
       <div class="pi-form-card">
 
-        <form id="pi-multi-step-form" novalidate>
+        <form id="pi-multi-step-form" onsubmit="event.preventDefault(); publishListing();" novalidate>
 
           <!-- ────────────────────────────────────────────────────────
                STEP 1: BASIC INFORMATION
@@ -315,7 +315,8 @@
                 <input type="text" id="pi-exchange-for" class="input-field"
                   placeholder="e.g. CS106B reader, TI-84 Plus, or Organic Chemistry kit">
                 <div class="form-hint">What textbooks, gear, or tools are you interested in swapping for?</div>
-                <div class="form-error-msg form-error" id="err-pi-exchange-for">Please specify what you would like to trade for</div>
+                <div class="form-error-msg form-error" id="err-pi-exchange-for">Please specify what you would like to
+                  trade for</div>
               </div>
             </div>
 
@@ -432,7 +433,7 @@
             <!-- Step 5 Actions -->
             <div class="pi-action-bar">
               <button type="button" class="btn btn-outline" onclick="goToStep(4)">&larr; Previous Step</button>
-              <button type="button" id="pi-publish-btn" class="btn btn-primary btn-lg" onclick="publishListing()">
+              <button type="submit" id="pi-publish-btn" class="btn btn-primary btn-lg" onclick="publishListing()">
                 Publish Listing 🚀
               </button>
             </div>
