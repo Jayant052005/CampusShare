@@ -349,6 +349,15 @@
           grid.innerHTML = displayItems.map(function(item) {
             return renderListingCard(item);
           }).join("");
+        } else {
+          grid.innerHTML = `
+            <div class="hp-empty-listings">
+              <div class="hp-empty-icon">📦</div>
+              <h3 class="hp-empty-title">No campus listings yet</h3>
+              <p class="hp-empty-subtitle">Be the first student to post textbooks, electronics, notes, or dorm essentials!</p>
+              <a href="html/post-item.html" class="hp-btn-explore">+ Post First Item</a>
+            </div>
+          `;
         }
       }
     });

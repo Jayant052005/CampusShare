@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Format item price in INR
     const priceFormatted = typeof formatINR === "function" ? formatINR(activeConv.itemPrice || activeConv.price || 0) : "₹" + (activeConv.itemPrice || 0);
-    const detailUrl = typeof getAppUrl === "function" ? getAppUrl("item-details.html?id=" + (activeConv.itemId || "item_demo_1")) : "item-details.html?id=" + (activeConv.itemId || "item_demo_1");
+    const detailUrl = typeof getAppUrl === "function" ? (activeConv.itemId ? getAppUrl("item-details.html?id=" + activeConv.itemId) : getAppUrl("explore.html")) : (activeConv.itemId ? "item-details.html?id=" + activeConv.itemId : "explore.html");
 
     chatPane.innerHTML = `
       <!-- 1. CHAT HEADER -->

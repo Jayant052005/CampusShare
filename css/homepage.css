@@ -710,6 +710,34 @@
   gap: 22px;
 }
 
+.hp-empty-listings {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 56px 24px;
+  background: #ffffff;
+  border: 1.5px dashed var(--border, #E2E8F0);
+  border-radius: 18px;
+}
+
+.hp-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.hp-empty-title {
+  color: var(--navy, #0F172A);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.hp-empty-subtitle {
+  color: var(--secondary-text, #64748B);
+  font-size: 0.95rem;
+  max-width: 440px;
+  margin: 0 auto 20px auto;
+}
+
 /* ListingCard component */
 .hp-listing-card {
   background: white;

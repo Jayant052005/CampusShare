@@ -246,7 +246,7 @@ function initNavbar() {
         <!-- Post an Item CTA Button -->
         <a href="${getAppUrl('post-item.html')}" class="cs-btn-post">
           ${CS_ICONS.plus}
-          <span class="btn-text">+ Post an Item</span>
+          <span class="btn-text">Post an Item</span>
         </a>
 
         <!-- User Avatar & Dropdown -->
