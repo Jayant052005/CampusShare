@@ -60,23 +60,7 @@ function initStorage() {
     localStorage.removeItem(STORAGE_KEYS.USERS);
     localStorage.setItem(STORAGE_KEYS.INIT_FLAG, "true");
 
-    // Seed default current user with clean placeholder
-    const defaultUser = {
-      id: "usr_current",
-      name: "Jordan Taylor",
-      email: "jordan.taylor@stanford.edu",
-      university: "Stanford University",
-      college: "School of Engineering",
-      major: "Computer Science '26",
-      avatar: "", // Will use clean initials avatar
-      verified: true,
-      rating: "—",
-      reviewsCount: 0,
-      joinedDate: "Sept 2026",
-      listingsCount: 0
-    };
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(defaultUser));
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([defaultUser]));
+    // Real authenticated users only - no hardcoded/dummy users
 
     // Zero dummy data: conversations, notifications, items, wishlist, transactions, reviews
     localStorage.setItem(STORAGE_KEYS.CONVERSATIONS, JSON.stringify([]));
@@ -391,13 +375,49 @@ function getUsers() {
   }
 }
 
+function getSupabaseUserFromStorage() {
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith("sb-") && key.endsWith("-auth-token")) {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        const user = parsed?.user || parsed?.currentSession?.user;
+        if (user && user.id) {
+          const meta = user.user_metadata || {};
+          return {
+            id: user.id,
+            name: meta.full_name || meta.name || user.email?.split("@")[0] || "Student",
+            email: user.email || "",
+            avatar: meta.avatar_url || meta.picture || "",
+            university: meta.university || "Campus Member"
+          };
+        }
+      }
+    }
+  } catch (err) {}
+  return null;
+}
+
 function getCurrentUser() {
   initStorage();
   const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
   if (storedUser) {
     try {
-      return JSON.parse(storedUser);
+      const parsed = JSON.parse(storedUser);
+      // Ensure it's not a legacy placeholder user
+      if (parsed && parsed.id && parsed.id !== "usr_current") {
+        return parsed;
+      }
     } catch (e) {}
+  }
+
+  // Retrieve authenticated Supabase user directly from stored session
+  const sbUser = getSupabaseUserFromStorage();
+  if (sbUser) {
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(sbUser));
+    return sbUser;
   }
   return null;
 }

@@ -253,12 +253,13 @@ function initNavbar() {
         ${currentUser ? `
           <div class="dropdown" id="user-dropdown">
             <button class="cs-user-dropdown-toggle" id="user-dropdown-btn" aria-label="User Menu">
-              ${currentUser.avatar ? `<img src="${currentUser.avatar}" alt="${currentUser.name}" class="cs-user-avatar" />` : `<div style="width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--blue)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">${userInitial}</div>`}
+              ${currentUser.avatar ? `<img src="${currentUser.avatar}" alt="${currentUser.name}" class="cs-user-avatar" referrerpolicy="no-referrer" />` : `<div style="width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--blue)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">${userInitial}</div>`}
               ${CS_ICONS.chevronDown}
             </button>
             <div class="dropdown-menu" id="user-dropdown-menu">
               <div style="padding: 10px 16px; font-size: 0.825rem; color: var(--secondary-text); border-bottom: 1px solid var(--border);">
                 Signed in as<br><strong style="color: var(--navy); font-size: 0.9rem;">${currentUser.name}</strong>
+                ${currentUser.email ? `<div style="font-size: 0.775rem; color: var(--secondary-text); margin-top: 2px; word-break: break-all;">${currentUser.email}</div>` : ''}
               </div>
               <a href="${getAppUrl('profile.html')}" class="dropdown-item">👤 My Profile</a>
               <a href="${getAppUrl('my-listings.html')}" class="dropdown-item">📦 My Listings</a>
@@ -366,18 +367,25 @@ function initNavbar() {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async function(e) {
       e.preventDefault();
-      if (window.supabaseClient) {
-        try {
+      try {
+        if (window.supabaseClient) {
           await window.supabaseClient.auth.signOut();
-        } catch (err) {
-          console.warn("Supabase sign out error:", err);
+        }
+      } catch (err) {
+        console.warn("Supabase sign out error:", err);
+      }
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && (key.startsWith("sb-") && key.endsWith("-auth-token"))) {
+          localStorage.removeItem(key);
         }
       }
       setCurrentUser(null);
+      initNavbar();
       showToast("Signed out of CampusShare", "info");
       setTimeout(() => {
-        window.location.href = getAppUrl("login.html");
-      }, 500);
+        window.location.href = getAppUrl("index.html");
+      }, 400);
     });
   }
 }

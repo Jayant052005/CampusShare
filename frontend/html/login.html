@@ -113,14 +113,14 @@
             errorMsg.textContent = "";
             errorMsg.style.display = "none";
           }
-          const redirectUrl = window.location.origin.startsWith("http")
-            ? window.location.origin
-            : "http://localhost:3000";
+          // Always redirect to the deployed Vercel URL so Google OAuth
+          // works from any browser / environment (localhost, Vercel, etc.)
+          const SITE_URL = "https://campusshare-frontend-swart.vercel.app";
 
           const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-              redirectTo: redirectUrl
+              redirectTo: SITE_URL
             }
           });
 

@@ -86,25 +86,30 @@ function initProfilePage() {
     headerContent.innerHTML = `
       <div class="profile-avatar-row">
         <div style="display: flex; align-items: flex-end; gap: 20px;">
-          <div class="profile-avatar-large">${initials}</div>
+          <div class="profile-avatar-large" style="position: relative; overflow: hidden; cursor: pointer;" title="Click to update profile picture" onclick="document.getElementById('profile-avatar-file-input')?.click()">
+            ${user.avatar ? `<img src="${user.avatar}" alt="${user.name}" referrerpolicy="no-referrer" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />` : initials}
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.75); color: white; font-size: 0.65rem; text-align: center; padding: 3px 0; font-weight: 600;">Update</div>
+          </div>
+          <input type="file" id="profile-avatar-file-input" accept="image/*" style="display: none;" />
           <div>
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <h1 style="color: var(--navy); font-size: 1.85rem; font-weight: 800; margin: 0;">${user.name}</h1>
               <span class="badge badge-success" style="font-size: 0.775rem;">✓ Verified Student</span>
             </div>
+            ${user.email ? `<p style="color: var(--secondary-text); font-size: 0.9rem; margin: 2px 0 0 0;">✉️ ${user.email}</p>` : ''}
             <p style="color: var(--secondary-text); font-size: 0.95rem; margin: 4px 0 0 0;">
-              🎓 <strong>${user.major || 'Undergraduate'}</strong> &bull; 🏫 ${user.university || 'Stanford University'}
+              🎓 <strong>${user.major || 'Undergraduate'}</strong> &bull; 🏫 ${user.university || 'Campus Member'}
             </p>
           </div>
         </div>
 
-        <div style="display: flex; gap: 10px; align-items: center;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
           <a href="${settingsUrl}" class="btn btn-outline" style="border-radius: 12px; font-weight: 600; padding: 9px 18px;">
             ⚙️ Edit Profile
           </a>
-          <a href="${settingsUrl}?tab=account" class="btn btn-outline" style="border-radius: 12px; font-weight: 600; padding: 9px 18px;">
-            🔒 Manage Account
-          </a>
+          <button type="button" id="profile-section-logout-btn" class="btn btn-outline" style="border-radius: 12px; font-weight: 600; padding: 9px 18px; color: var(--danger); border-color: var(--danger);">
+            🚪 Log Out
+          </button>
         </div>
       </div>
 
@@ -132,6 +137,90 @@ function initProfilePage() {
         </div>
       </div>
     `;
+  }
+
+  // Bind Profile Section Logout Button
+  const profLogoutBtn = document.getElementById("profile-section-logout-btn");
+  if (profLogoutBtn) {
+    profLogoutBtn.addEventListener("click", async function(e) {
+      e.preventDefault();
+      try {
+        if (window.supabaseClient) {
+          await window.supabaseClient.auth.signOut();
+        }
+      } catch (err) {
+        console.warn("Supabase sign out error:", err);
+      }
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("sb-") && key.endsWith("-auth-token")) {
+          localStorage.removeItem(key);
+        }
+      }
+      if (typeof setCurrentUser === "function") setCurrentUser(null);
+      if (typeof initNavbar === "function") initNavbar();
+      if (typeof showToast === "function") {
+        showToast("Signed out of CampusShare", "info");
+      }
+      setTimeout(() => {
+        window.location.href = (typeof getAppUrl === "function") ? getAppUrl("index.html") : "../index.html";
+      }, 400);
+    });
+  }
+
+  // Bind Profile Avatar File Input
+  const avatarInput = document.getElementById("profile-avatar-file-input");
+  if (avatarInput) {
+    avatarInput.addEventListener("change", async function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(evt) {
+        const dataUrl = evt.target.result;
+        let finalAvatarUrl = dataUrl;
+
+        // Try uploading to Supabase Storage if bucket exists
+        if (window.supabaseClient) {
+          try {
+            const ext = file.name.split('.').pop() || 'png';
+            const filePath = `avatar_${user.id}_${Date.now()}.${ext}`;
+            const { data: uploadData, error: uploadErr } = await window.supabaseClient.storage
+              .from('avatars')
+              .upload(filePath, file, { upsert: true });
+
+            if (!uploadErr && uploadData?.path) {
+              const { data: pubData } = window.supabaseClient.storage
+                .from('avatars')
+                .getPublicUrl(uploadData.path);
+              if (pubData?.publicUrl) {
+                finalAvatarUrl = pubData.publicUrl;
+              }
+            }
+          } catch (storageErr) {
+            console.log("Using dataUrl fallback for avatar:", storageErr);
+          }
+
+          // Update Supabase user metadata so it persists across devices and sessions
+          try {
+            await window.supabaseClient.auth.updateUser({
+              data: { avatar_url: finalAvatarUrl, picture: finalAvatarUrl }
+            });
+          } catch (metaErr) {
+            console.warn("Failed to update Supabase user metadata:", metaErr);
+          }
+        }
+
+        user.avatar = finalAvatarUrl;
+        if (typeof setCurrentUser === "function") setCurrentUser(user);
+        if (typeof showToast === "function") {
+          showToast("Profile picture updated successfully!", "success");
+        }
+        initProfilePage();
+        if (typeof initNavbar === "function") initNavbar();
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   // Active tab state
@@ -490,6 +579,52 @@ function initSettingsPage() {
   if (bioInput) bioInput.value = user.bio || "";
   if (emailInput) emailInput.value = user.email || "";
 
+  // Settings Avatar Uploader
+  const avatarPreview = document.getElementById("settings-avatar-preview");
+  const avatarInput = document.getElementById("settings-avatar-input");
+  let pendingAvatar = user.avatar || "";
+
+  if (avatarPreview) {
+    if (user.avatar) {
+      avatarPreview.innerHTML = `<img src="${user.avatar}" alt="${user.name}" referrerpolicy="no-referrer" style="width: 100%; height: 100%; object-fit: cover;" />`;
+    } else {
+      avatarPreview.textContent = (user.name || "U").charAt(0).toUpperCase();
+    }
+  }
+
+  if (avatarInput) {
+    avatarInput.addEventListener("change", function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async function(evt) {
+        pendingAvatar = evt.target.result;
+        if (avatarPreview) {
+          avatarPreview.innerHTML = `<img src="${pendingAvatar}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />`;
+        }
+        if (window.supabaseClient) {
+          try {
+            const ext = file.name.split('.').pop() || 'png';
+            const filePath = `avatar_${user.id}_${Date.now()}.${ext}`;
+            const { data: uploadData, error: uploadErr } = await window.supabaseClient.storage
+              .from('avatars')
+              .upload(filePath, file, { upsert: true });
+
+            if (!uploadErr && uploadData?.path) {
+              const { data: pubData } = window.supabaseClient.storage
+                .from('avatars')
+                .getPublicUrl(uploadData.path);
+              if (pubData?.publicUrl) {
+                pendingAvatar = pubData.publicUrl;
+              }
+            }
+          } catch (err) {}
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   // Check URL param for tab
   const urlParams = new URLSearchParams(window.location.search);
   const targetTab = urlParams.get("tab") || "profile";
@@ -530,6 +665,7 @@ function initSettingsPage() {
 
       const updatedUser = {
         ...user,
+        avatar: pendingAvatar,
         name: nameInput ? nameInput.value.trim() : user.name,
         university: uniInput ? uniInput.value : user.university,
         major: majorInput ? majorInput.value.trim() : user.major,
@@ -538,6 +674,20 @@ function initSettingsPage() {
       };
 
       setCurrentUser(updatedUser);
+
+      // Sync editable profile details to Supabase Auth metadata
+      if (window.supabaseClient) {
+        window.supabaseClient.auth.updateUser({
+          data: {
+            full_name: updatedUser.name,
+            university: updatedUser.university,
+            major: updatedUser.major,
+            bio: updatedUser.bio,
+            avatar_url: updatedUser.avatar,
+            picture: updatedUser.avatar
+          }
+        }).catch(err => console.warn("Supabase updateUser error:", err));
+      }
 
       if (typeof showToast === "function") {
         showToast("Settings and preferences saved successfully!", "success");
