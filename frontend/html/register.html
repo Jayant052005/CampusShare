@@ -41,7 +41,7 @@
         Continue with Google
       </button>
 
-      <div class="auth-divider">or register with university details</div>
+      <div class="auth-divider">or register with email</div>
 
       <form id="register-form">
         <!-- Full Name -->
@@ -50,29 +50,28 @@
           <input type="text" id="reg-name" class="input-field" placeholder="Jordan Taylor" required autocomplete="name">
         </div>
 
-        <!-- University Email -->
+        <!-- Primary Email (required for login) -->
         <div class="form-group mb-md">
           <label class="form-label" for="reg-email">Email *</label>
-          <input type="email" id="reg-email" class="input-field" placeholder="student@gmail.com" required
+          <input type="email" id="reg-email" class="input-field" placeholder="you@gmail.com" required
+            autocomplete="email">
+        </div>
+
+        <!-- University Email (optional) -->
+        <div class="form-group mb-md">
+          <label class="form-label" for="reg-uni-email">University Email</label>
+          <input type="email" id="reg-uni-email" class="input-field" placeholder="student@university.edu"
             autocomplete="email">
           <div class="form-hint auth-form-hint">
-            Use your email for campus peer verification
+            Optional — add your university email for campus verification
           </div>
         </div>
 
         <!-- College / University -->
         <div class="form-group mb-md">
           <label class="form-label" for="reg-university">College/University *</label>
-          <select id="reg-university" class="select-field" required>
-            <option value="Stanford University" selected>Stanford University</option>
-            <option value="UC Berkeley">UC Berkeley</option>
-            <option value="MIT">MIT</option>
-            <option value="Harvard University">Harvard University</option>
-            <option value="UT Austin">UT Austin</option>
-            <option value="University of Michigan">University of Michigan</option>
-            <option value="NYU">NYU</option>
-            <option value="UCLA">UCLA</option>
-          </select>
+          <input type="text" id="reg-university" class="input-field" placeholder="e.g. Stanford University" required
+            autocomplete="organization">
         </div>
 
         <!-- Passwords -->
