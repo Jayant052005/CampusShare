@@ -22,11 +22,26 @@
     }
   </script>
   <script type="module">
-    import { supabase } from "../../src/supabaseClient.js";
+    import { supabase } from "../src/supabaseClient.js";
 
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-      window.location.href = "/login";
+      window.location.href = "login.html";
+    } else {
+      const user = session.user;
+      const current = typeof getCurrentUser === "function" ? getCurrentUser() : null;
+      if (!current || current.id !== user.id) {
+        if (typeof setCurrentUser === "function") {
+          setCurrentUser({
+            id: user.id,
+            name: user.user_metadata?.full_name || user.user_metadata?.name || user.email.split("@")[0],
+            email: user.email,
+            avatar: user.user_metadata?.avatar_url || null,
+            university: user.user_metadata?.university || "Campus Member"
+          });
+          if (typeof initNavbar === "function") initNavbar();
+        }
+      }
     }
   </script>
 </head>

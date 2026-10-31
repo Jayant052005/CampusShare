@@ -364,8 +364,15 @@ function initNavbar() {
   // Logout Listener
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
-    logoutBtn.addEventListener("click", function(e) {
+    logoutBtn.addEventListener("click", async function(e) {
       e.preventDefault();
+      if (window.supabaseClient) {
+        try {
+          await window.supabaseClient.auth.signOut();
+        } catch (err) {
+          console.warn("Supabase sign out error:", err);
+        }
+      }
       setCurrentUser(null);
       showToast("Signed out of CampusShare", "info");
       setTimeout(() => {

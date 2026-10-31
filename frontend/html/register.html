@@ -122,7 +122,7 @@
     }
   </script>
   <script type="module">
-    import { supabase } from "../../src/supabaseClient.js";
+    import { supabase } from "../src/supabaseClient.js";
 
     const registerForm = document.getElementById("register-form");
     const errorMsg = document.getElementById("auth-error-msg");
@@ -167,9 +167,20 @@
           return;
         }
 
+        const fullName = document.getElementById("reg-name")?.value.trim() || "";
+        const university = document.getElementById("reg-university")?.value.trim() || "";
+        const uniEmail = document.getElementById("reg-uni-email")?.value.trim() || "";
+
         const { data, error } = await supabase.auth.signUp({
           email,
-          password
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+              university: university,
+              university_email: uniEmail
+            }
+          }
         });
 
         if (error) {
@@ -193,7 +204,15 @@
         }
 
         // Only redirect when a real session exists
-        window.location.href = "/";
+        if (typeof setCurrentUser === "function") {
+          setCurrentUser({
+            id: data.session.user.id,
+            name: fullName || email.split("@")[0],
+            email: email,
+            university: university || "Campus Member"
+          });
+        }
+        window.location.href = "../index.html";
       });
     }
   </script>

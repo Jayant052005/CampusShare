@@ -99,7 +99,7 @@
     }
   </script>
   <script type="module">
-    import { supabase } from "../../src/supabaseClient.js";
+    import { supabase } from "../src/supabaseClient.js";
 
     const loginForm = document.getElementById("login-form");
     const errorMsg = document.getElementById("auth-error-msg");
@@ -151,7 +151,18 @@
 
         // Only redirect when a real session exists after login
         if (data?.session) {
-          window.location.href = "/";
+          const user = data.session.user;
+          const userName = user.user_metadata?.full_name || user.user_metadata?.name || email.split("@")[0];
+          if (typeof setCurrentUser === "function") {
+            setCurrentUser({
+              id: user.id,
+              name: userName,
+              email: user.email,
+              avatar: user.user_metadata?.avatar_url || null,
+              university: user.user_metadata?.university || "Campus Member"
+            });
+          }
+          window.location.href = "../index.html";
         } else {
           if (errorMsg) {
             errorMsg.style.color = "var(--blue, #1769FF)";

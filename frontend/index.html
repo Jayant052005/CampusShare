@@ -338,6 +338,40 @@
   <script src="js/storage.js"></script>
   <script src="js/main.js"></script>
 
+  <!-- Supabase Auth Sync for Google OAuth & Sessions -->
+  <script type="importmap">
+    {
+      "imports": {
+        "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+      }
+    }
+  </script>
+  <script type="module">
+    import { supabase } from "./src/supabaseClient.js";
+
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        const user = session.user;
+        const current = typeof getCurrentUser === "function" ? getCurrentUser() : null;
+        if (!current || current.id !== user.id) {
+          if (typeof setCurrentUser === "function") {
+            setCurrentUser({
+              id: user.id,
+              name: user.user_metadata?.full_name || user.user_metadata?.name || user.email.split("@")[0],
+              email: user.email,
+              avatar: user.user_metadata?.avatar_url || null,
+              university: user.user_metadata?.university || "Campus Member"
+            });
+            if (typeof initNavbar === "function") initNavbar();
+          }
+        }
+      } else if (event === "SIGNED_OUT") {
+        if (typeof setCurrentUser === "function") setCurrentUser(null);
+        if (typeof initNavbar === "function") initNavbar();
+      }
+    });
+  </script>
+
   <!-- Homepage Featured Listings Rendering logic -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
