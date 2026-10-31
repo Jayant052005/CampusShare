@@ -9,6 +9,23 @@
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/marketplace.css">
   <link rel="stylesheet" href="../css/responsive.css">
+
+  <!-- Supabase Route Guard -->
+  <script type="importmap">
+    {
+      "imports": {
+        "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+      }
+    }
+  </script>
+  <script type="module">
+    import { supabase } from "../../src/supabaseClient.js";
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = "/login";
+    }
+  </script>
 </head>
 <body class="bg-background">
 

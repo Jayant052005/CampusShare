@@ -104,6 +104,25 @@
     const loginForm = document.getElementById("login-form");
     const errorMsg = document.getElementById("auth-error-msg");
 
+    // ── Google OAuth ──
+    const googleBtn = document.getElementById("google-login-btn");
+    if (googleBtn) {
+      googleBtn.addEventListener("click", async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin
+          }
+        });
+        if (error && errorMsg) {
+          errorMsg.style.color = "var(--danger, #EF4444)";
+          errorMsg.textContent = error.message;
+          errorMsg.style.display = "block";
+        }
+      });
+    }
+
+    // ── Email / Password Login ──
     if (loginForm) {
       loginForm.addEventListener("submit", async function(e) {
         e.preventDefault();
@@ -123,14 +142,23 @@
 
         if (error) {
           if (errorMsg) {
+            errorMsg.style.color = "var(--danger, #EF4444)";
             errorMsg.textContent = error.message;
             errorMsg.style.display = "block";
           }
           return;
         }
 
-        // Redirect to Home page on success
-        window.location.href = "/";
+        // Only redirect when a real session exists after login
+        if (data?.session) {
+          window.location.href = "/";
+        } else {
+          if (errorMsg) {
+            errorMsg.style.color = "var(--blue, #1769FF)";
+            errorMsg.textContent = "Check your email and confirm your account before logging in.";
+            errorMsg.style.display = "block";
+          }
+        }
       });
     }
   </script>

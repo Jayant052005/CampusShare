@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Student Account - CampusShare</title>
   <meta name="description"
-    content="Join CampusShare with your university .edu student email to buy, sell, borrow, and exchange items safely on campus.">
+    content="Join CampusShare with your university email to buy, sell, borrow, and exchange items safely on campus.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/marketplace.css">
@@ -56,7 +56,7 @@
           <input type="email" id="reg-email" class="input-field" placeholder="student@gmail.com" required
             autocomplete="email">
           <div class="form-hint auth-form-hint">
-            Must end with .edu for instant campus peer verification
+            Use your email for campus peer verification
           </div>
         </div>
 
@@ -128,8 +128,27 @@
     const registerForm = document.getElementById("register-form");
     const errorMsg = document.getElementById("auth-error-msg");
 
+    // ── Google OAuth ──
+    const googleBtn = document.getElementById("google-register-btn");
+    if (googleBtn) {
+      googleBtn.addEventListener("click", async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin
+          }
+        });
+        if (error && errorMsg) {
+          errorMsg.style.color = "var(--danger, #EF4444)";
+          errorMsg.textContent = error.message;
+          errorMsg.style.display = "block";
+        }
+      });
+    }
+
+    // ── Email / Password Registration ──
     if (registerForm) {
-      registerForm.addEventListener("submit", async function(e) {
+      registerForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
         if (errorMsg) {
@@ -156,13 +175,25 @@
 
         if (error) {
           if (errorMsg) {
+            errorMsg.style.color = "var(--danger, #EF4444)";
             errorMsg.textContent = error.message;
             errorMsg.style.display = "block";
           }
           return;
         }
 
-        // Redirect to Home page on success
+        // After signUp(), if data.session is null, don't redirect to the dashboard.
+        // Just show: "Check your email and confirm your account before logging in."
+        if (!data?.session) {
+          if (errorMsg) {
+            errorMsg.style.color = "var(--blue, #1769FF)";
+            errorMsg.textContent = "Check your email and confirm your account before logging in.";
+            errorMsg.style.display = "block";
+          }
+          return;
+        }
+
+        // Only redirect when a real session exists
         window.location.href = "/";
       });
     }

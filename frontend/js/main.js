@@ -538,7 +538,7 @@ function initMobileDrawer() {
       </div>
 
       <div style="margin-top: auto; padding-top: 20px;">
-        <a href="${getAppUrl('post-item.html')}" class="btn btn-primary btn-block btn-lg">+ Post an Item</a>
+        <a href="${getAppUrl('post-item.html')}" class="btn btn-primary btn-block btn-lg">Post an Item</a>
       </div>
     `;
     document.body.appendChild(drawer);
