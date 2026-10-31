@@ -103,7 +103,7 @@ You only need a modern web browser and a static local server (e.g. Python, Node.
 
 ### 2. Clone the Repository
 ```bash
-git clone https://github.com/your-username/CampusShare.git
+git clone https://github.com/Jayant052005/CampusShare.git
 cd CampusShare
 ```
 
@@ -137,8 +137,8 @@ The application is wired to Supabase for authentication and database management:
    ```javascript
    import { createClient } from "@supabase/supabase-js";
 
-   const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-   const SUPABASE_PUBLIC_KEY = "YOUR_SUPABASE_ANON_PUBLIC_KEY";
+   const SUPABASE_URL = "https://ymxdypzryicdpkdgcprg.supabase.co";
+   const SUPABASE_PUBLIC_KEY = "sb_publishable_QRbRXa97SlOzUaBjlDv-dA_URF7QUPt";
 
    export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
    ```
@@ -167,3 +167,4 @@ CampusShare is a pure static frontend and can be hosted for free on:
 ## 📄 License
 
 This project is open-source and available under the [MIT License](LICENSE).
+
