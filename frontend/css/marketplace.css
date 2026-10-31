@@ -2737,6 +2737,14 @@
   margin-top: 4px;
 }
 
+.auth-error-msg {
+  color: var(--danger, #EF4444);
+  font-size: 0.85rem;
+  margin-top: 12px;
+  text-align: center;
+  display: none;
+}
+
 /* Settings page */
 .settings-header-wrap {
   margin-bottom: 28px;
