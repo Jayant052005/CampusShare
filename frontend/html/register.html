@@ -131,16 +131,41 @@
     const googleBtn = document.getElementById("google-register-btn");
     if (googleBtn) {
       googleBtn.addEventListener("click", async () => {
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: "google",
-          options: {
-            redirectTo: window.location.origin
+        try {
+          if (errorMsg) {
+            errorMsg.textContent = "";
+            errorMsg.style.display = "none";
           }
-        });
-        if (error && errorMsg) {
-          errorMsg.style.color = "var(--danger, #EF4444)";
-          errorMsg.textContent = error.message;
-          errorMsg.style.display = "block";
+          const redirectUrl = window.location.origin.startsWith("http")
+            ? window.location.origin
+            : "http://localhost:3000";
+
+          const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+              redirectTo: redirectUrl
+            }
+          });
+
+          if (error) {
+            if (errorMsg) {
+              errorMsg.style.color = "var(--danger, #EF4444)";
+              errorMsg.textContent = error.message;
+              errorMsg.style.display = "block";
+            }
+            return;
+          }
+
+          if (data?.url) {
+            window.location.href = data.url;
+          }
+        } catch (err) {
+          console.error("Google OAuth error:", err);
+          if (errorMsg) {
+            errorMsg.style.color = "var(--danger, #EF4444)";
+            errorMsg.textContent = err.message || "Failed to start Google sign in.";
+            errorMsg.style.display = "block";
+          }
         }
       });
     }
